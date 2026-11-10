@@ -1,0 +1,319 @@
+DASHBOARD.HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #f4f7f9;
+            padding: 30px;
+            font-family: 'Inter', sans-serif;
+            color: #0f172a;
+        }
+ 
+        .premium-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+       
+        .premium-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        }
+ 
+        .stat-val {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+       
+        .text-orange { color: #ea580c !important; }
+        .text-red { color: #dc2626 !important; }
+        .text-green { color: #059669 !important; }
+ 
+        .logo-container { text-align: center; margin-bottom: 25px; padding: 25px; }
+        .logo-img { max-width: 250px; }
+ 
+        .dashboard-title { font-weight: 800; letter-spacing: -1px; text-transform: uppercase; font-size: 2.2rem; color: #1e293b; }
+        .dashboard-subtitle { color: #3b82f6; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; font-size: 0.85rem; }
+ 
+        /* Table Styling */
+        .table-premium { background: #ffffff; border-radius: 12px; overflow: hidden; margin-top: 10px; }
+        .table-premium thead th { background: #f8fafc; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; border-bottom: 2px solid #e2e8f0; padding: 15px; }
+        .table-premium tbody tr { transition: background 0.2s; border-bottom: 1px solid #f1f5f9; }
+        .table-premium tbody tr:hover { background: #f8fafc; }
+        .table-premium td { padding: 16px 15px; vertical-align: middle; color: #334155; font-size: 1.2rem; }
+ 
+        /* Inputs */
+        .form-control, .form-select { border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); padding: 1.0rem 1rem; }
+        .form-control:focus, .form-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+       
+        /* Badges */
+        .badge-soft { padding: 0.5em 1em; border-radius: 6px; font-weight: 700; font-size: 1.0rem; letter-spacing: 0.5px; }
+        .badge-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+        .badge-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+        .badge-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+        .badge-secondary { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+ 
+        .pulse { animation: pulse-glow 2s infinite; }
+        @keyframes pulse-glow { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+ 
+        /* Keep Terminal Dark for Contrast */
+        #debugTerminal { background: #0f172a; color: #10b981; font-family: 'Courier New', monospace; font-size: 12px; padding: 15px; border-radius: 8px; margin-top: 20px; max-height: 200px; overflow-y: auto; display: none; border: 1px solid #334155; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="logo-container premium-card mb-4">
+            <img id="mainLogo" class="logo-img" alt="SBL Specialty Coatings" src="https://lh3.googleusercontent.com/d/1qHnrfpJzV2XcKIlDCUYTwJZQczgX7uBG" onerror="this.style.display='none';">
+            <h1 class="dashboard-title mt-3">PERMIT TO WORK - DASHBOARD</h1>
+            <p class="dashboard-subtitle">Created, Developed and Maintained by Mr. Budhi Parkash</p>
+            <div class="d-flex justify-content-center gap-2 mt-4">
+                <button class="btn btn-outline-secondary btn-sm fw-bold px-4 rounded-pill" onclick="refresh(true)">🔄 SYNC CLOUD</button>
+                <button class="btn btn-primary btn-sm fw-bold px-4 rounded-pill shadow-sm" onclick="exportToCSV()">📊 EXPORT KPI</button>
+                <button class="btn btn-dark btn-sm fw-bold px-4 rounded-pill" onclick="toggleDebug()">TERMINAL</button>
+            </div>
+            <div id="connectionError" class="alert alert-danger mt-3 fw-bold shadow-sm" style="display:none; border-radius: 10px;"></div>
+        </div>
+ 
+        <div class="row g-4 text-center mb-5">
+            <div class="col-md-3">
+                <div class="premium-card p-4 h-100" style="border-top: 5px solid #f59e0b;">
+                    <h6 class="text-muted fw-bold tracking-wide">PENDING APPROVAL</h6>
+                    <div id="pending" class="stat-val text-orange mt-2">0</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="premium-card p-4 h-100" style="border-top: 5px solid #ef4444;">
+                    <h6 class="text-muted fw-bold tracking-wide">REVOKED / REJECTED</h6>
+                    <div id="rejected" class="stat-val text-red mt-2">0</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="premium-card p-4 h-100" style="border-top: 5px solid #10b981; background: linear-gradient(to bottom right, #ffffff, #f0fdf4);">
+                    <h6 class="fw-bold tracking-wide mb-4" style="color: #059669;">TOTAL APPROVED EXECUTIONS</h6>
+                    <div class="row text-center align-items-center">
+                        <div class="col-3"><div class="fw-bold fs-2 text-green" id="statToday">0</div><small class="text-muted text-uppercase fw-bold" style="font-size: 1.0rem;">Today</small></div>
+                        <div class="col-3"><div class="fw-bold fs-2 text-green" id="statYest">0</div><small class="text-muted text-uppercase fw-bold" style="font-size: 1.0rem;">Yesterday</small></div>
+                        <div class="col-3"><div class="fw-bold fs-2 text-green" id="statMTD">0</div><small class="text-muted text-uppercase fw-bold" style="font-size: 1.0rem;">MTD</small></div>
+                        <div class="col-3"><div class="fw-bold fs-2 text-green" id="statYTD">0</div><small class="text-muted text-uppercase fw-bold" style="font-size: 1.0rem;">YTD</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="premium-card p-4 shadow-sm">
+            <div class="row g-3 align-items-end mb-4 pb-3" style="border-bottom: 1px solid #e2e8f0;">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold text-muted">SEARCH REGISTRY</label>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Permit #, Vendor..." onkeyup="applyFilters()">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">STATUS FILTER</label>
+                    <select id="statusFilter" class="form-select" onchange="applyFilters()">
+                        <option value="ALL">All Records</option>
+                        <option value="Pending">Pending / In-Route</option>
+                        <option value="Approved">Approved / Active</option>
+                        <option value="Closed">Closed / Completed</option>
+                        <option value="Rejected">Rejected / Revoked</option>
+                    </select>
+                </div>
+                <div class="col-md-5 text-end pb-2">
+                    <div id="syncStatus" class="fw-bold" style="color: #059669; font-size: 1.0rem; letter-spacing: 1px;">BOOTING ENGINE...</div>
+                </div>
+            </div>
+ 
+            <div class="table-responsive">
+                <table class="table table-premium w-100 mb-0">
+                    <thead>
+                        <tr>
+                            <th>Permit #</th><th>Type</th><th>Vendor & Location</th><th style="min-width: 220px;">Work Description</th><th>Status & Authority</th><th>Expiry</th><th class="text-center">Controls</th>
+                        </tr>
+                    </thead>
+                    <tbody id="permitTable">
+                        <tr><td colspan="6" class="text-center py-5 text-muted fw-bold">Connecting to Secure Cloud...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+<div id="loadMoreWrapper" class="text-center mt-4 mb-5" style="display: none;">
+        <button id="loadMoreBtn" onclick="triggerFullSync()" class="btn btn-outline-dark fw-bold px-5 py-2">
+            ⬇️ LOAD HISTORICAL ARCHIVE (SLOWER) ⬇️
+        </button>
+    </div>
+        <div id="debugTerminal"></div>
+    </div>
+ 
+    <script>
+        let fullDataCache = [];
+        let syncTimeout;
+ 
+        const escapeHTML = (str) => {
+            if (!str) return "";
+            return String(str).replace(/[&<>'"]/g, tag => ({ '&': '&', '<': '<', '>': '>', "'": '', '"': '"' }[tag] || tag));
+        };
+ 
+        const escapeCSV = (str) => {
+            if (!str) return '""';
+            return `"${String(str).replace(/"/g, '""')}"`;
+        };
+ 
+        function logDebug(msg, color = "#10b981") {
+            const term = document.getElementById('debugTerminal');
+            if (term) {
+                term.innerHTML += `<div style="color: ${color}">[${new Date().toLocaleTimeString()}] ${escapeHTML(msg)}</div>`;
+                term.scrollTop = term.scrollHeight;
+            }
+        }
+ 
+        function toggleDebug() {
+            const term = document.getElementById('debugTerminal');
+            term.style.display = (term.style.display === "block") ? "none" : "block";
+        }
+ 
+        // === SURGICAL INCLUSION 2: THE TRIGGER LOGIC ===
+    function triggerFullSync() {
+        const btn = document.getElementById('loadMoreBtn');
+        btn.innerText = "FETCHING ENTIRE ARCHIVE...";
+        btn.disabled = true;
+        logDebug("FETCHING FULL HISTORICAL ARCHIVE...");
+        document.getElementById('syncStatus').innerHTML = '<span class="text-warning">● DOWNLOADING ARCHIVE...</span>';
+ 
+        google.script.run
+            .withSuccessHandler(function(data) {
+                btn.innerText = "⬇️ LOAD HISTORICAL ARCHIVE (SLOWER) ⬇️";
+                btn.disabled = false;
+                updateUI(data); // Safely routes data back to your existing engine
+            })
+            .withFailureHandler(function(err) {
+                logDebug("ARCHIVE FETCH FAILED", "#ef4444");
+                btn.disabled = false;
+                btn.innerText = "⬇️ LOAD HISTORICAL ARCHIVE (SLOWER) ⬇️";
+            })
+            .getExtendedDashboardData(true);
+    }
+    // === END INCLUSION 2 ===
+ 
+        function refresh(isManual = false) {
+            logDebug(isManual ? "MANUAL SYNC INITIATED..." : "POLLING CLOUD...");
+            document.getElementById('syncStatus').innerHTML = '<span class="text-warning">● SYNCING...</span>';
+            google.script.run.withSuccessHandler(updateUI).getExtendedDashboardData();
+        }
+ 
+        function updateUI(data) {
+            clearTimeout(syncTimeout);
+            const errBanner = document.getElementById('connectionError');
+           
+            if(!data || data.error) {
+                logDebug(`HANDSHAKE REJECTED: ${data ? data.error : 'Unknown'}`, "#ef4444");
+                errBanner.style.display = 'block';
+                errBanner.innerHTML = `<strong>🚨 SYSTEM ERROR:</strong> ${escapeHTML(data ? data.error : 'Data object corrupted.')}`;
+                document.getElementById('syncStatus').innerHTML = '<span class="text-danger fw-bold">OFFLINE</span>';
+                return;
+            }
+           
+            logDebug("SUCCESS: " + (data.recent ? data.recent.length : 0) + " records synced.");
+            errBanner.style.display = 'none';
+            fullDataCache = data.recent || [];
+           
+            document.getElementById('pending').innerText = data.stats.pending || 0;
+            document.getElementById('rejected').innerText = data.stats.rejected || 0;
+            document.getElementById('statToday').innerText = data.stats.today || 0;
+            document.getElementById('statYest').innerText = data.stats.yesterday || 0;
+            document.getElementById('statMTD').innerText = data.stats.mtd || 0;
+            document.getElementById('statYTD').innerText = data.stats.ytd || 0;
+ 
+            // === SURGICAL INCLUSION 3: BUTTON TOGGLE ===
+        const wrapper = document.getElementById('loadMoreWrapper');
+        if (wrapper) wrapper.style.display = data.showLoadMoreBtn ? "block" : "none";
+        // === END INCLUSION 3 ===
+           
+            applyFilters();
+            document.getElementById('syncStatus').innerHTML = '<span class="pulse">●</span> SECURE CONNECTION: ' + new Date().toLocaleTimeString();
+        }
+ 
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const filter = document.getElementById('statusFilter').value;
+            const filtered = fullDataCache.filter(p => {
+                const textMatch = (String(p.id) + String(p.vendor)).toLowerCase().includes(search);
+                const status = (p.status || "").toLowerCase();
+               
+                if (filter === "ALL") return textMatch;
+                if (filter === "Pending") return textMatch && status.includes("pending");
+                if (filter === "Closed") return textMatch && (status.includes("closed") || status.includes("expired"));
+                return textMatch && status === filter.toLowerCase();
+            });
+            render(filtered);
+        }
+ 
+        function render(data) {
+            let html = '';
+            const now = new Date();
+           
+            data.forEach(p => {
+                const status = (p.status || "Unknown").toLowerCase();
+                const safeDateStr = p.validity ? String(p.validity).replace(' ', 'T') : null;
+                const isExpired = safeDateStr && (new Date(safeDateStr) < now) && status === "approved";
+               
+                let badgeClass = 'badge-warning';
+                if (status === "approved") badgeClass = 'badge-success';
+                else if (status.includes("reject") || status.includes("revoked")) badgeClass = 'badge-danger';
+                else if (status.includes("closed") || status.includes("expired")) badgeClass = 'badge-secondary';
+ 
+                const statusDisplay = isExpired ? '<span class="badge-soft badge-danger pulse">⚠️ EXPIRED</span>' : `<span class="badge-soft ${badgeClass}">${escapeHTML(p.status).toUpperCase()}</span>`;
+               
+const showPdf = (status === "approved" || status.includes("closed")) && p.pdf;
+                const isApproved = status === "approved";
+                const isPendingIncharge = status === "pending area incharge";
+                const actionType = isPendingIncharge ? "finalclose" : "handback";
+                const closeUrl = `${p.webAppUrl}?action=${actionType}&row=${p.row}&token=${p.token}`;
+ 
+               html += `<tr>
+                    <td><span class="badge bg-dark rounded-pill px-3 py-2" style="font-family: monospace; font-size: 1.0rem;">${escapeHTML(p.id)}</span></td>
+                    <td class="fw-bold" style="color: #2563eb; font-size:2.0rem;">${escapeHTML(p.permitType)}</td>
+                    <td><div class="fw-bold text-dark">${escapeHTML(p.vendor)}</div><div class="small text-muted mt-1">${escapeHTML(p.location)}</div></td>
+                    <td style="max-width: 280px;">
+                        <div class="text-dark fw-medium" style="font-size: 0.95rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;" title="${escapeHTML(p.description)}">
+                            ${escapeHTML(p.description)}
+                        </div>
+                    </td>
+                    <td><div class="mb-2">${statusDisplay}</div><div class="small fw-bold text-secondary">👤 ${escapeHTML(p.pendingWith)}</div></td>
+                    <td><small class="${isExpired ? 'text-danger fw-bold' : 'text-muted fw-bold'}" style="font-family: monospace;">${escapeHTML(p.validity)}</small></td>
+                    <td class="text-center">
+                        <div class="d-flex justify-content-center gap-1">
+                            ${showPdf ? `<a href="${encodeURI(p.pdf)}" target="_blank" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-2 shadow-sm">VIEW PDF</a>` : ''}
+                            ${isApproved ? `<a href="${closeUrl}" target="_blank" class="btn btn-sm btn-success fw-bold rounded-pill px-2 shadow-sm" style="background:#16a34a;">⚡ CLOSE</a>` : ''}
+                            ${isPendingIncharge ? `<a href="${closeUrl}" target="_blank" class="btn btn-sm btn-warning fw-bold rounded-pill px-2 shadow-sm text-dark" style="background:#f59e0b;">🔑 INCHARGE SIGN</a>` : ''}
+                            ${!showPdf && !isApproved && !isPendingIncharge ? '<span class="text-muted small fw-bold">PENDING</span>' : ''}
+                        </div>
+                    </td>
+                </tr>`;
+            });
+            document.getElementById('permitTable').innerHTML = html || '<tr><td colspan="6" class="text-center py-5 fw-bold text-muted">NO RECORDS FOUND</td></tr>';
+        }
+ 
+        function exportToCSV() {
+            if (fullDataCache.length === 0) { alert("No data available to export."); return; }
+            let csv = "Permit No,Type,Vendor,Location,Status,Pending With,Expiry\n";
+            fullDataCache.forEach(r => { csv += `${escapeCSV(r.id)},${escapeCSV(r.permitType)},${escapeCSV(r.vendor)},${escapeCSV(r.location)},${escapeCSV(r.status)},${escapeCSV(r.pendingWith)},${escapeCSV(r.validity)}\n`; });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = window.URL.createObjectURL(blob);
+            a.setAttribute("download", `PTW_KPI_Report_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+ 
+        window.onload = refresh;
+        setInterval(refresh, 180000);
+    </script>
+</body>
+</html>
+ 

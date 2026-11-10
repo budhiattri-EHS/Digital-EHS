@@ -1,0 +1,230 @@
+[
+  {
+    "role": "Engineering Incharge",
+    "name": "Tarun Bansal",
+    "email": "u2maintenance@sblcoatings.com",
+    "pin": "1111"
+  },
+  {
+    "role": "EHS Manager",
+    "name": "Budhi Parkash",
+    "email": "b.parkash@sblcoatings.com",
+    "pin": "2222"
+  },
+  {
+    "role": "Engineering Incharge",
+    "name": "Charanjit Singh",
+    "email": "managerprojects@sblcoatings.com",
+    "pin": "3333"
+  },
+  {
+    "role": "Engineering Incharge",
+    "name": "Deshraj Annotiya",
+    "email": "d.annotiya@sblcoatings.com",
+    "pin": "4444"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Balakram Maurya",
+    "email": "b.maurya@sblcoatings.com",
+    "pin": "6666"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Bhishma Verma",
+    "email": "b.verma@sblcoatings.com",
+    "pin": "7777"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Budhi Parkash",
+    "email": "b.parkash@sblcoatings.com",
+    "pin": "1406"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Dhawal Shukla",
+    "email": "d.shukla@sblcoatings.com",
+    "pin": "9999"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Gurpreet Kaur",
+    "email": "gp.kaur@sblcoatings.com",
+    "pin": "1010"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Ravi Ran",
+    "email": "r.rana@sblcoatings.com",
+    "pin": "2020"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Jyoti Sharma",
+    "email": "j.sharma@sblcoatings.com",
+    "pin": "3030"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "logistics SBL",
+    "email": "V.Kaundal@sblcoatings.com",
+    "pin": "4040"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "maintenance SBL",
+    "email": "maintenance@sblcoatings.com",
+    "pin": "6060"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Tarun Bansal",
+    "email": "u2maintenance@sblcoatings.com",
+    "pin": "7070"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Shailza",
+    "email": "personnel@sblcoatings.com",
+    "pin": "8080"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Ranveer Singh",
+    "email": "r.singh@sblcoatings.com",
+    "pin": "2121"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Sanjeev Kushvaha",
+    "email": "s.kushvaha@sblcoatings.com",
+    "pin": "4141"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Satya acharya",
+    "email": "s.acharya@sblcoatings.com",
+    "pin": "5151"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "SBL RMQC",
+    "email": "sblrmqc@sblcoatings.com",
+    "pin": "6161"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "SBL SQA",
+    "email": "SblSqa@sblcoatings.com",
+    "pin": "7171"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Shubham Pandey",
+    "email": "s.pandey@sblcoatings.com",
+    "pin": "8181"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "stores U2",
+    "email": "stores@sblcoatings.com",
+    "pin": "3232"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Subhadip Mondal",
+    "email": "S.Mondal@sblcoatings.com",
+    "pin": "4242"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Surjeet Kumar",
+    "email": "sk.kumar@sblcoatings.com",
+    "pin": "5252"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "U2 QC",
+    "email": "u2qc@sblcoatings.com",
+    "pin": "7272"
+  },
+  {
+    "role": "Area HOD",
+    "name": "Namita Sharma",
+    "email": "n.sharma@sblcoatings.com",
+    "pin": "9292"
+  },
+  {
+    "role": "Area HOD",
+    "name": "Manas Kumar Aich",
+    "email": "mk.aich@sblcoatings.com",
+    "pin": "1313"
+  },
+  {
+    "role": "Area HOD",
+    "name": "Sharad Buchake",
+    "email": "s.buchake@sblcoatings.com",
+    "pin": "2323"
+  },
+  {
+    "role": "Area HOD",
+    "name": "Vishal Kaundal",
+    "email": "V.Kaundal@sblcoatings.com",
+    "pin": "4343"
+  },
+  {
+    "role": "Area HOD",
+    "name": "Ranveer Singh",
+    "email": "r.singh@sblcoatings.com",
+    "pin": "5353"
+  },
+  {
+    "role": "Area HOD",
+    "name": "Sanjeev Kushvaha",
+    "email": "s.kushvaha@sblcoatings.com",
+    "pin": "6363"
+  },
+  {
+    "role": "Engineering HOD",
+    "name": "S. Kushvaha",
+    "email": "s.kushvaha@sblcoatings.com",
+    "pin": "7373"
+  },
+  {
+    "role": "Engineering HOD",
+    "name": "Deshraj Annotiya",
+    "email": "d.annotiya@sblcoatings.com",
+    "pin": "8383"
+  },
+  {
+    "role": "Engineering Incharge",
+    "name": "Ajay Kumar",
+    "email": "maintenance@sblcoatings.com",
+    "pin": "9393"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Charanjit Singh",
+    "email": "managerprojects@sblcoatings.com",
+    "pin": "5454"
+  },
+  {
+    "role": "Area HOD",
+    "name": "Ajay Tiwari",
+    "email": "a.tiwari@sblcoatings.com",
+    "pin": "6464"
+  },
+  {
+    "role": "Area Incharge",
+    "name": "Vishal Kaundal",
+    "email": "V.Kaundal@sblcoatings.com",
+    "pin": "7474"
+  },
+  {
+    "role": "EHS Manager",
+    "name": "Sanee Kumar",
+    "email": "sunnychoudhary299@gmail.com",
+    "pin": "8484"
+  }
+]

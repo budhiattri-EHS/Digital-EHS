@@ -1,0 +1,305 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #090d16;
+  color: #f1f5f9;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* Safe area padding utilities */
+.pt-safe {
+  padding-top: max(0.75rem, env(safe-area-inset-top));
+}
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+.mb-safe {
+  margin-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.4);
+}
+
+/* Mobile high-tech glowing cards */
+.mobile-card {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.mobile-card-elevated {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.85) 100%);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6);
+}
+
+/* ECG Track Animation */
+.ecg-track {
+  position: relative;
+  background: transparent !important;
+}
+
+.ecg-track::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,1) 85%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 30%, rgba(0,0,0,1) 85%, transparent 100%);
+  -webkit-mask-size: 180px 100%;
+  mask-size: 180px 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: true-oscilloscope-sweep var(--ecg-duration, 3s) linear infinite;
+}
+
+.ecg-critical::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 48' preserveAspectRatio='none'%3E%3Cpath d='M0 24 L 130 24 C 140 18, 150 18, 160 24 L 168 24 L 172 28 L 185 4 L 195 44 L 203 24 L 210 24 C 220 16, 235 16, 245 24 L 430 24 C 440 18, 450 18, 460 24 L 468 24 L 472 28 L 485 4 L 495 44 L 503 24 L 510 24 C 520 16, 535 16, 545 24 L 730 24 C 740 18, 750 18, 760 24 L 768 24 L 772 28 L 785 4 L 795 44 L 803 24 L 810 24 C 820 16, 835 16, 845 24 L 1000 24' fill='none' stroke='%23ef4444' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  filter: drop-shadow(0 0 6px #ef4444);
+}
+
+.ecg-elevated::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 48' preserveAspectRatio='none'%3E%3Cpath d='M0 24 L 130 24 C 140 18, 150 18, 160 24 L 168 24 L 172 28 L 185 4 L 195 44 L 203 24 L 210 24 C 220 16, 235 16, 245 24 L 430 24 C 440 18, 450 18, 460 24 L 468 24 L 472 28 L 485 4 L 495 44 L 503 24 L 510 24 C 520 16, 535 16, 545 24 L 730 24 C 740 18, 750 18, 760 24 L 768 24 L 772 28 L 785 4 L 795 44 L 803 24 L 810 24 C 820 16, 835 16, 845 24 L 1000 24' fill='none' stroke='%23f59e0b' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  filter: drop-shadow(0 0 6px #f59e0b);
+}
+
+.ecg-optimal::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 48' preserveAspectRatio='none'%3E%3Cpath d='M0 24 L 130 24 C 140 18, 150 18, 160 24 L 168 24 L 172 28 L 185 4 L 195 44 L 203 24 L 210 24 C 220 16, 235 16, 245 24 L 430 24 C 440 18, 450 18, 460 24 L 468 24 L 472 28 L 485 4 L 495 44 L 503 24 L 510 24 C 520 16, 535 16, 545 24 L 730 24 C 740 18, 750 18, 760 24 L 768 24 L 772 28 L 785 4 L 795 44 L 803 24 L 810 24 C 820 16, 835 16, 845 24 L 1000 24' fill='none' stroke='%2310b981' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  filter: drop-shadow(0 0 6px #10b981);
+}
+
+/* Dynamic score-based speed fallback classes */
+.ecg-speed-rapid::after { animation-duration: 0.9s !important; }
+.ecg-speed-fast::after { animation-duration: 1.4s !important; }
+.ecg-speed-medium::after { animation-duration: 2.2s !important; }
+.ecg-speed-calm::after { animation-duration: 3.2s !important; }
+
+@keyframes true-oscilloscope-sweep {
+  0% { 
+    -webkit-mask-position: -180px 0; 
+    mask-position: -180px 0; 
+  }
+  100% { 
+    -webkit-mask-position: calc(100% + 180px) 0; 
+    mask-position: calc(100% + 180px) 0; 
+  }
+}
+
+/* J.A.R.V.I.S. 3D Atomic Core */
+.atomic-reactor {
+  width: 5rem;
+  height: 5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.arc-core-3d {
+  position: absolute;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: radial-gradient(circle, #1e293b 0%, #0f172a 60%, #020617 100%);
+  border-radius: 50%;
+  border: 1px solid #38bdf8;
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.4), inset 0 0 10px rgba(56, 189, 248, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: core-pulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes core-pulse {
+  0% { transform: scale(0.95); box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+  100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(56, 189, 248, 0.6); }
+}
+
+.orbit-container {
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  transform-style: preserve-3d;
+}
+
+.orbit {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-width: 1.5px;
+  border-style: solid;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+}
+
+.orbit-1 { 
+  border-color: rgba(56, 189, 248, 0.5); 
+  animation: spin-1 3s linear infinite; 
+}
+.orbit-2 { 
+  border-color: rgba(99, 102, 241, 0.5); 
+  animation: spin-2 3.8s linear infinite; 
+}
+.orbit-3 { 
+  border-color: rgba(239, 68, 68, 0.5); 
+  animation: spin-3 4.5s linear infinite; 
+}
+
+@keyframes spin-1 {
+  0%   { transform: rotateZ(0deg) rotateX(75deg) rotateZ(0deg); }
+  100% { transform: rotateZ(0deg) rotateX(75deg) rotateZ(360deg); }
+}
+@keyframes spin-2 {
+  0%   { transform: rotateZ(60deg) rotateX(75deg) rotateZ(0deg); }
+  100% { transform: rotateZ(60deg) rotateX(75deg) rotateZ(360deg); }
+}
+@keyframes spin-3 {
+  0%   { transform: rotateZ(120deg) rotateX(75deg) rotateZ(0deg); }
+  100% { transform: rotateZ(120deg) rotateX(75deg) rotateZ(360deg); }
+}
+
+/* Tactical live gradient */
+.btn-live-gradient {
+  background: linear-gradient(-45deg, #1d4ed8, #0ea5e9, #3b82f6, #4f46e5);
+  background-size: 300% 300%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ==========================================================================
+   APPLE iOS / CUPERTINO HUMAN INTERFACE GUIDELINES (HIG) STYLING
+   Optimized specifically for iPhone (Dynamic Island / Notch & Home Indicator)
+   ========================================================================== */
+
+.font-ios {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif !important;
+  letter-spacing: -0.015em;
+}
+
+/* Apple iOS Inset Grouped Card */
+.ios-card {
+  background: rgba(28, 28, 30, 0.82) !important;
+  backdrop-filter: blur(25px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(25px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+/* Apple Frosted Glass Top Navigation Bar */
+.ios-glass-nav {
+  background: rgba(20, 20, 24, 0.82) !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Apple Frosted Bottom Tab Bar */
+.ios-glass-tabbar {
+  background: rgba(22, 22, 26, 0.88) !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+/* Apple Cupertino Modal Sheet Presentation */
+.ios-sheet {
+  background: #1c1c1e !important;
+  border-top-left-radius: 28px !important;
+  border-top-right-radius: 28px !important;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.6) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Apple Sheet Pull Drag Handle / Grabber */
+.ios-grabber {
+  width: 38px;
+  height: 5px;
+  border-radius: 9999px;
+  background-color: rgba(235, 235, 245, 0.3);
+  margin: 8px auto 14px auto;
+}
+
+/* Apple Segmented Control Bar */
+.ios-segmented {
+  background: rgba(118, 118, 128, 0.24);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  padding: 3px;
+}
+
+.ios-segment-btn {
+  border-radius: 9px;
+  font-weight: 600;
+  font-size: 11px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ios-segment-btn-active {
+  background: #2c2c2e;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* Apple System Blue Button */
+.ios-btn-primary {
+  background: #007aff !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 14px !important;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.ios-btn-primary:active {
+  opacity: 0.85;
+  transform: scale(0.98);
+}
+
+/* Apple Health ECG Activity Track */
+.ios-ecg-canvas {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+
+/* Smooth momentum scrolling on iOS */
+.ios-momentum-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+

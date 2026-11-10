@@ -1,0 +1,958 @@
+﻿CODE.GS
+
+
+/**
+ * SBL EHS Central Portal - Master Daily Dashboard
+ * Features: Month-wise EHS Filtering, Upsert logic, Auto Gap-Filling, Flattened Payload.
+ */
+
+
+const MASTER_DB_ID = '1-sMlO-uy8yO6Krgjay2tnu1urWM6WPnMvq0wUOWSmvQ';
+const LIVE_SAFETY_DB_ID = '1qxwTcS-2c87UAMH6c3xNPUT1MscKH5LXJwrgaSGTauY';
+const LIVE_PTW_DB_ID = '1H_ggksQXPvCMi_DbomwECSmkAeUySsg2o5jj-871JCE';
+
+
+function doGet(e) {
+  return HtmlService.createTemplateFromFile('Index')
+    .evaluate()
+    .setTitle('SBL Master Dashboard')
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+
+function fetchLiveSafetyData(targetDateStr) {
+  try {
+    const safetySheet = SpreadsheetApp.openById(LIVE_SAFETY_DB_ID).getSheetByName('Safety Log');
+    if (!safetySheet) return { summary: { totals: [] }, register: [] };
+   
+    const safetyData = safetySheet.getDataRange().getValues();
+    const headers = safetyData.shift();
+   
+    const colType = headers.findIndex(h => h.toString().includes('Observation Type'));
+    const colImpact = headers.findIndex(h => h.toString().includes('Potential Severity'));
+    const colStatus = headers.findIndex(h => h.toString().includes('Status'));
+    const colDate = headers.findIndex(h => h.toString().includes('Date and Time'));
+    const colTargetDate = headers.findIndex(h => h.toString().includes('Target Date of Closure'));
+    const colActualDate = headers.findIndex(h => h.toString().includes('Date Closed'));
+    const colPrevAction = headers.findIndex(h => h.toString().includes('Preventive Action'));
+    const colRemarks = headers.findIndex(h => h.toString().includes('Remarks'));
+    const colDept = headers.findIndex(h => h.toString().toLowerCase().includes('department') || h.toString().toLowerCase().includes('dept'));
+    let summaryTotals = {
+      "Unsafe Act": { total: 0, open: 0, overdue: 0, closed: 0, high: 0, medium: 0, low: 0 },
+      "Unsafe Condition": { total: 0, open: 0, overdue: 0, closed: 0, high: 0, medium: 0, low: 0 },
+      "Near Miss": { total: 0, open: 0, overdue: 0, closed: 0, high: 0, medium: 0, low: 0 }
+    };
+   
+    let totalDaysToClose = 0;
+    let closedCountForAvg = 0;
+    let registerArray = [];
+
+
+  const tDateObj = new Date(targetDateStr);
+    tDateObj.setHours(0, 0, 0, 0); // Normalize time
+    const targetYear = tDateObj.getFullYear();
+    const targetMonth = tDateObj.getMonth();
+   
+   safetyData.forEach((row, index) => {
+ let originalDate = new Date(row[colDate]);
+      if (isNaN(originalDate)) return;
+     
+      let repDate = new Date(originalDate);
+      // We set the target Date Object to 23:59:59 so it includes the ENTIRE target day.
+      let endOfDayTarget = new Date(tDateObj);
+      endOfDayTarget.setHours(23, 59, 59, 999);
+
+
+      // STRICT MTD FILTER: Must be this month, and CANNOT be after the selected date
+      if (repDate.getFullYear() !== targetYear || repDate.getMonth() !== targetMonth) return;
+      if (repDate > endOfDayTarget) return;
+
+
+      let typeStr = row[colType] ? row[colType].toString() : "";
+      let type = typeStr.includes('Unsafe Act') ? 'Unsafe Act' :
+                 typeStr.includes('Unsafe Condition') ? 'Unsafe Condition' :
+                 typeStr.includes('Near Miss') ? 'Near Miss' : 'Unknown';
+                 
+      if (type === 'Unknown') return;
+     
+      let impactStr = row[colImpact] ? row[colImpact].toString().toLowerCase() : "";
+      let impact = impactStr.includes('high') ? 'High' :
+                   impactStr.includes('medium') ? 'Medium' :
+                   impactStr.includes('low') ? 'Low' : '-';
+                   
+      let statusStr = row[colStatus] ? row[colStatus].toString().toLowerCase() : "";
+      let status = statusStr.includes('close') ? 'Closed' : 'Open';
+     
+      let closeDate = row[colActualDate] ? new Date(row[colActualDate]) : null;
+      let daysToClose = 0;
+      if (closeDate && !isNaN(closeDate) && !isNaN(repDate)) {
+        daysToClose = Math.ceil((closeDate - repDate) / (1000 * 60 * 60 * 24));
+        if (daysToClose < 0) daysToClose = 0;
+      }
+     
+      summaryTotals[type].total++;
+      if (status === 'Closed') {
+        summaryTotals[type].closed++;
+        totalDaysToClose += daysToClose;
+        closedCountForAvg++;
+      } else {
+        summaryTotals[type].open++;
+        if (row[colTargetDate]) {
+          let tDate = new Date(row[colTargetDate]);
+          if (!isNaN(tDate) && tDate < new Date()) summaryTotals[type].overdue++;
+        }
+      }
+     
+      if (impact === 'High') summaryTotals[type].high++;
+      else if (impact === 'Medium') summaryTotals[type].medium++;
+      else if (impact === 'Low') summaryTotals[type].low++;
+     
+    let dFormat = Utilities.formatDate(originalDate, Session.getScriptTimeZone(), "yyyy-MM-dd");
+      let tFormat = Utilities.formatDate(originalDate, Session.getScriptTimeZone(), "HH:mm:ss");
+      let targetFormat = row[colTargetDate] && !isNaN(new Date(row[colTargetDate])) ? Utilities.formatDate(new Date(row[colTargetDate]), Session.getScriptTimeZone(), "yyyy-MM-dd") : "-";
+      let actFormat = closeDate && !isNaN(closeDate) ? Utilities.formatDate(closeDate, Session.getScriptTimeZone(), "yyyy-MM-dd") : "-";
+     
+registerArray.push({
+        sr: registerArray.length + 1, date: dFormat, time: tFormat, type: type,
+        desc: row[10] || "-", location: row[9] || "-", reporter: row[7] || "-",
+dept: row[22] || "-", impact: impact, cause: row[12] || "-",
+        corrective: row[13] || "-", preventive: colPrevAction > -1 ? row[colPrevAction] : "-",
+        assigned: row[14] || "-", targetDate: targetFormat, actualDate: actFormat,
+        status: status, daysToClose: daysToClose, remarks: colRemarks > -1 ? row[colRemarks] : "-"
+      });
+    });
+   
+    let totalsArray = [];
+    let totalsRow = { type: "Total", total: 0, open: 0, overdue: 0, closed: 0, high: 0, medium: 0, low: 0 };
+    ["Unsafe Act", "Unsafe Condition", "Near Miss"].forEach(t => {
+      let r = summaryTotals[t]; r.type = t; totalsArray.push(r);
+      totalsRow.total += r.total; totalsRow.open += r.open; totalsRow.overdue += r.overdue;
+      totalsRow.closed += r.closed; totalsRow.high += r.high; totalsRow.medium += r.medium; totalsRow.low += r.low;
+    });
+    totalsArray.push(totalsRow);
+   
+    let closureRate = totalsRow.total > 0 ? ((totalsRow.closed / totalsRow.total) * 100).toFixed(2) + "%" : "0%";
+    let avgDays = closedCountForAvg > 0 ? (totalDaysToClose / closedCountForAvg).toFixed(2) : "0";
+   
+    return {
+      summary: { totals: totalsArray, closureRate: closureRate, avgDays: avgDays },
+      register: registerArray
+    };
+  } catch (e) {
+    Logger.log("Safety Fetch Error: " + e);
+    return { summary: { totals: [], closureRate: "0%", avgDays: "0" }, register: [] };
+  }
+}
+
+
+function fetchLivePTWData(targetDateStr) {
+  try {
+  const tDateObj = new Date(targetDateStr);
+    tDateObj.setHours(0, 0, 0, 0);
+   
+   const ptwSheet = SpreadsheetApp.openById(LIVE_PTW_DB_ID).getSheetByName('PTW_Master_Data');
+    if (!ptwSheet) return null;
+   
+    const ptwData = ptwSheet.getDataRange().getValues();
+    const headers = ptwData.shift();
+    const colDate = headers.findIndex(h => h.toString().includes('Permit Start Date'));
+   
+// Dynamically find columns for the Permit Details table
+    const colPermitNo = headers.findIndex(h => h.toString().toLowerCase().match(/permit\s*(no|#|num)|ptw\s*(no|#|num)/i));
+    const colVendor = headers.findIndex(h => h.toString().toLowerCase().match(/vendor|contractor|agency/));
+    const colLocation = headers.findIndex(h => h.toString().toLowerCase().match(/location|area|plant/));
+    const colDesc = headers.findIndex(h => h.toString().toLowerCase().match(/description|nature of work|details/));
+    const colType = headers.findIndex(h => h.toString().toLowerCase().match(/permit type|type of permit/));
+   
+    const permits = {
+      gen: { t: 0, m: 0 }, hot: { t: 0, m: 0 }, hgt: { t: 0, m: 0 }, cnf: { t: 0, m: 0 },
+      exc: { t: 0, m: 0 }, lin: { t: 0, m: 0 }, hst: { t: 0, m: 0 },
+      todayDetails: []
+    };
+   
+    ptwData.forEach(row => {
+      let pDate = new Date(row[colDate]);
+      if (isNaN(pDate)) return;
+      pDate.setHours(0, 0, 0, 0);
+     
+      // STRICT MTD FILTER: Must be this month, and CANNOT be after the selected date
+      if (pDate.getFullYear() !== tDateObj.getFullYear() || pDate.getMonth() !== tDateObj.getMonth()) return;
+      if (pDate > tDateObj) return;
+     
+let isToday = (pDate.getTime() === tDateObj.getTime());
+     
+      let isHot = false, isHgt = false, isCnf = false, isLin = false, isExc = false, isHst = false;
+      let rowString = "";
+
+
+      // If a specific Permit Type column exists, use it. Otherwise, stringify the whole row and search it.
+      if (colType > -1) {
+        rowString = row[colType] ? row[colType].toString().toLowerCase() : "";
+      } else {
+        rowString = row.join(" ").toLowerCase();
+      }
+
+
+      if (rowString.includes('hot')) isHot = true;
+      if (rowString.includes('height')) isHgt = true;
+      if (rowString.includes('confined')) isCnf = true;
+      if (rowString.includes('line break')) isLin = true;
+      if (rowString.includes('excavation')) isExc = true;
+      if (rowString.includes('hoist') || rowString.includes('crane')) isHst = true;
+     
+      let isGen = (!isHot && !isHgt && !isCnf && !isLin && !isExc && !isHst);
+     
+// Gather specific types for the description string
+      let types = [];
+      if (isGen) types.push("General");
+      if (isHot) types.push("Hot Work");
+      if (isHgt) types.push("Height Work");
+      if (isCnf) types.push("Confined Space");
+      if (isLin) types.push("Line Breaking");
+      if (isExc) types.push("Excavation");
+      if (isHst) types.push("Hoisting");
+      let typeStr = types.join(", ") || "General";
+
+
+      if (isGen) { permits.gen.m++; if (isToday) permits.gen.t++; }
+      if (isHot) { permits.hot.m++; if (isToday) permits.hot.t++; }
+      if (isHgt) { permits.hgt.m++; if (isToday) permits.hgt.t++; }
+      if (isCnf) { permits.cnf.m++; if (isToday) permits.cnf.t++; }
+      if (isLin) { permits.lin.m++; if (isToday) permits.lin.t++; }
+      if (isExc) { permits.exc.m++; if (isToday) permits.exc.t++; }
+if (isHst) { permits.hst.m++; if (isToday) permits.hst.t++; }
+
+
+      // Capture ALL permits for the Month-to-Date table
+      let pNo = colPermitNo > -1 ? row[colPermitNo].toString().trim() : "";
+      // If Permit No is blank or column doesn't exist, use the Timestamp as the ID
+      if (!pNo || pNo === "") pNo = Utilities.formatDate(pDate, Session.getScriptTimeZone(), "MMdd-HHmm");
+     
+      let ven = colVendor > -1 ? row[colVendor] : "";
+      let loc = colLocation > -1 ? row[colLocation] : "";
+      let vendorLoc = [ven, loc].filter(Boolean).join(" - ") || "-";
+      let desc = colDesc > -1 ? row[colDesc] : "-";
+      let pDateFormatted = Utilities.formatDate(pDate, Session.getScriptTimeZone(), "yyyy-MM-dd");
+
+
+      // We keep the array name 'todayDetails' to avoid breaking the payload, but it now holds MTD data
+      permits.todayDetails.push({
+         date: pDateFormatted,
+         permitNo: pNo,
+         type: typeStr,
+         vendorLocation: vendorLoc,
+         description: desc
+      });
+    });
+   
+    return permits;
+  } catch (e) {
+    Logger.log("PTW Fetch Error: " + e);
+    return null;
+  }
+}
+
+
+function processDailySubmission(formData) {
+  try {
+    if (!formData) formData = {};
+    const targetDateStr = formData.date || Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyy-MM-dd");
+    const ss = SpreadsheetApp.openById(MASTER_DB_ID);
+   
+    // --- 1. HANDLE PRODUCTION DATA (UPSERT) ---
+    const prodSheet = ss.getSheetByName('Production');
+    const prodData = prodSheet.getDataRange().getValues();
+    if (prodData.length > 0) prodData.shift();
+
+
+    let existingRowIndex = -1;
+    for (let i = 0; i < prodData.length; i++) {
+      let rowDate = prodData[i][0];
+      let rowDateStr = rowDate instanceof Date ? Utilities.formatDate(rowDate, Session.getScriptTimeZone(), "yyyy-MM-dd") : rowDate;
+      if (rowDateStr === targetDateStr) { existingRowIndex = i; break; }
+    }
+
+
+    if (existingRowIndex === -1 && prodData.length > 0) {
+      let lastRow = prodData[prodData.length - 1];
+      let lastDateObj = new Date(lastRow[0]);
+      lastDateObj.setHours(0, 0, 0, 0);
+     
+      const tDateObj = new Date(targetDateStr);
+      tDateObj.setHours(0, 0, 0, 0);
+     
+      let currDate = new Date(lastDateObj);
+      currDate.setDate(currDate.getDate() + 1);
+     
+      let prevMtd = parseFloat(lastRow[4]) || 0;
+      let prevCum = parseFloat(lastRow[7]) || 0;
+      let prevTotalMonth = parseFloat(lastRow[9]) || 0;
+     
+      let workingDays = 0;
+      for (let i = 0; i < prodData.length; i++) {
+        let rowDate = new Date(prodData[i][0]);
+        // Only count working days from the same month as the last row
+        if (!isNaN(rowDate) && rowDate.getMonth() === lastDateObj.getMonth() && rowDate.getFullYear() === lastDateObj.getFullYear()) {
+          if (parseFloat(prodData[i][3]) > 0) workingDays++;
+        }
+      }
+
+
+      let gapRows = [];
+      let currentTrackingMonth = lastDateObj.getMonth();
+     
+      while (currDate < tDateObj) {
+        // CRITICAL: If the gap crosses into a new month, reset all MTD/Cum totals to 0!
+        if (currDate.getMonth() !== currentTrackingMonth) {
+          prevMtd = 0;
+          prevCum = 0;
+          prevTotalMonth = 0;
+          workingDays = 0;
+          currentTrackingMonth = currDate.getMonth();
+        }
+       
+        let achieved = workingDays > 0 ? (prevMtd / workingDays) : 0;
+        let dStr = Utilities.formatDate(currDate, Session.getScriptTimeZone(), "yyyy-MM-dd");
+        gapRows.push([
+          dStr, "525 KL", "20 KL", "0.000", prevMtd.toFixed(3), achieved.toFixed(3),
+          "0.00", prevCum.toFixed(2), "0.00", prevTotalMonth.toFixed(2), "0", "0", "No Production"
+        ]);
+        currDate.setDate(currDate.getDate() + 1);
+      }
+     
+      if (gapRows.length > 0) {
+        prodSheet.getRange(prodSheet.getLastRow() + 1, 1, gapRows.length, gapRows[0].length).setValues(gapRows);
+        prodData.push(...gapRows);
+      }
+    }
+
+
+    // DECLARE ONCE FOR BOTH HISTORY FETCH AND CALCULATIONS
+    const tDateObjFilter = new Date(targetDateStr);
+    tDateObjFilter.setHours(0, 0, 0, 0);
+    const targetYear = tDateObjFilter.getFullYear();
+    const targetMonth = tDateObjFilter.getMonth();
+
+
+    let previousMtd = 0;
+    let previousCum = 0;
+    let workingDaysSoFar = 0;
+   
+    let loopLimit = existingRowIndex > -1 ? existingRowIndex : prodData.length;
+    let lastRowInSameMonth = null;
+   
+    // CRITICAL: Only fetch historical MTD/Cum data if it belongs to the CURRENT month
+    for (let i = 0; i < loopLimit; i++) {
+      let rowDate = new Date(prodData[i][0]);
+      if (isNaN(rowDate)) continue;
+     
+      if (rowDate.getFullYear() === targetYear && rowDate.getMonth() === targetMonth) {
+        if (parseFloat(prodData[i][3]) > 0) workingDaysSoFar++;
+        lastRowInSameMonth = prodData[i];
+      }
+    }
+   
+    // If it's the 1st of the month, lastRowInSameMonth remains null, so previousMtd stays 0.
+    if (lastRowInSameMonth) {
+      previousMtd = parseFloat(lastRowInSameMonth[4]) || 0;
+      previousCum = parseFloat(lastRowInSameMonth[7]) || 0;
+    }
+
+
+    const todayProd = parseFloat(formData.todayProduction) || 0;
+    const todayDisp = parseFloat(formData.todayDispatched) || 0;
+    const pendingOrder = parseFloat(formData.pendingOrder) || 0;
+    const manualTotalMonthOrder = parseFloat(formData.totalMonthOrder) || 0;
+
+
+    const mtdProduction = previousMtd + todayProd;
+    if (todayProd > 0) {
+      workingDaysSoFar++;
+    }
+   
+    const achievedProdRate = workingDaysSoFar > 0 ? (mtdProduction / workingDaysSoFar) : 0;
+    const cumDispatch = previousCum + todayDisp;
+
+
+    let newRowData = [
+      targetDateStr, "525 KL", "20 KL", todayProd.toFixed(3), mtdProduction.toFixed(3),
+      achievedProdRate.toFixed(3), todayDisp.toFixed(2), cumDispatch.toFixed(2),
+      pendingOrder.toFixed(2), manualTotalMonthOrder.toFixed(2), formData.skus || "0", formData.batches || "0", formData.remarks || "-"
+    ];
+
+
+    if (existingRowIndex > -1) {
+      prodSheet.getRange(existingRowIndex + 2, 1, 1, newRowData.length).setValues([newRowData]);
+    } else {
+      prodSheet.appendRow(newRowData);
+    }
+
+
+    const updatedProdData = prodSheet.getDataRange().getValues();
+    if (updatedProdData.length > 0) updatedProdData.shift();
+   
+    const productionHistory = [];
+    updatedProdData.forEach(row => {
+      let d = row[0];
+      let rowDateObj = (d instanceof Date) ? d : new Date(d);
+      rowDateObj.setHours(0, 0, 0, 0);
+     
+      // STRICT MONTH-WISE FILTER: Only push rows for the current selected month & year
+      if (rowDateObj.getFullYear() === targetYear && rowDateObj.getMonth() === targetMonth && rowDateObj <= tDateObjFilter) {
+        let dStr = (d instanceof Date) ? Utilities.formatDate(d, Session.getScriptTimeZone(), "yyyy-MM-dd") : d;
+        productionHistory.push({
+          date: dStr, monthlyPlan: row[1], askingRate: row[2], todayProduction: Number(row[3]).toFixed(3),
+          mtdProduction: Number(row[4]).toFixed(3), achievedProdRate: Number(row[5]).toFixed(3),
+          todayDispatched: Number(row[6]).toFixed(2), cumDispatch: Number(row[7]).toFixed(2),
+          pendingOrder: Number(row[8]).toFixed(2), totalMonthOrder: Number(row[9]).toFixed(2), skus: row[10], batches: row[11]
+        });
+      }
+    });
+
+
+    // --- 2. FETCH LIVE EHS DATA ---
+    const safetyData = fetchLiveSafetyData(targetDateStr);
+    const ptwData = fetchLivePTWData(targetDateStr);
+   
+    if (ptwData) {
+      formData.l_gen_t = ptwData.gen.t; formData.l_gen_m = ptwData.gen.m;
+      formData.l_hot_t = ptwData.hot.t; formData.l_hot_m = ptwData.hot.m;
+      formData.l_hgt_t = ptwData.hgt.t; formData.l_hgt_m = ptwData.hgt.m;
+      formData.l_cnf_t = ptwData.cnf.t; formData.l_cnf_m = ptwData.cnf.m;
+      formData.l_exc_t = ptwData.exc.t; formData.l_exc_m = ptwData.exc.m;
+      formData.l_lin_t = ptwData.lin.t; formData.l_lin_m = ptwData.lin.m;
+      formData.l_hst_t = ptwData.hst.t; formData.l_hst_m = ptwData.hst.m;
+    }
+
+
+    let ua_today = 0, uc_today = 0;
+    safetyData.register.forEach(r => {
+      if (r.date === targetDateStr) {
+        if (r.type === 'Unsafe Act') ua_today++;
+        if (r.type === 'Unsafe Condition') uc_today++;
+      }
+    });
+   
+    formData.l_ua_t = ua_today;
+    formData.l_uc_t = uc_today;
+   
+    let ua_total = safetyData.summary.totals.find(t => t.type === 'Unsafe Act');
+    let uc_total = safetyData.summary.totals.find(t => t.type === 'Unsafe Condition');
+    formData.l_ua_m = ua_total ? ua_total.total : 0;
+    formData.l_uc_m = uc_total ? uc_total.total : 0;
+
+
+    // --- 3. COMPILE PDF ---
+    const htmlTemplate = HtmlService.createTemplateFromFile('PdfTemplate');
+    htmlTemplate.prodHistory = productionHistory;
+    htmlTemplate.ehsData = safetyData;
+    htmlTemplate.registerData = safetyData.register;
+    htmlTemplate.ptwDetails = ptwData ? ptwData.todayDetails : []; // Pass PTW Details
+    htmlTemplate.formData = formData;
+    htmlTemplate.remarks = formData.remarks || "-";
+
+
+    const htmlOutput = htmlTemplate.evaluate().getContent();
+    const pdfBlob = Utilities.newBlob(htmlOutput, 'text/html', 'Master_Report.html').getAs('application/pdf');
+
+
+    return {
+      success: true,
+      message: "Data logged and live EHS portals synced successfully for " + targetDateStr + ".",
+      fileName: `SBL_Master_Report_${targetDateStr}.pdf`,
+      fileData: Utilities.base64Encode(pdfBlob.getBytes())
+    };
+  } catch (error) {
+    return { success: false, message: error.toString() };
+  }
+}
+function fetchProductionDataForDate(targetDateStr) {
+  try {
+    const ss = SpreadsheetApp.openById(MASTER_DB_ID);
+    const prodSheet = ss.getSheetByName('Production');
+    const prodData = prodSheet.getDataRange().getValues();
+    if (prodData.length > 0) prodData.shift();
+   
+    for (let i = 0; i < prodData.length; i++) {
+      let rowDate = prodData[i][0];
+      let rowDateStr = rowDate instanceof Date ? Utilities.formatDate(rowDate, Session.getScriptTimeZone(), "yyyy-MM-dd") : rowDate;
+      if (rowDateStr === targetDateStr) {
+        return {
+          found: true,
+          todayProduction: prodData[i][3],
+          todayDispatched: prodData[i][6],
+          pendingOrder: prodData[i][8],
+          totalMonthOrder: prodData[i][9],
+          skus: prodData[i][10],
+          batches: prodData[i][11],
+          remarks: prodData[i][12]
+        };
+      }
+    }
+    return { found: false };
+  } catch (e) {
+    return { found: false, error: e.toString() };
+  }
+}
+
+
+INDEX.HTML
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SBL Master Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background-color: #f8fafc; font-family: sans-serif; color: #0f172a; padding: 30px; }
+    .card { background: #fff; border-radius: 8px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .section-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid #e2e8f0; }
+    input, textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+    th, td { border: 1px solid #e2e8f0; padding: 6px; text-align: center; }
+    th { background: #f1f5f9; font-size: 0.9rem; }
+    .rm-input { border: none; background: transparent; padding: 4px; text-align: center; }
+    .rm-input:focus { outline: 1px solid #3b82f6; background: #fff; }
+  </style>
+</head>
+<body class="max-w-6xl mx-auto">
+
+
+  <div class="card bg-slate-900 text-white flex justify-between items-center">
+    <div>
+      <h1 class="text-2xl font-bold">SBL Master Operations Portal</h1>
+      <p class="text-slate-400 text-sm mt-1">Live Linked to PTW & UA/C NM Portals (Filtered by Month)</p>
+    </div>
+    <div class="bg-emerald-800 text-emerald-100 text-xs px-3 py-1 rounded-full font-bold">LIVE SYNC ACTIVE</div>
+  </div>
+
+
+  <form id="masterForm" onsubmit="submitForm(event)">
+    <div class="card">
+      <h2 class="section-title">1. Production & Dispatch</h2>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+        <div><label class="block text-sm font-bold mb-1">Date</label><input type="date" id="date" required></div>
+        <div><label class="block text-sm font-bold mb-1">Today Prod (KL/MT)</label><input type="number" step="0.001" id="todayProduction" required></div>
+        <div><label class="block text-sm font-bold mb-1">Total Batches</label><input type="number" id="batches" required></div>
+        <div><label class="block text-sm font-bold mb-1">No of SKUs</label><input type="number" id="skus" required></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div><label class="block text-sm font-bold mb-1">Today Dispatched (KL)</label><input type="number" step="0.01" id="todayDispatched" required></div>
+        <div><label class="block text-sm font-bold mb-1">Pending Order In Hand (KL)</label><input type="number" step="0.01" id="pendingOrder" required></div>
+        <div><label class="block text-sm font-bold mb-1">Total Month Order (KL)</label><input type="number" step="0.01" id="totalMonthOrder" required></div>
+      </div>
+      <div><label class="block text-sm font-bold mb-1">Production Remarks</label><textarea id="remarks" rows="2"></textarea></div>
+    </div>
+
+
+    <div class="card">
+      <h2 class="section-title">2. Batch Details, Quality & RM Shortage</h2>
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <div class="col-span-12 md:col-span-5">
+          <table>
+            <tr><th>Batch Detail</th><th>SKU (Count)</th><th>Volume in KL</th></tr>
+            <tr><td>Below (1-300 ltr)</td><td><input type="number" id="batchSmallCount" value="0"></td><td><input type="number" id="batchSmallVol" value="0"></td></tr>
+            <tr><td>Up to (300 ltr)</td><td><input type="number" id="batchLargeCount" value="0"></td><td><input type="number" id="batchLargeVol" value="0"></td></tr>
+          </table>
+          <label class="block text-sm font-bold mb-1 mt-4">Quality Status</label>
+          <input type="text" id="qualityStatus" value="There is no quality issue">
+        </div>
+       
+        <div class="col-span-12 md:col-span-7">
+          <label class="block text-sm font-bold mb-1">RM Shortage</label>
+          <table>
+            <thead><tr><th colspan="2">RM/PM</th><th>Status</th><th>Product hampered</th><th>vol.</th></tr></thead>
+            <tbody id="rmTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <h2 class="section-title">3. EHS Lagging Indicators & Emergency Readiness</h2>
+     
+      <label class="block text-sm font-bold mb-2 text-red-700">LAGGING INDICATORS (Today / MTD)</label>
+      <table class="mb-6">
+        <tr><th>Fatality</th><th>LTI</th><th>MTC</th><th>First Aid</th><th>Fire</th><th>Spill</th><th>Dangerous</th></tr>
+        <tr>
+          <td><input type="number" id="lag_fat_t" value="0"></td><td><input type="number" id="lag_lti_t" value="0"></td><td><input type="number" id="lag_mtc_t" value="0"></td><td><input type="number" id="lag_fa_t" value="0"></td><td><input type="number" id="lag_fir_t" value="0"></td><td><input type="number" id="lag_spl_t" value="0"></td><td><input type="number" id="lag_dng_t" value="0"></td>
+        </tr>
+        <tr>
+          <td><input type="number" id="lag_fat_m" value="0"></td><td><input type="number" id="lag_lti_m" value="0"></td><td><input type="number" id="lag_mtc_m" value="0"></td><td><input type="number" id="lag_fa_m" value="0"></td><td><input type="number" id="lag_fir_m" value="0"></td><td><input type="number" id="lag_spl_m" value="0"></td><td><input type="number" id="lag_dng_m" value="0"></td>
+        </tr>
+      </table>
+
+
+      <label class="block text-sm font-bold mb-2 text-blue-700">EMERGENCY READINESS</label>
+      <table>
+        <tr><th>Tank Vol</th><th>Pump Mode</th><th>Pressure</th><th>Exits</th><th>Lights</th><th>Interlocks</th></tr>
+        <tr>
+          <td><input type="text" id="er_tank" value="90%"></td><td><input type="text" id="er_pump" value="AUTO"></td><td><input type="text" id="er_hyd" value="7"></td><td><input type="text" id="er_exit" value="YES"></td><td><input type="text" id="er_lght" value="YES"></td><td><input type="text" id="er_int" value="No"></td>
+        </tr>
+      </table>
+    </div>
+
+
+    <div class="flex justify-end">
+      <button type="submit" id="submitBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded shadow-lg shadow-blue-500/50">Compile Master PDF</button>
+    </div>
+  </form>
+
+
+  <script>
+    document.getElementById('date').valueAsDate = new Date();
+
+
+    let rmHTML = '';
+    for (let i = 1; i <= 10; i++) {
+      rmHTML += `
+        <tr>
+          <td class="font-bold bg-slate-50 w-8">${i}</td>
+          <td><input type="text" id="rm_${i}_code" class="rm-input w-full"></td>
+          <td><input type="text" id="rm_${i}_status" class="rm-input w-full"></td>
+          <td><input type="text" id="rm_${i}_prod" class="rm-input w-full"></td>
+          ${i === 1 ? `<td rowspan="10" class="align-middle bg-slate-50"><input type="text" id="rm_vol" class="rm-input w-full h-full text-center" value="-"></td>` : ''}
+        </tr>
+      `;
+    }
+document.getElementById('rmTableBody').innerHTML = rmHTML;
+
+
+    function loadDataForDate() {
+      const dateStr = document.getElementById('date').value;
+      if (!dateStr) return;
+     
+      const btn = document.getElementById('submitBtn');
+      btn.innerText = 'Fetching saved data...';
+     
+      google.script.run.withSuccessHandler((res) => {
+        btn.innerText = 'Compile Master PDF';
+        if (res.found) {
+          document.getElementById('todayProduction').value = res.todayProduction;
+          document.getElementById('todayDispatched').value = res.todayDispatched;
+          document.getElementById('pendingOrder').value = res.pendingOrder;
+          document.getElementById('totalMonthOrder').value = res.totalMonthOrder;
+          document.getElementById('skus').value = res.skus;
+          document.getElementById('batches').value = res.batches;
+          document.getElementById('remarks').value = (res.remarks && res.remarks !== "-") ? res.remarks : "";
+        }
+      }).fetchProductionDataForDate(dateStr);
+    }
+   
+    // Auto-load data for today when the page opens
+    loadDataForDate();
+   
+    // Add event listener so it fetches data whenever the date is changed
+    document.getElementById('date').addEventListener('change', loadDataForDate);
+
+
+    function submitForm(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.innerText = 'Syncing Live Portals...'; btn.disabled = true;
+
+
+      const payload = {
+        date: document.getElementById('date').value, todayProduction: document.getElementById('todayProduction').value, batches: document.getElementById('batches').value,
+        skus: document.getElementById('skus').value, todayDispatched: document.getElementById('todayDispatched').value, pendingOrder: document.getElementById('pendingOrder').value,
+        totalMonthOrder: document.getElementById('totalMonthOrder').value, remarks: document.getElementById('remarks').value,
+        batchSmallCount: document.getElementById('batchSmallCount').value, batchSmallVol: document.getElementById('batchSmallVol').value,
+        batchLargeCount: document.getElementById('batchLargeCount').value, batchLargeVol: document.getElementById('batchLargeVol').value,
+        qualityStatus: document.getElementById('qualityStatus').value, rm_vol: document.getElementById('rm_vol').value,
+       
+        lag_fat_t: document.getElementById('lag_fat_t').value, lag_fat_m: document.getElementById('lag_fat_m').value, lag_lti_t: document.getElementById('lag_lti_t').value, lag_lti_m: document.getElementById('lag_lti_m').value,
+        lag_mtc_t: document.getElementById('lag_mtc_t').value, lag_mtc_m: document.getElementById('lag_mtc_m').value, lag_fa_t: document.getElementById('lag_fa_t').value, lag_fa_m: document.getElementById('lag_fa_m').value,
+        lag_fir_t: document.getElementById('lag_fir_t').value, lag_fir_m: document.getElementById('lag_fir_m').value, lag_spl_t: document.getElementById('lag_spl_t').value, lag_spl_m: document.getElementById('lag_spl_m').value, lag_dng_t: document.getElementById('lag_dng_t').value, lag_dng_m: document.getElementById('lag_dng_m').value,
+        er_tank: document.getElementById('er_tank').value, er_pump: document.getElementById('er_pump').value, er_hyd: document.getElementById('er_hyd').value, er_exit: document.getElementById('er_exit').value, er_lght: document.getElementById('er_lght').value, er_int: document.getElementById('er_int').value
+      };
+
+
+      for (let i = 1; i <= 10; i++) {
+        payload['rm_' + i + '_code'] = document.getElementById('rm_' + i + '_code').value;
+        payload['rm_' + i + '_status'] = document.getElementById('rm_' + i + '_status').value;
+        payload['rm_' + i + '_prod'] = document.getElementById('rm_' + i + '_prod').value;
+      }
+
+
+      google.script.run.withSuccessHandler((res) => {
+        if(res.success) {
+          const link = document.createElement('a'); link.href = 'data:application/pdf;base64,' + res.fileData; link.download = res.fileName;
+          document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        } else { alert("Error: " + res.message); }
+        btn.innerText = 'Compile Master PDF'; btn.disabled = false;
+      }).processDailySubmission(payload);
+    }
+  </script>
+</body>
+</html>
+
+
+Pdftemplate.html
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* CRITICAL FIX: FORCES PDF ENGINE TO RENDER BACKGROUND COLORS */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+   
+    @page {
+      size: A4 landscape;
+      margin: 15mm 10mm 18mm 10mm;
+      @top-center { content: element(header); }
+      @bottom-center { content: element(footer); }
+    }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 8pt;
+      line-height: 1.3;
+      color: #0f172a;
+    }
+   
+    div.header { position: running(header); border-bottom: 3px solid #1e3a8a; padding-bottom: 6px; display: flex; justify-content: space-between; align-items: flex-end; }
+    div.footer { position: running(footer); text-align: center; border-top: 1px solid #cbd5e1; padding-top: 6px; font-size: 7pt; color: #475569; }
+    .header img { max-height: 60px; }
+    .header-text { text-align: right; }
+    .header-text h2 { margin: 0; font-size: 13pt; color: #1e3a8a; font-weight: 800; text-transform: uppercase; }
+    .header-text p { margin: 2px 0 0 0; font-size: 8pt; font-weight: bold; color: #475569; }
+   
+    h3 { text-align: center; font-size: 11pt; margin: 12px 0 8px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #0f172a; }
+   
+    .section-title { font-size: 9pt; font-weight: bold; margin-top: 12px; margin-bottom: 4px; background-color: #1e3a8a !important; color: #ffffff !important; padding: 4px 8px; border-radius: 2px; page-break-after: avoid; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 10px; table-layout: fixed; word-wrap: break-word; }
+    th, td { border: 1px solid #94a3b8; padding: 4px; text-align: center; vertical-align: middle; }
+    td { font-size: 7.5pt; color: #0f172a; }
+    th { font-size: 7.5pt; font-weight: bold; }
+   
+    /* VIBRANT TABLE HEADERS */
+    .bg-blue th { background-color: #1e3a8a !important; color: #ffffff !important; }
+    .bg-green th { background-color: #047857 !important; color: #ffffff !important; }
+    .bg-red th { background-color: #be123c !important; color: #ffffff !important; }
+    .bg-slate th { background-color: #334155 !important; color: #ffffff !important; }
+   
+    .flex-container { display: flex; justify-content: space-between; gap: 12px; page-break-inside: avoid; margin-bottom: 10px; }
+    .flex-container > div { width: 49%; }
+
+
+    .register-table th { font-size: 6.5pt !important; padding: 3px 2px !important; }
+    .register-table td { font-size: 6pt !important; padding: 3px 2px !important; }
+  </style>
+</head>
+<body>
+
+
+  <div class="header">
+    <div><img src="https://drive.google.com/uc?export=view&id=1fVvoUClB-z32WwaNeMOWVEzAYBlehdHL" onerror="this.src='https://dummyimage.com/150x45/1e3a8a/ffffff&text=SBL+Coatings'" alt="Company Logo"></div>
+    <div class="header-text">
+      <h2>SBL Specialty Coatings Private Limited</h2>
+      <p>Format Number: EHS-F-01 | Rev Number: 02 | Rev Date: 10/11/2025</p>
+    </div>
+  </div>
+
+
+  <h3>Daily Production & Safety Report</h3>
+
+
+  <div class="section-title">1. Production & Dispatch Status</div>
+  <table>
+    <tr class="bg-blue">
+      <th>Date</th><th>Monthly Plan KL</th><th>Asking Rate</th><th>Today Prod</th><th>MTD Prod</th><th>Achieved Rate</th><th>Today Dispatched</th><th>Cum Dispatched</th><th>Pending Order</th><th>Total Month Order</th><th>SKUs</th><th>Batches</th>
+    </tr>
+    <? if (prodHistory && prodHistory.length > 0) { for (var i = 0; i < prodHistory.length; i++) { ?>
+      <tr style="<?= i % 2 === 0 ? 'background-color: #f8fafc;' : 'background-color: #ffffff;' ?>">
+        <td style="font-weight: bold;"><?= prodHistory[i].date ?></td><td><?= prodHistory[i].monthlyPlan ?></td><td><?= prodHistory[i].askingRate ?></td><td style="font-weight: bold; color: #0369a1;"><?= prodHistory[i].todayProduction ?></td><td style="font-weight: bold; color: #15803d;"><?= prodHistory[i].mtdProduction ?></td><td><?= prodHistory[i].achievedProdRate ?></td><td><?= prodHistory[i].todayDispatched ?></td><td><?= prodHistory[i].cumDispatch ?></td><td><?= prodHistory[i].pendingOrder ?></td><td><?= prodHistory[i].totalMonthOrder ?></td><td><?= prodHistory[i].skus ?></td><td><?= prodHistory[i].batches ?></td>
+      </tr>
+    <? } } ?>
+  </table>
+  <p style="font-size: 8pt; margin-top: 0; margin-bottom: 12px; color: #334155;"><strong>Production Remarks:</strong> <?= remarks ?></p>
+
+
+  <div class="flex-container">
+    <div>
+      <div class="section-title">Bigger and smaller batch detail</div>
+      <table>
+        <tr class="bg-blue"><th>Batch Detail</th><th>SKU</th><th>Volume in KL</th></tr>
+        <tr><td style="text-align: left;">1 No. of batch below (1-300 ltr)</td><td style="font-weight: bold;"><?= formData.batchSmallCount || '0' ?></td><td style="font-weight: bold;"><?= formData.batchSmallVol || '0' ?></td></tr>
+        <tr><td style="text-align: left;">2 No. of batch up to (300 ltr)</td><td style="font-weight: bold;"><?= formData.batchLargeCount || '0' ?></td><td style="font-weight: bold;"><?= formData.batchLargeVol || '0' ?></td></tr>
+        <tr style="background-color: #f1f5f9;"><td style="text-align: right; font-weight: bold;">Total</td><td style="font-weight: bold; color: #1e3a8a;"><?= Number(formData.batchSmallCount || 0) + Number(formData.batchLargeCount || 0) ?></td><td style="font-weight: bold; color: #1e3a8a;"><?= Number(formData.batchSmallVol || 0) + Number(formData.batchLargeVol || 0) ?></td></tr>
+      </table>
+      <div class="section-title">Quality</div>
+      <table style="margin-bottom: 0;"><tr><td style="text-align: left; font-weight: bold; padding: 6px; color: #15803d;"><?= formData.qualityStatus || '-' ?></td></tr></table>
+    </div>
+   
+    <div>
+      <div class="section-title">RM shortage</div>
+      <table>
+        <tr class="bg-blue"><th colspan="2" style="width: 25%;">RM/PM</th><th style="width: 25%;">Status</th><th style="width: 35%;">Product hampered</th><th style="width: 15%;">vol.</th></tr>
+        <? for (var r = 1; r <= 10; r++) { ?>
+          <tr>
+            <td style="width: 5%; font-weight: bold; background-color: #f8fafc;"><?= r ?></td>
+            <td style="width: 20%;"><?= formData['rm_' + r + '_code'] || '' ?></td>
+            <td style="width: 25%;"><?= formData['rm_' + r + '_status'] || '' ?></td>
+            <td style="width: 35%;"><?= formData['rm_' + r + '_prod'] || '' ?></td>
+            <? if (r === 1) { ?>
+              <td rowspan="10" style="width: 15%; font-weight: bold; font-size: 10pt; color: #b91c1c; vertical-align: middle; background-color: #fef2f2;"><?= formData.rm_vol || '' ?></td>
+            <? } ?>
+          </tr>
+        <? } ?>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="section-title">SUMMARY – UA / UC / NEAR MISS</div>
+  <table>
+    <tr class="bg-blue">
+      <th>Type</th><th>Total</th><th>Open</th><th>Overdue</th><th>Closed</th><th>High</th><th>Medium</th><th>Low</th>
+    </tr>
+    <? if (ehsData && ehsData.summary && ehsData.summary.totals && ehsData.summary.totals.length > 0) { for (var k = 0; k < ehsData.summary.totals.length; k++) { ?>
+      <tr style="<?= ehsData.summary.totals[k].type === 'Total' ? 'background-color: #e2e8f0; font-weight: bold;' : '' ?>">
+        <td style="font-weight: bold; text-align: left; padding-left: 10px;"><?= ehsData.summary.totals[k].type ?></td>
+        <td style="font-weight: bold; font-size: 9pt;"><?= ehsData.summary.totals[k].total ?></td>
+        <td style="color: #b91c1c; font-weight: bold;"><?= ehsData.summary.totals[k].open ?></td>
+        <td style="color: #ea580c; font-weight: bold;"><?= ehsData.summary.totals[k].overdue ?></td>
+        <td style="color: #15803d; font-weight: bold;"><?= ehsData.summary.totals[k].closed ?></td>
+        <td><?= ehsData.summary.totals[k].high ?></td>
+        <td><?= ehsData.summary.totals[k].medium ?></td>
+        <td><?= ehsData.summary.totals[k].low ?></td>
+      </tr>
+    <? } } ?>
+  </table>
+  <p style="font-size: 8.5pt; text-align: right; margin-top: 0; margin-bottom: 12px; color: #1e3a8a;">
+    <strong>Closure rate:</strong> <span style="color: #15803d;"><?= ehsData.summary.closureRate || '0%' ?></span> &nbsp;|&nbsp;
+    <strong>Avg. days to close:</strong> <span><?= ehsData.summary.avgDays || '0' ?></span>
+  </p>
+
+
+  <div class="section-title">EHS LEADING INDICATORS FOR THE DAY</div>
+  <table>
+    <tr class="bg-green">
+      <th rowspan="2">Date</th>
+      <th colspan="7">Work Permits Issued / Closed (x/y)</th>
+      <th colspan="2">Unsafe Acts/Conditions</th>
+      <th rowspan="2">First Aid</th>
+    </tr>
+    <tr class="bg-green">
+      <th>General</th><th>Hot Work</th><th>Height Work</th><th>Confined Space</th><th>Excavation</th><th>Line Breaking</th><th>Hoisting</th><th>UA Reported</th><th>UC Reported</th>
+    </tr>
+    <tr>
+      <td style="background-color: #fef08a; font-weight: bold; color: #854d0e;"><?= formData.date || 'Today' ?></td>
+      <td style="font-weight: bold;"><?= formData.l_gen_t || '0' ?></td><td style="font-weight: bold;"><?= formData.l_hot_t || '0' ?></td><td style="font-weight: bold;"><?= formData.l_hgt_t || '0' ?></td><td style="font-weight: bold;"><?= formData.l_cnf_t || '0' ?></td><td style="font-weight: bold;"><?= formData.l_exc_t || '0' ?></td><td style="font-weight: bold;"><?= formData.l_lin_t || '0' ?></td><td style="font-weight: bold;"><?= formData.l_hst_t || '0' ?></td><td style="font-weight: bold; color: #b91c1c;"><?= formData.l_ua_t || '0' ?></td><td style="font-weight: bold; color: #ea580c;"><?= formData.l_uc_t || '0' ?></td><td style="font-weight: bold;"><?= formData.l_fa_t || '0' ?></td>
+    </tr>
+    <tr style="background-color: #f8fafc;">
+      <td style="font-weight: bold; color: #047857;">MTD</td>
+      <td style="font-weight: bold; color: #047857;"><?= formData.l_gen_m || '0' ?></td><td style="font-weight: bold; color: #047857;"><?= formData.l_hot_m || '0' ?></td><td style="font-weight: bold; color: #047857;"><?= formData.l_hgt_m || '0' ?></td><td style="font-weight: bold; color: #047857;"><?= formData.l_cnf_m || '0' ?></td><td style="font-weight: bold; color: #047857;"><?= formData.l_exc_m || '0' ?></td><td style="font-weight: bold; color: #047857;"><?= formData.l_lin_m || '0' ?></td><td style="font-weight: bold; color: #047857;"><?= formData.l_hst_m || '0' ?></td><td style="font-weight: bold; color: #b91c1c;"><?= formData.l_ua_m || '0' ?></td><td style="font-weight: bold; color: #ea580c;"><?= formData.l_uc_m || '0' ?></td><td style="font-weight: bold; color: #047857;"><?= formData.l_fa_m || '0' ?></td>
+    </tr>
+  </table>
+
+
+  <div class="section-title">EHS LAGGING INDICATORS FOR THE DAY</div>
+  <table>
+    <tr class="bg-red">
+      <th>Date</th><th>Fatality</th><th>LTI (Lost Time Injury)</th><th>MTC (Medical Treatment)</th><th>First Aid</th><th>Fire Incidents</th><th>Spillage</th><th>Dangerous Occurrence</th>
+    </tr>
+    <tr>
+      <td style="background-color: #fef08a; font-weight: bold; color: #854d0e;"><?= formData.date || 'Today' ?></td>
+      <td style="font-weight: bold;"><?= formData.lag_fat_t || '0' ?></td><td style="font-weight: bold;"><?= formData.lag_lti_t || '0' ?></td><td style="font-weight: bold;"><?= formData.lag_mtc_t || '0' ?></td><td style="font-weight: bold;"><?= formData.lag_fa_t || '0' ?></td><td style="font-weight: bold;"><?= formData.lag_fir_t || '0' ?></td><td style="font-weight: bold;"><?= formData.lag_spl_t || '0' ?></td><td style="font-weight: bold;"><?= formData.lag_dng_t || '0' ?></td>
+    </tr>
+    <tr style="background-color: #fdf2f8;">
+      <td style="font-weight: bold; color: #be123c;">MTD</td>
+      <td style="font-weight: bold; color: #be123c;"><?= formData.lag_fat_m || '0' ?></td><td style="font-weight: bold; color: #be123c;"><?= formData.lag_lti_m || '0' ?></td><td style="font-weight: bold; color: #be123c;"><?= formData.lag_mtc_m || '0' ?></td><td style="font-weight: bold; color: #be123c;"><?= formData.lag_fa_m || '0' ?></td><td style="font-weight: bold; color: #be123c;"><?= formData.lag_fir_m || '0' ?></td><td style="font-weight: bold; color: #be123c;"><?= formData.lag_spl_m || '0' ?></td><td style="font-weight: bold; color: #be123c;"><?= formData.lag_dng_m || '0' ?></td>
+    </tr>
+  </table>
+
+
+  <div class="section-title">PERMIT DETAILS (MONTH-TO-DATE)</div>
+  <table>
+    <tr class="bg-slate">
+      <th style="width: 12%;">DATE</th>
+      <th style="width: 12%;">PERMIT #</th>
+      <th style="width: 22%;">TYPE</th>
+      <th style="width: 22%;">VENDOR & LOCATION</th>
+      <th style="width: 32%;">WORK DESCRIPTION</th>
+    </tr>
+    <? if (ptwDetails && ptwDetails.length > 0) { for (var p = 0; p < ptwDetails.length; p++) { ?>
+      <tr style="<?= p % 2 === 0 ? 'background-color: #f8fafc;' : 'background-color: #ffffff;' ?>">
+        <td style="font-weight: bold; font-size: 6.5pt;"><?= ptwDetails[p].date ?></td>
+        <td style="font-weight: bold; font-size: 6.5pt;"><?= ptwDetails[p].permitNo ?></td>
+        <td style="font-weight: bold; color: #1e3a8a; font-size: 6.5pt;"><?= ptwDetails[p].type ?></td>
+        <td style="font-size: 6.5pt;"><?= ptwDetails[p].vendorLocation ?></td>
+        <td style="text-align: left; font-size: 6.5pt;"><?= ptwDetails[p].description ?></td>
+      </tr>
+    <? } } else { ?>
+      <tr>
+        <td colspan="5" style="color: #64748b; font-style: italic; padding: 8px;">No permits logged for this month.</td>
+      </tr>
+    <? } ?>
+  </table>
+
+
+  <div class="section-title">Emergency Readiness (Mark cells RED for non-compliance)</div>
+  <table>
+    <tr class="bg-blue">
+      <th>Fire water tank vol %, Min. 90%</th><th>Fire Pump Auto mode</th><th>Hydrant Pressure</th><th>Emergency Exits clear</th><th>Emergency Lights working</th><th>Specify if any Safety interlock not working</th><th>Any other Safety Issue, specify in details</th>
+    </tr>
+    <tr>
+      <td style="font-weight: bold; font-size: 9pt; color: #0369a1;"><?= formData.er_tank || '-' ?></td>
+      <td style="font-weight: bold; font-size: 9pt; color: #15803d;"><?= formData.er_pump || '-' ?></td>
+      <td style="font-weight: bold; font-size: 9pt;"><?= formData.er_hyd || '-' ?></td>
+      <td style="font-weight: bold; font-size: 9pt; color: #15803d;"><?= formData.er_exit || '-' ?></td>
+      <td style="font-weight: bold; font-size: 9pt; color: #15803d;"><?= formData.er_lght || '-' ?></td>
+      <td style="font-weight: bold; color: #b91c1c;"><?= formData.er_int || '-' ?></td>
+      <td><?= formData.er_other || '-' ?></td>
+    </tr>
+  </table>
+
+
+  <div class="section-title">UNSAFE ACT / UNSAFE CONDITION / NEAR MISS REPORTING REGISTER</div>
+  <table class="register-table">
+    <tr class="bg-slate">
+      <th style="width: 2%;">Sr.</th><th style="width: 4%;">Reporting Date</th><th style="width: 4%;">Time</th><th style="width: 5%;">Observation Type</th><th style="width: 11%;">Description of Observation</th><th style="width: 5%;">Location</th><th style="width: 5%;">Reporter Name</th><th style="width: 4%;">Dept</th><th style="width: 4%;">Impact</th><th style="width: 8%;">Cause</th><th style="width: 8%;">Corrective Action</th><th style="width: 8%;">Preventive Action</th><th style="width: 5%;">Assigned To</th><th style="width: 4%;">Target Date</th><th style="width: 4%;">Actual Closure</th><th style="width: 4%;">Status</th><th style="width: 3%;">Days</th><th style="width: 4%;">Remarks</th>
+    </tr>
+    <? if (registerData && registerData.length > 0) { for (var j = 0; j < registerData.length; j++) { ?>
+      <tr style="<?= registerData[j].status === 'Open' ? 'background-color: #fff1f2;' : (j % 2 === 0 ? 'background-color: #f8fafc;' : 'background-color: #ffffff;') ?>">
+        <td style="font-weight: bold;"><?= registerData[j].sr ?></td>
+        <td><?= registerData[j].date ?></td>
+        <td><?= registerData[j].time ?></td>
+        <td style="font-weight: bold; color: #334155;"><?= registerData[j].type ?></td>
+        <td style="text-align: left;"><?= registerData[j].desc ?></td>
+        <td><?= registerData[j].location ?></td>
+        <td><?= registerData[j].reporter ?></td>
+        <td><?= registerData[j].dept ?></td>
+        <td style="font-weight: bold; color: <?= registerData[j].impact === 'High' ? '#b91c1c' : (registerData[j].impact === 'Medium' ? '#ea580c' : '#15803d') ?>;"><?= registerData[j].impact ?></td>
+        <td style="text-align: left;"><?= registerData[j].cause ?></td>
+        <td style="text-align: left;"><?= registerData[j].corrective ?></td>
+        <td style="text-align: left;"><?= registerData[j].preventive ?></td>
+        <td style="font-weight: bold;"><?= registerData[j].assigned ?></td>
+        <td><?= registerData[j].targetDate ?></td>
+        <td><?= registerData[j].actualDate ?></td>
+        <td style="font-weight: bold; color: <?= registerData[j].status === 'Open' ? '#b91c1c' : '#15803d' ?>;"><?= registerData[j].status ?></td>
+        <td style="font-weight: bold;"><?= registerData[j].daysToClose ?></td>
+        <td><?= registerData[j].remarks ?></td>
+      </tr>
+    <? } } ?>
+  </table>
+
+
+  <div class="footer">
+    <p style="margin: 0 0 4px 0;">
+      <strong>Doc ID:</strong> SBL-EHS-<?= formData.date || 'REPORT' ?> &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>Status:</strong> <span style="color: #15803d; font-weight: bold;">PUBLISHED</span> &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>Classification:</strong> Internal
+    </p>
+    <p style="margin: 0; font-size: 6.5pt;">
+      This is a system-generated report from the SBL EHS Central Portal. No physical signature is required. &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>Generated On:</strong> <?= Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm") ?>
+    </p>
+  </div>
+</body>
+</html>

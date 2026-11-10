@@ -1,0 +1,1456 @@
+[
+  {
+    "idx": 1,
+    "id": 744503264,
+    "title": "1. GENERAL JOB PERMIT",
+    "type": 6,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 2,
+    "id": 753312962,
+    "title": "Department/Area/Location",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 3,
+    "id": 1950173455,
+    "title": "Description of work",
+    "type": 1,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 4,
+    "id": 2118170553,
+    "title": "Emergency Contact No",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 5,
+    "id": 427761394,
+    "title": "Permit Start Date & Time",
+    "type": 9,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 6,
+    "id": 652896220,
+    "title": "Permit End Date & Time",
+    "type": 9,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 7,
+    "id": 453917134,
+    "title": "Requestor Name",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 8,
+    "id": 1774586900,
+    "title": "Vendor/Maintenance Name",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 9,
+    "id": 431621572,
+    "title": "Contractor Safety Induction Date",
+    "type": 9,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 10,
+    "id": 1285752663,
+    "title": "Contractor Compliance ID (ESI/Insurance)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 11,
+    "id": 808322446,
+    "title": "Names of Persons performing the job",
+    "type": 1,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 12,
+    "id": 1569198472,
+    "title": "Individual Induction Training Number(s)*",
+    "type": 1,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 13,
+    "id": 307553432,
+    "title": "EMERGENCY PREPAREDNESS",
+    "type": 6,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 14,
+    "id": 1499393994,
+    "title": "Assigned Shift First Aider Name",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 15,
+    "id": 30248944,
+    "title": "Assigned Shift ERT member Name",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 16,
+    "id": 2060445340,
+    "title": "Assigned Fire Watch Name",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 17,
+    "id": 1689565068,
+    "title": "Rescue Plan Assembly Point No.",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 18,
+    "id": 247745356,
+    "title": "Supervisor (Executing Department)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 19,
+    "id": 874264183,
+    "title": "Supervisor (Beneficiary Department)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 20,
+    "id": 1890750056,
+    "title": "2. HAZARDS & PPE IDENTIFICATION",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 21,
+    "id": 1730799834,
+    "title": "Hazard: Corrosive Chemical",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 22,
+    "id": 2045990293,
+    "title": "Hazard: Fume/Dust",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 23,
+    "id": 1937795598,
+    "title": "Hazard: Lone Work",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 24,
+    "id": 90292065,
+    "title": "Hazard: Flammables",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 25,
+    "id": 249064612,
+    "title": "Hazard: Overhead danger",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 26,
+    "id": 1041481319,
+    "title": "Hazard: Buried Cables",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 27,
+    "id": 1873441548,
+    "title": "Hazard: Explosives",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 28,
+    "id": 1927145705,
+    "title": "Hazard: Moving Machine",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 29,
+    "id": 2127787603,
+    "title": "Hazard: Buried Pipelines",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 30,
+    "id": 1416749603,
+    "title": "Hazard: Compressed Gas",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 31,
+    "id": 432524513,
+    "title": "Hazard: Confined Space",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 32,
+    "id": 589862556,
+    "title": "Hazard: Hot Work",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 33,
+    "id": 1938582113,
+    "title": "Hazard: Hot Material",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 34,
+    "id": 1085727928,
+    "title": "Hazard: Fragile Roof",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 35,
+    "id": 2040837753,
+    "title": "Hazard: Hazardous Energy",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 36,
+    "id": 896395234,
+    "title": "Any other Hazards?",
+    "type": 1,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 37,
+    "id": 99606049,
+    "title": "PPE: Safety Helmet",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 38,
+    "id": 1915715571,
+    "title": "PPE: Safety Goggles",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 39,
+    "id": 354806971,
+    "title": "PPE: Safety Shoes",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 40,
+    "id": 1714222580,
+    "title": "PPE: Gum boots",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 41,
+    "id": 1429795752,
+    "title": "PPE: Face Mask",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 42,
+    "id": 789310210,
+    "title": "PPE: Safety Gloves",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 43,
+    "id": 1385158903,
+    "title": "PPE: Safety glasses",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 44,
+    "id": 483922762,
+    "title": "PPE: Full body PVC suit",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 45,
+    "id": 1056330909,
+    "title": "PPE: Safety Harness",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 46,
+    "id": 1715347211,
+    "title": "PPE: Ear Protection",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 47,
+    "id": 701664994,
+    "title": "PPE: Dust/Fume respirator Pad",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 48,
+    "id": 249016718,
+    "title": "PPE: Fall arrestor",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 49,
+    "id": 1124445759,
+    "title": "Any other PPEs?",
+    "type": 1,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 50,
+    "id": 801982423,
+    "title": "GATEWAY: Hot Work Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 51,
+    "id": 518894688,
+    "title": "Do you need to fill the Hot Work Permit checklist?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 52,
+    "id": 559787060,
+    "title": "CHECKLIST: Hot Work Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 53,
+    "id": 1887985995,
+    "title": "HW - Type of Hot Work",
+    "type": 3,
+    "options": [
+      "Welding",
+      "Gas Cutting",
+      "Grinding",
+      "Buffing",
+      "Drilling",
+      "Other"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 54,
+    "id": 714380275,
+    "title": "HW - Cleaning Method Used",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 55,
+    "id": 727781866,
+    "title": "HW - Equipment purged and open to atmosphere to release expanded air?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 56,
+    "id": 5955013,
+    "title": "HW - Flammable materials removed within 10ft radius?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 57,
+    "id": 947488720,
+    "title": "HW - Area barricaded with tarpaulin/metal sheets to prevent sparks?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 58,
+    "id": 56931698,
+    "title": "HW - Fire watch stationed and adjacent department informed?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 59,
+    "id": 1413513120,
+    "title": "HW - Welding Machine body earthed and 60mA ELCB in circuit?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 60,
+    "id": 1216261140,
+    "title": "HW - Gas torch Flashback Arrester & cylinders on trolleys verified?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 61,
+    "id": 1491684892,
+    "title": "HW - LEL % (STRICT: 0%)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 62,
+    "id": 1299503609,
+    "title": "HW - Oxygen % (Safe: 19.5 - 23.0%)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 63,
+    "id": 503951575,
+    "title": "GATEWAY: Height Work Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 64,
+    "id": 700571752,
+    "title": "Do you need to fill the Height Work Permit checklist?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 65,
+    "id": 1120665619,
+    "title": "CHECKLIST: Height Work Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 66,
+    "id": 2132719617,
+    "title": "HT - Electrical hazards nearby isolated?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 67,
+    "id": 1320271080,
+    "title": "HT - Platform/Scaffold green tagged and sound material construction?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 68,
+    "id": 1799175009,
+    "title": "HT - Safety net provided below the job?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 69,
+    "id": 37728257,
+    "title": "HT - Ladder: Construction good, footing firm and secured at top/bottom?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 70,
+    "id": 1791506244,
+    "title": "HT - Safety Harness No.",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 71,
+    "id": 706983972,
+    "title": "HT - Certificate Validity Date",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 72,
+    "id": 833504627,
+    "title": "HT - Anchorage point verified not to be lower than working level?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 73,
+    "id": 1610499495,
+    "title": "HT - Moving/rotating machinery nearby shut down?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 74,
+    "id": 1772851957,
+    "title": "GATEWAY: Confined Space Entry Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 75,
+    "id": 1162662671,
+    "title": "Do you need to fill the Confined Space Entry Permit checklist?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 76,
+    "id": 2038788377,
+    "title": "CHECKLIST: Confined Space Entry Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 77,
+    "id": 253470972,
+    "title": "CS - Nitrogen, Reflux and Utility pipelines isolated?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 78,
+    "id": 914293536,
+    "title": "CS - Equipment Temperature recorded (°C)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 79,
+    "id": 874622875,
+    "title": "CS - Vessel Attendant provided (Name/Sign/Shift verified)?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 80,
+    "id": 1775377703,
+    "title": "CS - 24V DC lighting and air-line respirator verified?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 81,
+    "id": 1464903830,
+    "title": "CS - Safety harness standby person holding end verified?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 82,
+    "id": 2143820499,
+    "title": "CS - LEL % (Top)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 83,
+    "id": 1287865682,
+    "title": "CS - Oxygen % (Top)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 84,
+    "id": 1356103582,
+    "title": "CS - LEL % (Middle)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 85,
+    "id": 1420683755,
+    "title": "CS - Oxygen % (Middle)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 86,
+    "id": 1801203338,
+    "title": "CS - LEL % (Bottom)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 87,
+    "id": 1429690105,
+    "title": "CS - Oxygen % (Bottom)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 88,
+    "id": 1310726577,
+    "title": "GATEWAY: Line Breaking Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 89,
+    "id": 1795773552,
+    "title": "Do you need to fill the Line Breaking Permit checklist?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 90,
+    "id": 266735846,
+    "title": "CHECKLIST: Line Breaking Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 91,
+    "id": 2146978005,
+    "title": "LB - Pipeline cleaned/flushed and free from vapors/liquid?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 92,
+    "id": 1413846607,
+    "title": "LB - All related valves closed/blinded and vent open?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 93,
+    "id": 1121436564,
+    "title": "LB - Power supply Locked/Tagged (LOTO) at source/panel?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 94,
+    "id": 1038204744,
+    "title": "LB - Chemical resistant suit and face shield provided?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 95,
+    "id": 943902913,
+    "title": "LB - Tools in good condition and appropriate standard?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 96,
+    "id": 894847823,
+    "title": "GATEWAY: Excavation Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 97,
+    "id": 1683239282,
+    "title": "Do you need to fill the Excavation Permit checklist?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 98,
+    "id": 1261468346,
+    "title": "CHECKLIST: Excavation Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 99,
+    "id": 1631068018,
+    "title": "EX - Cables marked and power supply disconnected?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 100,
+    "id": 483575046,
+    "title": "EX - Overhead cables safe distance from JCB height?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 101,
+    "id": 1247993955,
+    "title": "EX - Surrounding barricaded and material cleared 1m from edge?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 102,
+    "id": 1835941278,
+    "title": "EX - Shoring arrangement provided (Required if Depth > 3ft)?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 103,
+    "id": 1482337543,
+    "title": "EX - Licensed drivers verified for vehicles/JCB?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 104,
+    "id": 448837542,
+    "title": "GATEWAY: Hoisting Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 105,
+    "id": 794294957,
+    "title": "Do you need to fill the Hoisting Permit checklist?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 106,
+    "id": 1728058234,
+    "title": "CHECKLIST: Hoisting Permit",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 107,
+    "id": 923324848,
+    "title": "HO - Weight of job (kg)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 108,
+    "id": 1589921221,
+    "title": "HO - Hoisting Height (meters)",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 109,
+    "id": 2108318015,
+    "title": "HO - Tool Condition & Testing Certificate Validity",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 110,
+    "id": 1944857224,
+    "title": "HO - Load balanced and tag line attached?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 111,
+    "id": 1686621738,
+    "title": "HO - Crane outriggers fully extended on firm ground?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 112,
+    "id": 781490265,
+    "title": "HO - Trained signal person assigned?",
+    "type": 2,
+    "options": [
+      "I certify this is verified",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 113,
+    "id": 311359600,
+    "title": "3. ISOLATION GATEWAY",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 114,
+    "id": 625071571,
+    "title": "Is LOTO / Energy Isolation Required for this permit?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 115,
+    "id": 382789574,
+    "title": "4. LOTO & ENERGY TRY-OUT",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 116,
+    "id": 1675191532,
+    "title": "Electrical isolation required?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 117,
+    "id": 463324933,
+    "title": "Electrical - Lock Number",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 118,
+    "id": 1479913774,
+    "title": "Electrical - Isolation Done By",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 119,
+    "id": 1210795450,
+    "title": "Electrical - Energy Discharge Verified?",
+    "type": 2,
+    "options": [
+      "Yes - Stored Energy Released",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 120,
+    "id": 1084714537,
+    "title": "Electrical - Try-Out Successful?",
+    "type": 2,
+    "options": [
+      "Yes - Verified Zero Energy",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 121,
+    "id": 827144743,
+    "title": "Mechanical isolation required?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 122,
+    "id": 910221160,
+    "title": "Mechanical - Lock Number",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 123,
+    "id": 840093687,
+    "title": "Mechanical - Isolation Done By",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 124,
+    "id": 1227357823,
+    "title": "Mechanical - Energy Discharge Verified?",
+    "type": 2,
+    "options": [
+      "Yes - Stored Energy Released",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 125,
+    "id": 1987512804,
+    "title": "Mechanical - Try-Out Successful?",
+    "type": 2,
+    "options": [
+      "Yes - Verified Zero Energy",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 126,
+    "id": 477188183,
+    "title": "Hydraulic isolation required?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 127,
+    "id": 522736777,
+    "title": "Hydraulic - Lock Number",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 128,
+    "id": 454443217,
+    "title": "Hydraulic - Isolation Done By",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 129,
+    "id": 824797773,
+    "title": "Hydraulic - Energy Discharge Verified?",
+    "type": 2,
+    "options": [
+      "Yes - Stored Energy Released",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 130,
+    "id": 1811548404,
+    "title": "Hydraulic - Try-Out Successful?",
+    "type": 2,
+    "options": [
+      "Yes - Verified Zero Energy",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 131,
+    "id": 1469166052,
+    "title": "Pneumatic isolation required?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 132,
+    "id": 1178699326,
+    "title": "Pneumatic - Lock Number",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 133,
+    "id": 1354613487,
+    "title": "Pneumatic - Isolation Done By",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 134,
+    "id": 1143469339,
+    "title": "Pneumatic - Energy Discharge Verified?",
+    "type": 2,
+    "options": [
+      "Yes - Stored Energy Released",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 135,
+    "id": 1234719423,
+    "title": "Pneumatic - Try-Out Successful?",
+    "type": 2,
+    "options": [
+      "Yes - Verified Zero Energy",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 136,
+    "id": 1575460979,
+    "title": "Other isolation required?",
+    "type": 2,
+    "options": [
+      "Yes",
+      "No"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 137,
+    "id": 1554377527,
+    "title": "Other - Lock Number",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 138,
+    "id": 2003613790,
+    "title": "Other - Isolation Done By",
+    "type": 0,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 139,
+    "id": 1468132815,
+    "title": "Other - Energy Discharge Verified?",
+    "type": 2,
+    "options": [
+      "Yes - Stored Energy Released",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 140,
+    "id": 1266262515,
+    "title": "Other - Try-Out Successful?",
+    "type": 2,
+    "options": [
+      "Yes - Verified Zero Energy",
+      "N/A"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 141,
+    "id": 782337205,
+    "title": "5. AUTHORIZATION ROUTING",
+    "type": 8,
+    "options": [],
+    "desc": null
+  },
+  {
+    "idx": 142,
+    "id": 229816717,
+    "title": "Area Incharge",
+    "type": 3,
+    "options": [
+      "Balakram Maurya",
+      "Bhishma Verma",
+      "Budhi Parkash",
+      "Dhawal Shukla",
+      "Gurpreet Kaur",
+      "Ravi Rana",
+      "Jyoti Sharma",
+      "logistics SBL",
+      "maintenance SBL",
+      "Tarun Bansal",
+      "Shailza",
+      "Ranveer Singh",
+      "rndrm testing",
+      "Sanjeev Kushvaha",
+      "Satya acharya",
+      "SBL RMQC",
+      "SBL SQA",
+      "Shubham Pandey",
+      "Somnath Ajrana",
+      "stores U2",
+      "Subhadip Mondal",
+      "Surjeet Kumar",
+      "U2 QC",
+      "Charanjit Singh",
+      "Vishal Kaundal"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 143,
+    "id": 2100284795,
+    "title": "Engineering Incharge",
+    "type": 3,
+    "options": [
+      "Tarun Bansal",
+      "Charanjit Singh",
+      "Deshraj Annotiya",
+      "Ajay Kumar"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 144,
+    "id": 1453500650,
+    "title": "EHS Manager",
+    "type": 3,
+    "options": [
+      "Budhi Parkash",
+      "Sanee Kumar"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 145,
+    "id": 2043982513,
+    "title": "Engineering HOD",
+    "type": 3,
+    "options": [
+      "S. Kushvaha",
+      "Deshraj Annotiya"
+    ],
+    "desc": null
+  },
+  {
+    "idx": 146,
+    "id": 1118014198,
+    "title": "Area HOD",
+    "type": 3,
+    "options": [
+      "Namita Sharma",
+      "Manas Kumar Aich",
+      "Sharad Buchake",
+      "Vishal Kaundal",
+      "Ranveer Singh",
+      "Sanjeev Kushvaha",
+      "Ajay Tiwari"
+    ],
+    "desc": null
+  }
+]
