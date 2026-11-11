@@ -10,14 +10,13 @@ interface BrandLogoProps {
 }
 
 /**
- * The EHS Delta Prism: Pure geometric mark for Budhi Parkash's Digital EHS Solutions.
- * Designed like Apple, ChatGPT, and Antigravity:
- * Ultra-simple, iconic, instantly recognizable geometric shape with zero visual clutter.
+ * The Sovereign EHS Crest: Symmetrical 4-Pillar Emblem for Budhi Parkash's Digital EHS Solutions.
+ * Designed with bilateral mirror symmetry, combining 4 distinct shapes & 4 distinct colors:
  * 
- * Geometry:
- * 1. An aerodynamic protective Shield silhouette (EHS Safety core)
- * 2. 3 clean, flowing geometric facets representing Environment, Health, and Safety
- * 3. An upward-pointing delta in negative space (Zero Harm / Excellence / Digital Ascension)
+ * 1. SAFETY: Protective Shield Foundation (Golden Amber) - Grounding industrial defense & Zero Harm.
+ * 2. ENVIRONMENT: Twin Botanical Leaves (Emerald Green) - Symmetrical wings of sustainable ecological stewardship.
+ * 3. HEALTH: Centered Vitality Heart (Coral Rose) - Human life, well-being, and occupational health at the core.
+ * 4. DIGITAL: Crown Tech Diamond (Electric Sapphire) - Cloud intelligence, digital connectivity, and forward vision.
  */
 export const EhsBrandShape: React.FC<{
   className?: string;
@@ -29,9 +28,11 @@ export const EhsBrandShape: React.FC<{
   const isMono = variant === 'mono';
   const isWhite = variant === 'white';
 
-  const fillEnv = isWhite ? '#ffffff' : (isMono ? 'currentColor' : 'url(#ehs-delta-env)');
-  const fillHealth = isWhite ? '#ffffff' : (isMono ? 'currentColor' : 'url(#ehs-delta-health)');
-  const fillSafety = isWhite ? '#ffffff' : (isMono ? 'currentColor' : 'url(#ehs-delta-safety)');
+  const fillDigital = isWhite ? '#ffffff' : (isMono ? 'currentColor' : 'url(#symm-digital)');
+  const fillEnv = isWhite ? '#ffffff' : (isMono ? 'currentColor' : 'url(#symm-env)');
+  const fillHealth = isWhite ? '#ffffff' : (isMono ? 'currentColor' : 'url(#symm-health)');
+  const fillSafety = isWhite ? '#ffffff' : (isMono ? 'currentColor' : 'url(#symm-safety)');
+  const nodeFill = isWhite ? '#0071e3' : (isMono ? 'currentColor' : '#ffffff');
 
   return (
     <svg
@@ -42,61 +43,85 @@ export const EhsBrandShape: React.FC<{
       aria-label="Budhi Parkash Digital EHS Solutions Icon"
     >
       <defs>
-        {/* Facet 1: Environment (Emerald to Cyan) */}
-        <linearGradient id="ehs-delta-env" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#10b981" />
+        {/* 1. DIGITAL: Electric Sapphire to Cyan (Vision & Cloud Intelligence) */}
+        <linearGradient id="symm-digital" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#0071e3" />
           <stop offset="100%" stopColor="#00c7be" />
         </linearGradient>
 
-        {/* Facet 2: Health & Digital (Cyan to Apple Azure) */}
-        <linearGradient id="ehs-delta-health" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#00c7be" />
-          <stop offset="100%" stopColor="#0071e3" />
+        {/* 2. ENVIRONMENT: Vibrant Emerald to Mint (Nature & Sustainability) */}
+        <linearGradient id="symm-env" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#10b981" />
+          <stop offset="100%" stopColor="#34c759" />
         </linearGradient>
 
-        {/* Facet 3: Safety Foundation (Apple Azure to Royal Indigo) */}
-        <linearGradient id="ehs-delta-safety" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#0071e3" />
-          <stop offset="100%" stopColor="#4f46e5" />
+        {/* 3. HEALTH: Radiant Coral Rose to Crimson (Vitality & Human Life) */}
+        <linearGradient id="symm-health" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#f43f5e" />
+          <stop offset="100%" stopColor="#fb7185" />
+        </linearGradient>
+
+        {/* 4. SAFETY: Industrial Golden Amber to Deep Gold (Zero Harm & Protective Shield) */}
+        <linearGradient id="symm-safety" x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#f59e0b" />
+          <stop offset="100%" stopColor="#ff9500" />
         </linearGradient>
       </defs>
 
       <g transform="translate(0, 1)">
-        {/* Facet 1: Environment (Left Shield Flank) */}
+        {/* 1. SAFETY: Foundation Shield Cradle (Golden Amber) */}
         <path
-          d="M 47 14
-             C 32 15 18 26 18 45
-             C 18 56 23 66 30 73
-             L 43 57
-             C 39 52 38 48 38 44
-             C 38 34 44 26 53 23
-             L 47 14 Z"
+          d="M 50 88
+             C 37 82 17 68 17 44
+             C 17 35 21 29 26 25
+             L 32 31
+             C 28 34 25 38 25 44
+             C 25 62 41 74 50 80
+             C 59 74 75 62 75 44
+             C 75 38 72 34 68 31
+             L 74 25
+             C 79 29 83 35 83 44
+             C 83 68 63 82 50 88 Z"
+          fill={fillSafety}
+        />
+
+        {/* 2. ENVIRONMENT: Twin Botanical Leaves (Emerald Green) */}
+        {/* Left Leaf */}
+        <path
+          d="M 30 46
+             C 19 46 19 29 34 23
+             C 42 29 42 42 30 46 Z"
+          fill={fillEnv}
+        />
+        {/* Right Leaf (Mirror reflection across x=50) */}
+        <path
+          d="M 70 46
+             C 81 46 81 29 66 23
+             C 58 29 58 42 70 46 Z"
           fill={fillEnv}
         />
 
-        {/* Facet 2: Health & Digital (Right Shield Flank / 'P' Lobe) */}
+        {/* 3. HEALTH: Centered Heart / Vitality Bloom (Coral Rose) */}
         <path
-          d="M 53 14
-             L 47 23
-             C 56 26 62 34 62 44
-             C 62 48 61 52 57 57
-             L 70 73
-             C 77 66 82 56 82 45
-             C 82 26 68 15 53 14 Z"
+          d="M 50 66
+             C 43 57 33 49 33 37
+             C 33 28 40 23 46 26
+             C 48 27 49.3 29 50 31
+             C 50.7 29 52 27 54 26
+             C 60 23 67 28 67 37
+             C 67 49 57 57 50 66 Z"
           fill={fillHealth}
         />
 
-        {/* Facet 3: Safety Foundation (Bottom Apex & Zero-Harm Anchor) */}
+        {/* 4. DIGITAL: Crown Tech Diamond Spark (Electric Sapphire) */}
         <path
-          d="M 33 76
-             L 46 60
-             C 48 61.2 50 61.8 52 61.8
-             C 54 61.8 56 61.2 58 60
-             L 71 76
-             C 65 83 57 88 50 88
-             C 43 88 35 83 33 76 Z"
-          fill={fillSafety}
+          d="M 50 11
+             L 59 21
+             L 50 31
+             L 41 21 Z"
+          fill={fillDigital}
         />
+        <circle cx="50" cy="21" r="2.5" fill={nodeFill} />
       </g>
     </svg>
   );
