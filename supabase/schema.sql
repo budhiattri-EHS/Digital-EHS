@@ -775,3 +775,14 @@ CREATE INDEX IF NOT EXISTS idx_5s_company_dept ON public.five_s_audits(company_i
 CREATE INDEX IF NOT EXISTS idx_fps_company_tag ON public.fps_assets(company_id, asset_tag);
 CREATE INDEX IF NOT EXISTS idx_telemetry_company_time ON public.ehs_telemetry_snapshots(company_id, snapshot_timestamp DESC);
 CREATE INDEX IF NOT EXISTS idx_users_company_code ON public.users(company_id, employee_code);
+
+-- ==============================================================================
+-- 29. POSTGREST & API ROLES PERMISSIONS (ANON, AUTHENTICATED, SERVICE_ROLE)
+-- ==============================================================================
+GRANT USAGE ON SCHEMA public TO anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL ROUTINES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO postgres, anon, authenticated, service_role;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON ROUTINES TO postgres, anon, authenticated, service_role;
