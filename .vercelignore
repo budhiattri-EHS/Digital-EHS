@@ -1,0 +1,8 @@
+# Ignore local build artifacts and mobile native folders from Vercel deployment
+.next/
+node_modules/
+mobile/
+supabase/
+.git/
+.env*
+*.bat
