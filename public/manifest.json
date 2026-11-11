@@ -1,28 +1,22 @@
 {
+  "name": "SBL EHS Central Enterprise Cloud",
   "short_name": "SBL EHS",
-  "name": "SBL Specialty Coatings - EHS Control Tower",
+  "description": "Commercial Multi-Tenant B2B EHS Management SaaS Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/favicon.png",
-      "type": "image/png",
-      "sizes": "64x64"
-    },
-    {
       "src": "/icon-192.png",
-      "type": "image/png",
       "sizes": "192x192",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
       "src": "/icon-512.png",
-      "type": "image/png",
       "sizes": "512x512",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
-  ],
-  "start_url": "/",
-  "background_color": "#090d16",
-  "theme_color": "#0f172a",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }

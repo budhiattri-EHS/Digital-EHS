@@ -9,10 +9,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const { createClient } = require('../web/node_modules/@supabase/supabase-js');
+const { createClient } = require('@supabase/supabase-js');
 
-// Load env from web/.env.local if present
-const envPath = path.join(__dirname, '..', 'web', '.env.local');
+// Load env from root .env.local if present
+const envPath = path.join(__dirname, '..', '.env.local');
 if (fs.existsSync(envPath)) {
   const envContent = fs.readFileSync(envPath, 'utf8');
   envContent.split('\n').forEach(line => {

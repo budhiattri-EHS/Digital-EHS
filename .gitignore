@@ -1,33 +1,37 @@
 # Dependencies
 node_modules/
-web/node_modules/
+mobile/node_modules/
 /.pnp
 .pnp.js
 
-# Build Outputs
+# Next.js Build Outputs
+.next/
+out/
 dist/
 build/
-web/.next/
-web/out/
 *.tsbuildinfo
 next-env.d.ts
 
 # Mobile Native Builds
-android/.gradle/
-android/app/build/
-android/build/
-android/captures/
-android/local.properties
-android/.idea/
-ios/App/Pods/
-ios/App/build/
-ios/App/DerivedData/
+mobile/dist/
+mobile/android/.gradle/
+mobile/android/app/build/
+mobile/android/build/
+mobile/android/captures/
+mobile/android/local.properties
+mobile/android/.idea/
+mobile/ios/App/Pods/
+mobile/ios/App/build/
+mobile/ios/App/DerivedData/
 
 # Environment Variables & Secrets
-.env*.local
 .env
-web/.env*.local
-web/.env
+.env*.local
+.env*
+mobile/.env*
+
+# Vercel Cache & Configuration
+.vercel/
 
 # Logs & Debug
 npm-debug.log*
