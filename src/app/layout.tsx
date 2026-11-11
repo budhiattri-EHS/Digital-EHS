@@ -2,12 +2,20 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'SBL EHS Central • Enterprise Cloud Platform',
-  description: 'Commercial Multi-Tenant B2B EHS Management SaaS Platform across 24 Core Industrial Modules',
+  title: "Budhi Parkash's Digital EHS Solutions • Enterprise Cloud Platform",
+  description: "Enterprise Multi-Tenant B2B EHS Management SaaS Platform across 24 Core Industrial Modules created and maintained by Mr Budhi Parkash",
   manifest: '/manifest.json',
   icons: {
-    icon: '/icon-192.png',
-    apple: '/icon-192.png'
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.png', sizes: '64x64', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' }
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/icon.svg', type: 'image/svg+xml' }
+    ]
   }
 };
 
