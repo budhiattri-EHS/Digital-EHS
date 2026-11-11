@@ -75,20 +75,21 @@ export const PtwEmailModal: React.FC<PtwEmailModalProps> = ({
     : ((permit as any).precautions_checklist || ['Safety Helmet', 'Safety Shoes']);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-white border border-[#d2d2d7]/80 w-full max-w-2xl rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] text-[#1d1d1f]">
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+      <div className="bg-white border border-[#d2d2d7]/80 w-[95vw] sm:max-w-2xl rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] text-[#1d1d1f]">
         
         {/* Modal Window Top Bar */}
-        <div className="px-6 py-3.5 bg-[#f5f5f7] border-b border-[#d2d2d7]/60 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2">
-            <Mail className="w-4 h-4 text-[#0071e3]" />
-            <h3 className="text-xs font-bold text-[#1d1d1f]">
+        <div className="px-4 sm:px-6 py-3.5 bg-[#f5f5f7] border-b border-[#d2d2d7]/60 flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <Mail className="w-4 h-4 text-[#0071e3] shrink-0" />
+            <h3 className="text-xs font-bold text-[#1d1d1f] truncate">
               System Email Dispatch Preview &amp; Verification Gateway
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-full bg-white hover:bg-slate-200 border border-[#d2d2d7]/60 flex items-center justify-center text-[#86868b] hover:text-[#1d1d1f] transition-all"
+            className="w-8 h-8 rounded-full bg-white hover:bg-slate-200 border border-[#d2d2d7]/60 flex items-center justify-center text-[#86868b] hover:text-[#1d1d1f] transition-all touch-target shrink-0"
+            aria-label="Close"
           >
             <X className="w-4 h-4" />
           </button>
@@ -215,11 +216,11 @@ export const PtwEmailModal: React.FC<PtwEmailModalProps> = ({
               </div>
 
               {/* Direct 1-Click Interactive Email Actions */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <button
                   type="button"
                   onClick={handleApprove}
-                  className="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all"
+                  className="flex-1 py-3 min-h-[44px] rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all touch-target"
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   <span>{actionDone === 'APPROVED' ? '✓ AUTHORIZED & SIGNED' : 'AUTHORIZE & APPLY SIGNATURE'}</span>
@@ -228,7 +229,7 @@ export const PtwEmailModal: React.FC<PtwEmailModalProps> = ({
                 <button
                   type="button"
                   onClick={handleReject}
-                  className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-[#d2d2d7] font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+                  className="px-4 py-3 min-h-[44px] rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-[#d2d2d7] font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all touch-target"
                 >
                   <XCircle className="w-4 h-4" />
                   <span>REJECT</span>
@@ -237,7 +238,7 @@ export const PtwEmailModal: React.FC<PtwEmailModalProps> = ({
                 <button
                   type="button"
                   onClick={handleRevoke}
-                  className="px-3 py-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all"
+                  className="px-3 py-3 min-h-[44px] rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs flex items-center justify-center gap-1 active:scale-95 transition-all touch-target"
                   title="🚨 Immediate Stop Work Revocation"
                 >
                   <ShieldAlert className="w-4 h-4 text-rose-600" />
@@ -245,11 +246,11 @@ export const PtwEmailModal: React.FC<PtwEmailModalProps> = ({
                 </button>
               </div>
 
-              <div className="flex items-center justify-between pt-1">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pt-1">
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="text-[11px] text-[#0071e3] hover:underline flex items-center gap-1 font-medium"
+                  className="text-[11px] text-[#0071e3] hover:underline flex items-center gap-1 font-medium touch-target py-1"
                 >
                   {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                   <span>{copied ? '1-Click Token Link Copied!' : 'Copy Direct Token Approval URL'}</span>
@@ -267,13 +268,13 @@ export const PtwEmailModal: React.FC<PtwEmailModalProps> = ({
         </div>
 
         {/* Modal Bottom Controls */}
-        <div className="p-4 bg-[#f5f5f7] border-t border-[#d2d2d7]/60 flex items-center justify-between shrink-0">
-          <span className="text-[10px] text-[#86868b]">
+        <div className="p-3.5 sm:p-4 bg-[#f5f5f7] border-t border-[#d2d2d7]/60 flex flex-col sm:flex-row items-center justify-between gap-2 shrink-0">
+          <span className="text-[10px] text-[#86868b] text-center sm:text-left">
             Multi-tier Telegram &amp; SMTP Envoy Synchronization Live
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-full bg-white hover:bg-[#e8e8ed] text-[#1d1d1f] border border-[#d2d2d7] text-xs font-semibold"
+            className="w-full sm:w-auto px-5 py-2.5 min-h-[40px] rounded-full bg-white hover:bg-[#e8e8ed] text-[#1d1d1f] border border-[#d2d2d7] text-xs font-semibold touch-target"
           >
             Close Preview
           </button>

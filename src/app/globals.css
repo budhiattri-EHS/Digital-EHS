@@ -85,3 +85,48 @@ body {
 .glow-risk-optimal {
   box-shadow: 0 2px 12px rgba(16, 185, 129, 0.18);
 }
+
+/* ==============================================================================
+   MOBILE-FIRST ACCESSIBILITY & RESPONSIVE UX ARCHITECTURE
+   ============================================================================== */
+
+/* Accessible Touch Targets for Shop-Floor Mobile Technicians (Minimum 44px) */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Hide Scrollbar while preserving touch swipe */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Prevent iOS Mobile Safari automatic zoom on form input focus */
+@media screen and (max-width: 640px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Responsive Table Wrapper with Smooth Kinetic Momentum Scrolling */
+.table-responsive-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile viewport bottom padding safe-area for home bar */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}

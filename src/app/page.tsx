@@ -35,7 +35,8 @@ import {
   Bot,
   LogOut,
   Building2,
-  Check
+  Check,
+  Menu
 } from 'lucide-react';
 import { UniversalEhsApi } from '@/lib/supabaseClient';
 import { generateEnterpriseEhsPdf } from '@/lib/pdfGenerator';
@@ -91,6 +92,9 @@ export default function EhsSaasApp() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [isAuthChecking, setIsAuthChecking] = useState<boolean>(true);
+
+  // Responsive Mobile Navigation Drawer State
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
 
   // Core Application State
   const [selectedCompanyId, setSelectedCompanyId] = useState('00000000-0000-0000-0000-000000000001');
@@ -162,6 +166,7 @@ export default function EhsSaasApp() {
     } catch (e) {}
     setIsAuthenticated(false);
     setUserProfile(null);
+    setIsMobileMenuOpen(false);
   };
 
   // Export Compliant PDF
@@ -243,6 +248,152 @@ export default function EhsSaasApp() {
     });
   };
 
+  // Reusable Sidebar Content Component (shared between Desktop and Mobile Drawer)
+  const renderSidebarContent = (isMobile: boolean = false) => (
+    <>
+      {/* Brand & Multi-Tenant Header */}
+      <div className="p-4 border-b border-[#d2d2d7]/60 bg-[#ffffff] flex flex-col gap-3 shrink-0">
+        <div className="flex items-center justify-between">
+          {/* Master Brand Logo */}
+          <BrandLogo size="sm" showSubtitle={true} className="pb-1 border-b border-[#d2d2d7]/40 flex-1" />
+          {isMobile && (
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-2 -mr-1 rounded-full text-[#86868b] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] touch-target flex items-center justify-center"
+              aria-label="Close Navigation"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
+        </div>
+
+        {/* Respective Logged-in Company's Logo Card */}
+        <div className="p-2.5 bg-[#f5f5f7] rounded-2xl border border-[#d2d2d7]/70 shadow-sm">
+          <CompanyLogo company={currentCompany} size="sm" showDetails={true} />
+        </div>
+
+        {/* Tenant Switcher Dropdown (Multi-Tenancy) */}
+        <div>
+          <label className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block mb-1">
+            Switch Corporate Tenant
+          </label>
+          <select
+            value={selectedCompanyId}
+            onChange={(e) => setSelectedCompanyId(e.target.value)}
+            className="w-full bg-[#f5f5f7] border border-[#d2d2d7] text-xs rounded-xl px-3 py-2.5 min-h-[44px] font-medium text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all cursor-pointer shadow-sm"
+          >
+            {companies.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Facility Selector */}
+        <div>
+          <label className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block mb-1">
+            Operating Facility / Site
+          </label>
+          <select
+            value={selectedFacilityId}
+            onChange={(e) => setSelectedFacilityId(e.target.value)}
+            className="w-full bg-[#f5f5f7] border border-[#d2d2d7] text-xs rounded-xl px-3 py-2.5 min-h-[44px] font-medium text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all cursor-pointer shadow-sm"
+          >
+            {facilities.map(f => (
+              <option key={f.id} value={f.id}>{f.name} ({f.code})</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Suite Filter Tabs (Apple Segmented Control Style) */}
+      <div className="p-2 border-b border-[#d2d2d7]/60 bg-[#f5f5f7]/70 overflow-x-auto flex gap-1 scrollbar-none text-[11px] font-medium shrink-0">
+        {['All', 'Core Operations', 'Incident & Quality', 'Audits & Standards', 'Risk & Process Safety', 'Health & People', 'Environment & Assets'].map(suite => (
+          <button
+            key={suite}
+            onClick={() => setSelectedSuite(suite)}
+            className={`px-3 py-1.5 rounded-lg shrink-0 transition-all text-xs touch-target flex items-center justify-center ${
+              selectedSuite === suite
+                ? 'bg-white text-[#1d1d1f] font-semibold shadow-sm border border-[#d2d2d7]/70'
+                : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-white/50'
+            }`}
+          >
+            {suite === 'All' ? 'All (24)' : suite.split(' ')[0]}
+          </button>
+        ))}
+      </div>
+
+      {/* Module Scroll List */}
+      <div className="flex-1 overflow-y-auto p-2.5 space-y-1.5">
+        {MODULE_REGISTRY.filter(m => selectedSuite === 'All' || m.category === selectedSuite).map(mod => {
+          const isActive = activeModuleId === mod.id;
+          return (
+            <button
+              key={mod.id}
+              onClick={() => {
+                setActiveModuleId(mod.id);
+                if (isMobile) setIsMobileMenuOpen(false);
+              }}
+              className={`w-full text-left p-3 rounded-2xl transition-all flex items-start justify-between gap-2.5 border touch-target ${
+                isActive
+                  ? 'bg-[#0071e3]/10 border-[#0071e3]/40 shadow-sm text-[#1d1d1f]'
+                  : 'border-transparent text-[#1d1d1f] hover:bg-[#f5f5f7] hover:border-[#d2d2d7]/50'
+              }`}
+            >
+              <div className="flex items-start gap-2.5 min-w-0">
+                <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold font-mono transition-colors ${
+                  isActive ? 'bg-[#0071e3] text-white' : 'bg-[#e8e8ed] text-[#515154]'
+                }`}>
+                  {mod.number}
+                </div>
+                <div className="min-w-0">
+                  <h3 className={`text-xs leading-tight truncate ${isActive ? 'font-bold text-[#0071e3]' : 'font-semibold text-[#1d1d1f]'}`}>
+                    {mod.title}
+                  </h3>
+                  <p className="text-[10px] text-[#86868b] truncate max-w-[160px] mt-0.5">{mod.subtitle}</p>
+                  <span className={`text-[9px] font-mono font-medium block mt-1 ${isActive ? 'text-[#0071e3]' : 'text-[#86868b]'}`}>
+                    {mod.formatNumber}
+                  </span>
+                </div>
+              </div>
+              <span className={`text-[9px] px-2 py-0.5 rounded-full font-mono font-semibold shrink-0 border ${
+                isActive
+                  ? 'bg-[#0071e3]/15 text-[#0071e3] border-[#0071e3]/30'
+                  : 'bg-[#e8e8ed] text-[#86868b] border-transparent'
+              }`}>
+                {mod.badge}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* User Card in Sidebar Bottom with Sign Out */}
+      <div className="p-3.5 border-t border-[#d2d2d7]/60 bg-[#ffffff] flex items-center justify-between shrink-0 shadow-[0_-1px_6px_rgba(0,0,0,0.02)] pb-safe">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0071e3] to-[#70a6ff] text-white flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
+            {userProfile?.employeeCode?.slice(0, 2) || 'BP'}
+          </div>
+          <div className="min-w-0">
+            <div className="text-xs font-semibold text-[#1d1d1f] truncate max-w-[130px]">
+              {userProfile?.fullName || 'Budhi Parkash'}
+            </div>
+            <div className="text-[10px] text-[#86868b] truncate">
+              {userProfile?.employeeCode || 'E0414'} • {userProfile?.role || 'HOD EHS'}
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={handleLogout}
+          className="p-2 rounded-xl hover:bg-rose-50 text-[#86868b] hover:text-rose-600 transition-colors touch-target flex items-center justify-center"
+          title="Sign Out"
+          aria-label="Sign Out"
+        >
+          <LogOut className="w-4 h-4" />
+        </button>
+      </div>
+    </>
+  );
+
   // If not authenticated, open directly to sleek Apple-style Login Page
   if (!isAuthenticated && !isAuthChecking) {
     return (
@@ -265,239 +416,154 @@ export default function EhsSaasApp() {
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#f5f5f7] text-[#1d1d1f] font-sans antialiased">
       {/* ==============================================================================
-          LEFT SIDEBAR: 24 ENTERPRISE MODULES ACROSS 6 SUITES (APPLE LIGHT AESTHETIC)
+          MOBILE NAVIGATION DRAWER OVERLAY (md:hidden)
       ============================================================================== */}
-      <aside className="w-80 border-r border-[#d2d2d7]/70 bg-white flex flex-col shrink-0 overflow-hidden shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20">
-        {/* Brand & Multi-Tenant Header */}
-        <div className="p-4 border-b border-[#d2d2d7]/60 bg-[#ffffff] flex flex-col gap-3 shrink-0">
-          {/* Creative Website Master Brand Logo */}
-          <BrandLogo size="sm" showSubtitle={true} className="pb-1 border-b border-[#d2d2d7]/40" />
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
 
-          {/* Respective Logged-in Company's Logo Card */}
-          <div className="p-2.5 bg-[#f5f5f7] rounded-2xl border border-[#d2d2d7]/70 shadow-sm">
-            <CompanyLogo company={currentCompany} size="sm" showDetails={true} />
-          </div>
-
-          {/* Tenant Switcher Dropdown (Multi-Tenancy) */}
-          <div>
-            <label className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block mb-1">
-              Switch Corporate Tenant
-            </label>
-            <select
-              value={selectedCompanyId}
-              onChange={(e) => setSelectedCompanyId(e.target.value)}
-              className="w-full bg-[#f5f5f7] border border-[#d2d2d7] text-xs rounded-xl px-3 py-1.5 font-medium text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all cursor-pointer shadow-sm"
-            >
-              {companies.map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Facility Selector */}
-          <div>
-            <label className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block mb-1">
-              Operating Facility / Site
-            </label>
-            <select
-              value={selectedFacilityId}
-              onChange={(e) => setSelectedFacilityId(e.target.value)}
-              className="w-full bg-[#f5f5f7] border border-[#d2d2d7] text-xs rounded-xl px-3 py-1.5 font-medium text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all cursor-pointer shadow-sm"
-            >
-              {facilities.map(f => (
-                <option key={f.id} value={f.id}>{f.name} ({f.code})</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Suite Filter Tabs (Apple Segmented Control Style) */}
-        <div className="p-2 border-b border-[#d2d2d7]/60 bg-[#f5f5f7]/70 overflow-x-auto flex gap-1 scrollbar-none text-[11px] font-medium shrink-0">
-          {['All', 'Core Operations', 'Incident & Quality', 'Audits & Standards', 'Risk & Process Safety', 'Health & People', 'Environment & Assets'].map(suite => (
-            <button
-              key={suite}
-              onClick={() => setSelectedSuite(suite)}
-              className={`px-2.5 py-1 rounded-lg shrink-0 transition-all text-xs ${
-                selectedSuite === suite
-                  ? 'bg-white text-[#1d1d1f] font-semibold shadow-sm border border-[#d2d2d7]/70'
-                  : 'text-[#86868b] hover:text-[#1d1d1f] hover:bg-white/50'
-              }`}
-            >
-              {suite === 'All' ? 'All (24)' : suite.split(' ')[0]}
-            </button>
-          ))}
-        </div>
-
-        {/* Module Scroll List */}
-        <div className="flex-1 overflow-y-auto p-2.5 space-y-1.5">
-          {MODULE_REGISTRY.filter(m => selectedSuite === 'All' || m.category === selectedSuite).map(mod => {
-            const isActive = activeModuleId === mod.id;
-            return (
-              <button
-                key={mod.id}
-                onClick={() => setActiveModuleId(mod.id)}
-                className={`w-full text-left p-3 rounded-2xl transition-all flex items-start justify-between gap-2.5 border ${
-                  isActive
-                    ? 'bg-[#0071e3]/10 border-[#0071e3]/40 shadow-sm text-[#1d1d1f]'
-                    : 'border-transparent text-[#1d1d1f] hover:bg-[#f5f5f7] hover:border-[#d2d2d7]/50'
-                }`}
-              >
-                <div className="flex items-start gap-2.5 min-w-0">
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 text-xs font-bold font-mono transition-colors ${
-                    isActive ? 'bg-[#0071e3] text-white' : 'bg-[#e8e8ed] text-[#515154]'
-                  }`}>
-                    {mod.number}
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className={`text-xs leading-tight truncate ${isActive ? 'font-bold text-[#0071e3]' : 'font-semibold text-[#1d1d1f]'}`}>
-                      {mod.title}
-                    </h3>
-                    <p className="text-[10px] text-[#86868b] truncate max-w-[160px] mt-0.5">{mod.subtitle}</p>
-                    <span className={`text-[9px] font-mono font-medium block mt-1 ${isActive ? 'text-[#0071e3]' : 'text-[#86868b]'}`}>
-                      {mod.formatNumber}
-                    </span>
-                  </div>
-                </div>
-                <span className={`text-[9px] px-2 py-0.5 rounded-full font-mono font-semibold shrink-0 border ${
-                  isActive
-                    ? 'bg-[#0071e3]/15 text-[#0071e3] border-[#0071e3]/30'
-                    : 'bg-[#e8e8ed] text-[#86868b] border-transparent'
-                }`}>
-                  {mod.badge}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* User Card in Sidebar Bottom with Sign Out */}
-        <div className="p-3.5 border-t border-[#d2d2d7]/60 bg-[#ffffff] flex items-center justify-between shrink-0 shadow-[0_-1px_6px_rgba(0,0,0,0.02)]">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0071e3] to-[#70a6ff] text-white flex items-center justify-center font-bold text-xs shadow-sm">
-              {userProfile?.employeeCode?.slice(0, 2) || 'BP'}
-            </div>
-            <div>
-              <div className="text-xs font-semibold text-[#1d1d1f] truncate max-w-[130px]">
-                {userProfile?.fullName || 'Budhi Parkash'}
-              </div>
-              <div className="text-[10px] text-[#86868b]">
-                {userProfile?.employeeCode || 'E0414'} • {userProfile?.role || 'HOD EHS'}
-              </div>
-            </div>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="p-1.5 rounded-xl hover:bg-rose-50 text-[#86868b] hover:text-rose-600 transition-colors"
-            title="Sign Out"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
-        </div>
+      {/* MOBILE SLIDE-OVER DRAWER (md:hidden) */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-[85vw] max-w-xs bg-white shadow-2xl flex flex-col md:hidden transform transition-transform duration-300 ease-in-out border-r border-[#d2d2d7]/70 ${
+          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
+        {renderSidebarContent(true)}
       </aside>
 
       {/* ==============================================================================
-          MAIN CONTENT AREA: TELEMETRY CONTROL TOWER & WORKSPACES (APPLE LIGHT THEME)
+          DESKTOP SIDEBAR: 24 ENTERPRISE MODULES ACROSS 6 SUITES (HIDDEN ON MOBILE)
       ============================================================================== */}
-      <main className="flex-1 flex flex-col overflow-hidden bg-[#f5f5f7]">
-        {/* Top Executive Header (Frosted Glass) with Company Logo & Brand */}
-        <header className="h-16 apple-glass px-6 flex items-center justify-between shrink-0 z-10 shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
-          {/* Active Module Indicator with Company Logo */}
-          <div className="flex items-center gap-3">
-            <CompanyLogo company={currentCompany} size="sm" showDetails={false} />
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-semibold uppercase text-[#0071e3] tracking-wider">
-                  {activeModule.category} • Module #{activeModule.number}
+      <aside className="hidden md:flex md:w-80 border-r border-[#d2d2d7]/70 bg-white flex-col shrink-0 overflow-hidden shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20">
+        {renderSidebarContent(false)}
+      </aside>
+
+      {/* ==============================================================================
+          MAIN CONTENT AREA: 100% WIDTH ON MOBILE, DYNAMIC WORKSPACES
+      ============================================================================== */}
+      <main className="flex-1 w-full flex flex-col overflow-hidden bg-[#f5f5f7]">
+        {/* Top Executive Header (Frosted Glass) */}
+        <header className="h-16 apple-glass px-3.5 sm:px-6 flex items-center justify-between shrink-0 z-10 shadow-[0_1px_4px_rgba(0,0,0,0.03)] gap-2">
+          {/* Left: Mobile Hamburger & Active Module Indicator */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            {/* Mobile Hamburger Toggle Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 -ml-1 rounded-xl text-[#1d1d1f] hover:bg-[#e8e8ed] touch-target flex items-center justify-center shrink-0"
+              aria-label="Open Navigation Menu"
+            >
+              <Menu className="w-5 h-5 text-[#1d1d1f]" />
+            </button>
+
+            {/* Company Logo */}
+            <div className="shrink-0">
+              <CompanyLogo company={currentCompany} size="sm" showDetails={false} />
+            </div>
+
+            {/* Active Module Indicator */}
+            <div className="min-w-0">
+              <div className="hidden sm:flex items-center gap-2">
+                <span className="text-[10px] font-mono font-semibold uppercase text-[#0071e3] tracking-wider truncate">
+                  {activeModule.category} • #{activeModule.number}
                 </span>
-                <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#e8e8ed] text-[#515154] font-mono font-semibold">
-                  {activeModule.formatNumber} ({activeModule.revNumber})
+                <span className="text-[9px] px-2 py-0.5 rounded-full bg-[#e8e8ed] text-[#515154] font-mono font-semibold truncate">
+                  {activeModule.formatNumber}
                 </span>
               </div>
-              <h2 className="text-base font-bold text-[#1d1d1f] leading-tight tracking-tight mt-0.5">
+              <h2 className="text-sm sm:text-base font-bold text-[#1d1d1f] leading-tight tracking-tight truncate">
                 {activeModule.title}
               </h2>
             </div>
           </div>
 
-          {/* Central Telemetry Index & Controls */}
-          <div className="flex items-center gap-3">
+          {/* Right: Telemetry Index & Primary Action Controls */}
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* Real-time Global Risk Index Chip (Apple Health Style) */}
-            <div className="px-3.5 py-1.5 rounded-full border border-rose-200 bg-rose-50 flex items-center gap-2.5 shadow-sm">
-              <ShieldAlert className="w-4 h-4 text-rose-600 animate-pulse" />
+            <div className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full border border-rose-200 bg-rose-50 flex items-center gap-1.5 sm:gap-2.5 shadow-sm">
+              <ShieldAlert className="w-4 h-4 text-rose-600 animate-pulse shrink-0" />
               <div>
-                <span className="text-[8px] uppercase font-bold text-rose-700 block leading-none tracking-wider">Plant Risk Index</span>
-                <span className="text-sm font-bold font-mono text-rose-800 leading-tight">
-                  {telemetry.global_risk_score} / 100 <span className="text-[10px] font-semibold uppercase text-rose-600">({telemetry.risk_status})</span>
+                <span className="hidden sm:block text-[8px] uppercase font-bold text-rose-700 leading-none tracking-wider">
+                  Plant Risk
+                </span>
+                <span className="text-xs sm:text-sm font-bold font-mono text-rose-800 leading-tight">
+                  {telemetry.global_risk_score} <span className="hidden sm:inline text-[10px] font-semibold uppercase text-rose-600">/ 100</span>
                 </span>
               </div>
             </div>
 
-            {/* Quick Action: Log New Event (Apple Primary Blue) */}
+            {/* Quick Action: Log New Event (Touch-optimized) */}
             <button
               onClick={() => setIsQuickRecordModalOpen(true)}
-              className="px-4 py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-all"
+              className="px-3 sm:px-4 py-2 min-h-[40px] sm:min-h-[44px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-all touch-target"
             >
-              <PlusCircle className="w-4 h-4" />
-              <span>Record Action</span>
+              <PlusCircle className="w-4 h-4 shrink-0" />
+              <span className="hidden sm:inline">Record Action</span>
+              <span className="sm:hidden">Action</span>
             </button>
 
-            {/* IMMUTABLE PDF EXPORT BUTTON (Apple Secondary White Pill) */}
+            {/* PDF EXPORT BUTTON */}
             <button
               onClick={handleExportPdf}
-              className="px-4 py-2 rounded-full bg-white hover:bg-[#f5f5f7] text-[#1d1d1f] border border-[#d2d2d7] font-medium text-xs flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-all"
+              className="px-3 sm:px-4 py-2 min-h-[40px] sm:min-h-[44px] rounded-full bg-white hover:bg-[#f5f5f7] text-[#1d1d1f] border border-[#d2d2d7] font-medium text-xs flex items-center gap-1.5 shadow-sm active:scale-[0.98] transition-all touch-target"
               title="Generate System-Certified ISO Report"
             >
-              <Download className="w-4 h-4 text-[#0071e3]" />
-              <span>Export Official PDF</span>
+              <Download className="w-4 h-4 text-[#0071e3] shrink-0" />
+              <span className="hidden md:inline">Export PDF</span>
+              <span className="md:hidden">PDF</span>
             </button>
 
             {/* Sign Out Button in Header */}
             <button
               onClick={handleLogout}
-              className="p-2 rounded-full bg-white hover:bg-rose-50 text-[#86868b] hover:text-rose-600 border border-[#d2d2d7] transition-all"
+              className="p-2 min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px] rounded-full bg-white hover:bg-rose-50 text-[#86868b] hover:text-rose-600 border border-[#d2d2d7] transition-all flex items-center justify-center touch-target"
               title="Sign Out"
+              aria-label="Sign Out"
             >
               <LogOut className="w-4 h-4" />
             </button>
           </div>
         </header>
 
-        {/* Global KPI Strip (Crisp Apple Cards) */}
-        <section className="px-6 py-3.5 border-b border-[#d2d2d7]/50 bg-white/70 grid grid-cols-6 gap-3 shrink-0">
-          <div className="saas-card p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
-            <span className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block">5S Plant Average</span>
-            <span className="text-xl font-bold font-mono text-purple-700">69%</span>
-            <span className="text-[9px] text-[#86868b] block mt-0.5">Goal: 85% ISO Target</span>
+        {/* Global KPI Strip (Crisp Apple Cards: 2 cols on mobile, 3 on tablet, 6 on desktop) */}
+        <section className="px-3.5 sm:px-6 py-2.5 sm:py-3.5 border-b border-[#d2d2d7]/50 bg-white/70 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 shrink-0">
+          <div className="saas-card p-2.5 sm:p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
+            <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block truncate">5S Plant Average</span>
+            <span className="text-lg sm:text-xl font-bold font-mono text-purple-700">69%</span>
+            <span className="text-[9px] text-[#86868b] block mt-0.5 truncate">Goal: 85% ISO</span>
           </div>
-          <div className="saas-card p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
-            <span className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block">Active Permits (PTW)</span>
-            <span className="text-xl font-bold font-mono text-[#0071e3]">{ptws.length}</span>
-            <span className="text-[9px] text-amber-600 block mt-0.5">2 High-Risk Active</span>
+          <div className="saas-card p-2.5 sm:p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
+            <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block truncate">Active Permits (PTW)</span>
+            <span className="text-lg sm:text-xl font-bold font-mono text-[#0071e3]">{ptws.length}</span>
+            <span className="text-[9px] text-amber-600 block mt-0.5 truncate">2 High-Risk Active</span>
           </div>
-          <div className="saas-card p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
-            <span className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block">FPS Fire Assets</span>
-            <span className="text-xl font-bold font-mono text-orange-600">{fpsAssets.length}</span>
-            <span className="text-[9px] text-emerald-600 block mt-0.5">100% Inspected</span>
+          <div className="saas-card p-2.5 sm:p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
+            <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block truncate">FPS Fire Assets</span>
+            <span className="text-lg sm:text-xl font-bold font-mono text-orange-600">{fpsAssets.length}</span>
+            <span className="text-[9px] text-emerald-600 block mt-0.5 truncate">100% Inspected</span>
           </div>
-          <div className="saas-card p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
-            <span className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block">Safety Hazards (UA/UC)</span>
-            <span className="text-xl font-bold font-mono text-rose-600">{observations.length}</span>
-            <span className="text-[9px] text-rose-600 block mt-0.5">14 Urgent CAPA</span>
+          <div className="saas-card p-2.5 sm:p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
+            <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block truncate">Safety Hazards (UA)</span>
+            <span className="text-lg sm:text-xl font-bold font-mono text-rose-600">{observations.length}</span>
+            <span className="text-[9px] text-rose-600 block mt-0.5 truncate">14 Urgent CAPA</span>
           </div>
-          <div className="saas-card p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
-            <span className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block">Kaizens Completed</span>
-            <span className="text-xl font-bold font-mono text-emerald-600">{kaizens.length}</span>
-            <span className="text-[9px] text-emerald-600 block mt-0.5">+2 This Month</span>
+          <div className="saas-card p-2.5 sm:p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
+            <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block truncate">Kaizens Done</span>
+            <span className="text-lg sm:text-xl font-bold font-mono text-emerald-600">{kaizens.length}</span>
+            <span className="text-[9px] text-emerald-600 block mt-0.5 truncate">+2 This Month</span>
           </div>
-          <div className="saas-card p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
-            <span className="text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block">LMS Compliance</span>
-            <span className="text-xl font-bold font-mono text-blue-600">67%</span>
-            <span className="text-[9px] text-[#86868b] block mt-0.5">54 Video Courses</span>
+          <div className="saas-card p-2.5 sm:p-3 rounded-2xl hover:border-[#0071e3]/40 transition-all">
+            <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-[#86868b] tracking-wider block truncate">LMS Compliance</span>
+            <span className="text-lg sm:text-xl font-bold font-mono text-blue-600">67%</span>
+            <span className="text-[9px] text-[#86868b] block mt-0.5 truncate">54 Video Courses</span>
           </div>
         </section>
 
         {/* Dynamic Module Workspace */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto p-3.5 sm:p-6 space-y-4">
           {activeModule.id === 'ptw' ? (
             <PtwDashboardView
               companyName={currentCompany.name}
@@ -507,75 +573,114 @@ export default function EhsSaasApp() {
           ) : (
             <>
               {/* Module Banner Card with Respective Company Logo */}
-              <div className="p-5 rounded-2xl saas-card flex items-center justify-between shadow-sm">
+              <div className="p-4 sm:p-5 rounded-2xl saas-card flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 shadow-sm">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-[#0071e3]/10 text-[#0071e3] border border-[#0071e3]/20 flex items-center justify-center font-bold text-lg">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-[#0071e3]/10 text-[#0071e3] border border-[#0071e3]/20 flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
                     #{activeModule.number}
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-base font-bold text-[#1d1d1f]">{activeModule.title}</h3>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-sm sm:text-base font-bold text-[#1d1d1f]">{activeModule.title}</h3>
                       <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/70 font-semibold font-mono">
                         UNIVERSAL REST API LIVE
                       </span>
                     </div>
-                    <p className="text-xs text-[#86868b] mt-0.5">{activeModule.subtitle}</p>
-                    <div className="flex items-center gap-3 mt-1.5 text-[10px] text-[#86868b] font-mono">
+                    <p className="text-xs text-[#86868b] mt-0.5 truncate">{activeModule.subtitle}</p>
+                    <div className="flex items-center gap-2 sm:gap-3 mt-1.5 text-[10px] text-[#86868b] font-mono flex-wrap">
                       <span>Tenant: <strong className="text-[#1d1d1f] font-semibold">{currentCompany.name}</strong></span>
-                      <span>•</span>
+                      <span className="hidden sm:inline">•</span>
                       <span>Format: <strong className="text-[#0071e3] font-semibold">{activeModule.formatNumber}</strong></span>
-                      <span>•</span>
-                      <span>Revision: <strong className="text-[#1d1d1f] font-semibold">{activeModule.revNumber}</strong> ({activeModule.revDate})</span>
+                      <span className="hidden sm:inline">•</span>
+                      <span>Rev: <strong className="text-[#1d1d1f] font-semibold">{activeModule.revNumber}</strong></span>
                     </div>
                   </div>
                 </div>
 
                 {/* Quick Filter */}
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <Search className="w-4 h-4 text-[#86868b] absolute left-3 top-2.5" />
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <div className="relative w-full sm:w-56">
+                    <Search className="w-4 h-4 text-[#86868b] absolute left-3 top-1/2 -translate-y-1/2" />
                     <input
                       type="text"
                       placeholder="Filter records..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="bg-[#f5f5f7] border border-[#d2d2d7] rounded-full pl-9 pr-3.5 py-1.5 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all shadow-sm"
+                      className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-full pl-9 pr-3.5 py-2 min-h-[40px] text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all shadow-sm"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Module Data Table (Clean Apple Table Aesthetic) */}
+              {/* Module Data Table & Responsive Mobile Stacked Cards */}
               <div className="saas-card rounded-2xl overflow-hidden border border-[#d2d2d7]/60 shadow-sm">
+                {/* 5S MODULE VIEW */}
                 {activeModule.id === '5s' && (
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-[#f5f5f7] text-[#86868b] uppercase text-[10px] font-semibold border-b border-[#d2d2d7]/60">
-                      <tr>
-                        <th className="p-3.5">Audit Number</th>
-                        <th className="p-3.5">Date</th>
-                        <th className="p-3.5">League</th>
-                        <th className="p-3.5">Department</th>
-                        <th className="p-3.5 text-center">Score (100)</th>
-                        <th className="p-3.5">Auditor Remarks</th>
-                        <th className="p-3.5 text-right">Certificate</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#f5f5f7] font-medium text-[#1d1d1f]">
+                  <>
+                    {/* Desktop Table View (Horizontal Scrolling Wrapper) */}
+                    <div className="hidden sm:block overflow-x-auto w-full table-responsive-container">
+                      <table className="w-full text-left text-xs min-w-[650px]">
+                        <thead className="bg-[#f5f5f7] text-[#86868b] uppercase text-[10px] font-semibold border-b border-[#d2d2d7]/60">
+                          <tr>
+                            <th className="p-3.5">Audit Number</th>
+                            <th className="p-3.5">Date</th>
+                            <th className="p-3.5">League</th>
+                            <th className="p-3.5">Department</th>
+                            <th className="p-3.5 text-center">Score (100)</th>
+                            <th className="p-3.5">Auditor Remarks</th>
+                            <th className="p-3.5 text-right">Certificate</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#f5f5f7] font-medium text-[#1d1d1f]">
+                          {fiveSAudits.filter(a => !searchQuery || a.department.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 25).map(a => (
+                            <tr key={a.id} className="hover:bg-[#f5f5f7]/80 transition-colors">
+                              <td className="p-3.5 font-mono font-bold text-purple-700">{a.audit_number}</td>
+                              <td className="p-3.5 text-[#86868b]">{a.audit_date}</td>
+                              <td className="p-3.5">
+                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
+                                  a.league === 'Labs League'
+                                    ? 'bg-blue-50 text-blue-700 border-blue-200/60'
+                                    : 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                                }`}>
+                                  {a.league}
+                                </span>
+                              </td>
+                              <td className="p-3.5 font-semibold text-[#1d1d1f]">{a.department}</td>
+                              <td className="p-3.5 text-center">
+                                <span className={`px-2.5 py-0.5 rounded-full font-mono font-bold text-xs border ${
+                                  a.total_score >= 85
+                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                                    : 'bg-amber-50 text-amber-700 border-amber-200/60'
+                                }`}>
+                                  {a.total_score}%
+                                </span>
+                              </td>
+                              <td className="p-3.5 text-[#515154] max-w-xs truncate">{a.remarks}</td>
+                              <td className="p-3.5 text-right">
+                                {a.report_pdf_url ? (
+                                  <a
+                                    href={a.report_pdf_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-[#0071e3] hover:underline text-[11px] font-semibold"
+                                  >
+                                    Drive PDF
+                                  </a>
+                                ) : (
+                                  <span className="text-[#86868b] text-[10px]">Matrix Ready</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Mobile Stacked Card View (sm:hidden) */}
+                    <div className="sm:hidden divide-y divide-[#f5f5f7] p-2 space-y-2.5">
                       {fiveSAudits.filter(a => !searchQuery || a.department.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 25).map(a => (
-                        <tr key={a.id} className="hover:bg-[#f5f5f7]/80 transition-colors">
-                          <td className="p-3.5 font-mono font-bold text-purple-700">{a.audit_number}</td>
-                          <td className="p-3.5 text-[#86868b]">{a.audit_date}</td>
-                          <td className="p-3.5">
-                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
-                              a.league === 'Labs League'
-                                ? 'bg-blue-50 text-blue-700 border-blue-200/60'
-                                : 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
-                            }`}>
-                              {a.league}
-                            </span>
-                          </td>
-                          <td className="p-3.5 font-semibold text-[#1d1d1f]">{a.department}</td>
-                          <td className="p-3.5 text-center">
+                        <div key={a.id} className="p-3.5 bg-white rounded-xl border border-[#d2d2d7]/50 space-y-2 text-xs">
+                          <div className="flex items-center justify-between">
+                            <span className="font-mono font-bold text-purple-700">{a.audit_number}</span>
                             <span className={`px-2.5 py-0.5 rounded-full font-mono font-bold text-xs border ${
                               a.total_score >= 85
                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
@@ -583,76 +688,117 @@ export default function EhsSaasApp() {
                             }`}>
                               {a.total_score}%
                             </span>
-                          </td>
-                          <td className="p-3.5 text-[#515154] max-w-xs truncate">{a.remarks}</td>
-                          <td className="p-3.5 text-right">
+                          </div>
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className="font-semibold text-[#1d1d1f]">{a.department}</span>
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
+                              a.league === 'Labs League'
+                                ? 'bg-blue-50 text-blue-700 border-blue-200/60'
+                                : 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                            }`}>
+                              {a.league}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-[#515154] italic">{a.remarks || 'Standard audit compliant'}</p>
+                          <div className="flex items-center justify-between pt-1 border-t border-[#f5f5f7] text-[10px] text-[#86868b]">
+                            <span>📅 {a.audit_date}</span>
                             {a.report_pdf_url ? (
                               <a
                                 href={a.report_pdf_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-[#0071e3] hover:underline text-[11px] font-semibold"
+                                className="text-[#0071e3] font-semibold underline"
                               >
-                                Drive PDF
+                                View PDF
                               </a>
                             ) : (
-                              <span className="text-[#86868b] text-[10px]">Matrix Ready</span>
+                              <span>Matrix Ready</span>
                             )}
-                          </td>
-                        </tr>
+                          </div>
+                        </div>
                       ))}
-                    </tbody>
-                  </table>
+                    </div>
+                  </>
                 )}
 
+                {/* FPS MODULE VIEW */}
                 {activeModule.id === 'fps' && (
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-[#f5f5f7] text-[#86868b] uppercase text-[10px] font-semibold border-b border-[#d2d2d7]/60">
-                      <tr>
-                        <th className="p-3.5">Asset Tag</th>
-                        <th className="p-3.5">Type</th>
-                        <th className="p-3.5">Location</th>
-                        <th className="p-3.5">Zone</th>
-                        <th className="p-3.5 text-center">Status</th>
-                        <th className="p-3.5">Hydro Due</th>
-                        <th className="p-3.5 text-right">QR Token</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#f5f5f7] font-medium text-[#1d1d1f]">
+                  <>
+                    {/* Desktop Table View */}
+                    <div className="hidden sm:block overflow-x-auto w-full table-responsive-container">
+                      <table className="w-full text-left text-xs min-w-[680px]">
+                        <thead className="bg-[#f5f5f7] text-[#86868b] uppercase text-[10px] font-semibold border-b border-[#d2d2d7]/60">
+                          <tr>
+                            <th className="p-3.5">Asset Tag</th>
+                            <th className="p-3.5">Type</th>
+                            <th className="p-3.5">Location</th>
+                            <th className="p-3.5">Zone</th>
+                            <th className="p-3.5 text-center">Status</th>
+                            <th className="p-3.5">Hydro Due</th>
+                            <th className="p-3.5 text-right">QR Token</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#f5f5f7] font-medium text-[#1d1d1f]">
+                          {fpsAssets.filter(f => !searchQuery || f.location.toLowerCase().includes(searchQuery.toLowerCase()) || f.asset_tag.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 25).map(f => (
+                            <tr key={f.id} className="hover:bg-[#f5f5f7]/80 transition-colors">
+                              <td className="p-3.5 font-mono font-bold text-orange-600">{f.asset_tag}</td>
+                              <td className="p-3.5 font-semibold text-[#1d1d1f]">{f.asset_type}</td>
+                              <td className="p-3.5 text-[#515154]">{f.location}</td>
+                              <td className="p-3.5 text-[#86868b]">{f.zone}</td>
+                              <td className="p-3.5 text-center">
+                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
+                                  f.status === 'Operable'
+                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
+                                    : 'bg-rose-50 text-rose-700 border-rose-200/60'
+                                }`}>
+                                  {f.status}
+                                </span>
+                              </td>
+                              <td className="p-3.5 text-[#86868b] font-mono">{f.hydro_test_date || '2028-12-31'}</td>
+                              <td className="p-3.5 text-right font-mono text-[10px] text-[#0071e3] font-semibold">{f.qr_code_token}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Mobile Stacked Card View (sm:hidden) */}
+                    <div className="sm:hidden divide-y divide-[#f5f5f7] p-2 space-y-2.5">
                       {fpsAssets.filter(f => !searchQuery || f.location.toLowerCase().includes(searchQuery.toLowerCase()) || f.asset_tag.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 25).map(f => (
-                        <tr key={f.id} className="hover:bg-[#f5f5f7]/80 transition-colors">
-                          <td className="p-3.5 font-mono font-bold text-orange-600">{f.asset_tag}</td>
-                          <td className="p-3.5 font-semibold text-[#1d1d1f]">{f.asset_type}</td>
-                          <td className="p-3.5 text-[#515154]">{f.location}</td>
-                          <td className="p-3.5 text-[#86868b]">{f.zone}</td>
-                          <td className="p-3.5 text-center">
-                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
+                        <div key={f.id} className="p-3.5 bg-white rounded-xl border border-[#d2d2d7]/50 space-y-2 text-xs">
+                          <div className="flex items-center justify-between">
+                            <span className="font-mono font-bold text-orange-600">{f.asset_tag}</span>
+                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
                               f.status === 'Operable'
                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200/60'
                                 : 'bg-rose-50 text-rose-700 border-rose-200/60'
                             }`}>
                               {f.status}
                             </span>
-                          </td>
-                          <td className="p-3.5 text-[#86868b] font-mono">{f.hydro_test_date || '2028-12-31'}</td>
-                          <td className="p-3.5 text-right font-mono text-[10px] text-[#0071e3] font-semibold">{f.qr_code_token}</td>
-                        </tr>
+                          </div>
+                          <div className="font-semibold text-[#1d1d1f]">{f.asset_type}</div>
+                          <div className="text-[11px] text-[#515154]">📍 {f.location} ({f.zone})</div>
+                          <div className="flex items-center justify-between pt-1 border-t border-[#f5f5f7] text-[10px] text-[#86868b]">
+                            <span>Hydro: {f.hydro_test_date || '2028-12-31'}</span>
+                            <span className="font-mono text-[#0071e3] font-semibold">{f.qr_code_token}</span>
+                          </div>
+                        </div>
                       ))}
-                    </tbody>
-                  </table>
+                    </div>
+                  </>
                 )}
 
                 {/* Fallback View for other modules */}
                 {!['5s', 'fps', 'ptw'].includes(activeModule.id) && (
-                  <div className="p-10 text-center text-[#86868b]">
-                    <CheckCircle2 className="w-12 h-12 mx-auto mb-3 text-[#0071e3]" />
+                  <div className="p-6 sm:p-10 text-center text-[#86868b]">
+                    <CheckCircle2 className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 text-[#0071e3]" />
                     <h4 className="text-sm font-bold text-[#1d1d1f]">Module Initialized with Multi-Tenant Architecture</h4>
                     <p className="text-xs text-[#86868b] mt-1 max-w-md mx-auto">
                       {activeModule.title} is synchronized with the central Supabase PostgreSQL schema, RLS policies, and universal data bundle.
                     </p>
                     <button
                       onClick={handleExportPdf}
-                      className="mt-4 px-5 py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs inline-flex items-center gap-2 shadow-sm transition-all"
+                      className="mt-4 px-5 py-2.5 min-h-[44px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs inline-flex items-center gap-2 shadow-sm transition-all touch-target"
                     >
                       <Download className="w-4 h-4" />
                       <span>Generate Certified {activeModule.formatNumber} Report</span>
@@ -676,60 +822,63 @@ export default function EhsSaasApp() {
       </main>
 
       {/* ==============================================================================
-          QUICK ACTION MODAL: RECORD EVENT (APPLE LIGHT DIALOG)
+          QUICK ACTION MODAL: RECORD EVENT (MOBILE VIEWPORT CONSTRAINED & SCROLLABLE)
       ============================================================================== */}
       {isQuickRecordModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-[#d2d2d7]/70 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl p-6 space-y-4 text-[#1d1d1f]">
-            <div className="flex items-center justify-between border-b border-[#d2d2d7]/50 pb-3">
-              <h3 className="text-sm font-bold text-[#1d1d1f] flex items-center gap-2">
-                <PlusCircle className="w-4 h-4 text-[#0071e3]" />
-                Record Action to Central Supabase
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-[#d2d2d7]/70 w-[95vw] sm:max-w-md max-h-[90vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl p-4 sm:p-6 text-[#1d1d1f]">
+            <div className="flex items-center justify-between border-b border-[#d2d2d7]/50 pb-3 shrink-0">
+              <h3 className="text-sm font-bold text-[#1d1d1f] flex items-center gap-2 truncate">
+                <PlusCircle className="w-4 h-4 text-[#0071e3] shrink-0" />
+                <span>Record Action to Central Supabase</span>
               </h3>
               <button 
                 onClick={() => setIsQuickRecordModalOpen(false)} 
-                className="w-7 h-7 rounded-full bg-[#f5f5f7] hover:bg-[#e8e8ed] flex items-center justify-center text-[#86868b] hover:text-[#1d1d1f] transition-colors"
+                className="w-8 h-8 rounded-full bg-[#f5f5f7] hover:bg-[#e8e8ed] flex items-center justify-center text-[#86868b] hover:text-[#1d1d1f] transition-colors shrink-0 touch-target"
+                aria-label="Close dialog"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div>
-              <label className="text-xs font-semibold text-[#86868b] block mb-1">Target Module</label>
-              <select
-                value={recordType}
-                onChange={(e) => setRecordType(e.target.value)}
-                className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-2.5 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all"
-              >
-                <option value="Safety Observation">Safety Observation (UA/UC/NM)</option>
-                <option value="PTW Permit">Permit to Work (PTW)</option>
-                <option value="Kaizen Proposal">Kaizen Continuous Improvement</option>
-                <option value="5S Audit">5S 100-Point Audit</option>
-              </select>
+            <div className="flex-1 overflow-y-auto py-3 space-y-4 pr-1">
+              <div>
+                <label className="text-xs font-semibold text-[#86868b] block mb-1">Target Module</label>
+                <select
+                  value={recordType}
+                  onChange={(e) => setRecordType(e.target.value)}
+                  className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-3 min-h-[44px] text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all cursor-pointer"
+                >
+                  <option value="Safety Observation">Safety Observation (UA/UC/NM)</option>
+                  <option value="PTW Permit">Permit to Work (PTW)</option>
+                  <option value="Kaizen Proposal">Kaizen Continuous Improvement</option>
+                  <option value="5S Audit">5S 100-Point Audit</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-[#86868b] block mb-1">Location / Zone</label>
+                <input
+                  type="text"
+                  defaultValue="Lalru Unit-3 Mixing Plant"
+                  className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-3 min-h-[44px] text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-[#86868b] block mb-1">Description / Observations</label>
+                <textarea
+                  rows={3}
+                  defaultValue="Conducted immediate field inspection. Controls in place."
+                  className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-3 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all"
+                />
+              </div>
             </div>
 
-            <div>
-              <label className="text-xs font-semibold text-[#86868b] block mb-1">Location / Zone</label>
-              <input
-                type="text"
-                defaultValue="Lalru Unit-3 Mixing Plant"
-                className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-2.5 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all"
-              />
-            </div>
-
-            <div>
-              <label className="text-xs font-semibold text-[#86868b] block mb-1">Description / Observations</label>
-              <textarea
-                rows={3}
-                defaultValue="Conducted immediate field inspection. Controls in place."
-                className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-2.5 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all"
-              />
-            </div>
-
-            <div className="pt-2 flex items-center justify-end gap-2.5 border-t border-[#d2d2d7]/50">
+            <div className="pt-3 flex items-center justify-end gap-2.5 border-t border-[#d2d2d7]/50 shrink-0">
               <button
                 onClick={() => setIsQuickRecordModalOpen(false)}
-                className="px-4 py-2 rounded-full text-xs font-medium text-[#86868b] hover:text-[#1d1d1f] transition-colors"
+                className="px-4 py-2.5 min-h-[44px] rounded-full text-xs font-medium text-[#86868b] hover:text-[#1d1d1f] transition-colors touch-target"
               >
                 Cancel
               </button>
@@ -738,7 +887,7 @@ export default function EhsSaasApp() {
                   alert(`Successfully committed new ${recordType} to company ${currentCompany.name} (RLS Tenant ID ${selectedCompanyId}).`);
                   setIsQuickRecordModalOpen(false);
                 }}
-                className="px-5 py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs shadow-sm active:scale-[0.98] transition-all"
+                className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white font-medium text-xs shadow-sm active:scale-[0.98] transition-all touch-target"
               >
                 Commit to Cloud
               </button>

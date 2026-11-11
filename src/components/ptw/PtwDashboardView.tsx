@@ -332,31 +332,31 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
       {actionNotice && (
         <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs font-semibold text-emerald-800 flex items-center justify-between shadow-sm animate-fade-in">
           <span>{actionNotice}</span>
-          <button onClick={() => setActionNotice(null)} className="text-emerald-600 hover:text-emerald-900">
+          <button onClick={() => setActionNotice(null)} className="text-emerald-600 hover:text-emerald-900 touch-target p-1">
             ✕
           </button>
         </div>
       )}
 
       {/* ==============================================================================
-          SLEEK APPLE-GRADE HEADER & ACTIONS
+          RESPONSIVE HEADER & PRIMARY ACTIONS
       ============================================================================== */}
-      <div className="p-6 rounded-3xl bg-white/90 backdrop-blur-xl border border-[#d2d2d7]/60 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="p-4 sm:p-6 rounded-3xl bg-white/90 backdrop-blur-xl border border-[#d2d2d7]/60 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2.5 flex-wrap">
-            <h1 className="text-xl font-bold tracking-tight text-[#1d1d1f]">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="text-lg sm:text-xl font-bold tracking-tight text-[#1d1d1f]">
               Permit to Work (PTW) System
             </h1>
-            <span className="px-2.5 py-0.5 rounded-full bg-[#0071e3]/10 text-[#0071e3] text-[11px] font-semibold border border-[#0071e3]/20">
-              ISO 45001 &amp; OSHA 29 CFR
+            <span className="px-2.5 py-0.5 rounded-full bg-[#0071e3]/10 text-[#0071e3] text-[10px] sm:text-[11px] font-semibold border border-[#0071e3]/20">
+              ISO 45001 &amp; OSHA
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-semibold border border-emerald-200">
-              PTW_Master_Data Synced
+            <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] sm:text-[11px] font-semibold border border-emerald-200">
+              PTW Synced
             </span>
             {canDelete && (
-              <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[11px] font-bold border border-rose-200 flex items-center gap-1">
+              <span className="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 text-[10px] sm:text-[11px] font-bold border border-rose-200 flex items-center gap-1">
                 <ShieldAlert className="w-3.5 h-3.5 text-rose-600" />
-                Master Admin (E0414): Deletion Privileges Active
+                Master Admin (E0414)
               </span>
             )}
           </div>
@@ -369,7 +369,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={handleSyncCloud}
-            className="px-3.5 py-2 rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#515154] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
+            className="px-3.5 py-2.5 min-h-[40px] sm:min-h-[44px] rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#515154] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all touch-target"
             title="Sync with Google Sheets PTW_Master_Data"
           >
             <RefreshCw className="w-3.5 h-3.5 text-[#0071e3]" />
@@ -378,7 +378,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
 
           <button
             onClick={handleExportCsv}
-            className="px-3.5 py-2 rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#515154] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
+            className="px-3.5 py-2.5 min-h-[40px] sm:min-h-[44px] rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#515154] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all touch-target"
             title="Export Ledger to CSV"
           >
             <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
@@ -387,7 +387,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
 
           <button
             onClick={() => setIsTerminalOpen(!isTerminalOpen)}
-            className="px-3.5 py-2 rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#515154] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
+            className="px-3.5 py-2.5 min-h-[40px] sm:min-h-[44px] rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#515154] flex items-center gap-1.5 shadow-sm active:scale-95 transition-all touch-target"
             title="Sentinel Activity Console"
           >
             <Terminal className="w-3.5 h-3.5 text-[#1d1d1f]" />
@@ -396,7 +396,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
 
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="px-5 py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all"
+            className="px-5 py-2.5 min-h-[40px] sm:min-h-[44px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition-all touch-target"
           >
             <PlusCircle className="w-3.5 h-3.5" />
             <span>+ Create Permit</span>
@@ -405,78 +405,78 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
       </div>
 
       {/* ==============================================================================
-          SLEEK APPLE KPI CARDS (CLEAN & BALANCED)
+          RESPONSIVE KPI CARDS (2 cols mobile, 3 tablet, 6 desktop)
       ============================================================================== */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5 text-left">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5 text-left">
         {/* Total Records */}
-        <div className="p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
+        <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between text-[#86868b]">
-            <span className="text-[11px] font-semibold uppercase tracking-wider">Total Permits</span>
-            <FileText className="w-4 h-4 text-[#86868b]" />
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">Total Permits</span>
+            <FileText className="w-4 h-4 text-[#86868b] shrink-0" />
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-bold font-mono text-[#1d1d1f]">{metrics.total.toLocaleString()}</div>
-            <span className="text-[10px] text-[#86868b] mt-0.5 block">Sheet Backlog</span>
+          <div className="mt-1.5 sm:mt-2">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-[#1d1d1f]">{metrics.total.toLocaleString()}</div>
+            <span className="text-[10px] text-[#86868b] mt-0.5 block truncate">Sheet Backlog</span>
           </div>
         </div>
 
         {/* Pending Approval */}
-        <div className="p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
+        <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between text-amber-600">
-            <span className="text-[11px] font-semibold uppercase tracking-wider">In Routing</span>
-            <Clock className="w-4 h-4 text-amber-500" />
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">In Routing</span>
+            <Clock className="w-4 h-4 text-amber-500 shrink-0" />
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-bold font-mono text-amber-600">{metrics.pending}</div>
-            <span className="text-[10px] text-amber-700/80 mt-0.5 block">Awaiting E-Sign</span>
+          <div className="mt-1.5 sm:mt-2">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-amber-600">{metrics.pending}</div>
+            <span className="text-[10px] text-amber-700/80 mt-0.5 block truncate">Awaiting E-Sign</span>
           </div>
         </div>
 
         {/* Active On Site */}
-        <div className="p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
+        <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between text-emerald-600">
-            <span className="text-[11px] font-semibold uppercase tracking-wider">Active On-Site</span>
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">Active On-Site</span>
+            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-bold font-mono text-emerald-600">{metrics.active}</div>
-            <span className="text-[10px] text-emerald-700/80 mt-0.5 block">Work In Progress</span>
+          <div className="mt-1.5 sm:mt-2">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-600">{metrics.active}</div>
+            <span className="text-[10px] text-emerald-700/80 mt-0.5 block truncate">Work In Progress</span>
           </div>
         </div>
 
         {/* Handback Pending */}
-        <div className="p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
+        <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between text-blue-600">
-            <span className="text-[11px] font-semibold uppercase tracking-wider">Handback</span>
-            <CheckSquare className="w-4 h-4 text-blue-500" />
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">Handback</span>
+            <CheckSquare className="w-4 h-4 text-blue-500 shrink-0" />
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-bold font-mono text-blue-600">{metrics.handbackPending}</div>
-            <span className="text-[10px] text-blue-700/80 mt-0.5 block">Awaiting Close</span>
+          <div className="mt-1.5 sm:mt-2">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-blue-600">{metrics.handbackPending}</div>
+            <span className="text-[10px] text-blue-700/80 mt-0.5 block truncate">Awaiting Close</span>
           </div>
         </div>
 
         {/* High Risk Gates */}
-        <div className="p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
+        <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between text-rose-600">
-            <span className="text-[11px] font-semibold uppercase tracking-wider">High Risk</span>
-            <Flame className="w-4 h-4 text-rose-500" />
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">High Risk</span>
+            <Flame className="w-4 h-4 text-rose-500 shrink-0" />
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-bold font-mono text-rose-600">{metrics.highRisk}</div>
-            <span className="text-[10px] text-rose-700/80 mt-0.5 block">HW / CS / HT / LB</span>
+          <div className="mt-1.5 sm:mt-2">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-rose-600">{metrics.highRisk}</div>
+            <span className="text-[10px] text-rose-700/80 mt-0.5 block truncate">HW / CS / HT / LB</span>
           </div>
         </div>
 
         {/* Closed Archive */}
-        <div className="p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
+        <div className="p-3 sm:p-4 rounded-2xl bg-white border border-[#d2d2d7]/60 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-600">
-            <span className="text-[11px] font-semibold uppercase tracking-wider">Closed</span>
-            <ShieldCheck className="w-4 h-4 text-slate-500" />
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">Closed</span>
+            <ShieldCheck className="w-4 h-4 text-slate-500 shrink-0" />
           </div>
-          <div className="mt-2">
-            <div className="text-2xl font-bold font-mono text-slate-700">{metrics.closed.toLocaleString()}</div>
-            <span className="text-[10px] text-slate-500 mt-0.5 block">Safely Concluded</span>
+          <div className="mt-1.5 sm:mt-2">
+            <div className="text-xl sm:text-2xl font-bold font-mono text-slate-700">{metrics.closed.toLocaleString()}</div>
+            <span className="text-[10px] text-slate-500 mt-0.5 block truncate">Safely Concluded</span>
           </div>
         </div>
       </div>
@@ -491,7 +491,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
               <Terminal className="w-4 h-4 text-emerald-400" />
               <span className="font-bold text-slate-200">SENTINEL LIVE ISO 45001 AUDIT CONSOLE</span>
             </div>
-            <button onClick={() => setIsTerminalOpen(false)} className="text-slate-400 hover:text-white text-xs">
+            <button onClick={() => setIsTerminalOpen(false)} className="text-slate-400 hover:text-white text-xs touch-target p-1">
               ✕ CLOSE
             </button>
           </div>
@@ -510,21 +510,21 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
       {/* ==============================================================================
           REGISTRY CONTROLS & FILTER BAR
       ============================================================================== */}
-      <div className="p-4 rounded-2xl saas-card flex flex-wrap items-center justify-between gap-3 shadow-sm">
+      <div className="p-3.5 sm:p-4 rounded-2xl saas-card flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
         {/* Status Tabs */}
-        <div className="flex items-center gap-1 bg-[#f5f5f7] p-1 rounded-xl text-xs font-semibold overflow-x-auto">
+        <div className="flex items-center gap-1 bg-[#f5f5f7] p-1 rounded-xl text-xs font-semibold overflow-x-auto scrollbar-none flex-nowrap w-full md:w-auto">
           {[
-            { id: 'ALL', label: `All Records (${metrics.total})` },
-            { id: 'PENDING', label: `Pending In-Route (${metrics.pending})` },
-            { id: 'APPROVED', label: `Approved / Active (${metrics.active})` },
-            { id: 'HANDBACK', label: `Handback Review (${metrics.handbackPending})` },
+            { id: 'ALL', label: `All (${metrics.total})` },
+            { id: 'PENDING', label: `In-Route (${metrics.pending})` },
+            { id: 'APPROVED', label: `Active (${metrics.active})` },
+            { id: 'HANDBACK', label: `Handback (${metrics.handbackPending})` },
             { id: 'CLOSED', label: `Closed (${metrics.closed})` },
-            { id: 'REJECTED', label: `Rejected / Revoked (${metrics.rejected})` }
+            { id: 'REJECTED', label: `Rejected (${metrics.rejected})` }
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setSelectedStatusTab(tab.id)}
-              className={`px-3 py-1.5 rounded-lg transition-all whitespace-nowrap ${
+              className={`px-3 py-2 rounded-lg transition-all whitespace-nowrap touch-target text-xs ${
                 selectedStatusTab === tab.id
                   ? 'bg-white text-[#1d1d1f] shadow-sm font-bold'
                   : 'text-[#86868b] hover:text-[#1d1d1f]'
@@ -536,16 +536,16 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
         </div>
 
         {/* Search & Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full md:w-auto">
           {/* Search Box */}
-          <div className="relative">
-            <Search className="w-4 h-4 text-[#86868b] absolute left-3 top-2.5" />
+          <div className="relative flex-1 sm:w-56">
+            <Search className="w-4 h-4 text-[#86868b] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search Permit #, Vendor..."
-              className="bg-[#f5f5f7] border border-[#d2d2d7] rounded-full pl-9 pr-3.5 py-1.5 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all w-56"
+              className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-full pl-9 pr-3.5 py-2 min-h-[40px] text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3] focus:ring-2 focus:ring-[#0071e3]/20 transition-all"
             />
           </div>
 
@@ -553,7 +553,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
           <select
             value={selectedTypeFilter}
             onChange={(e) => setSelectedTypeFilter(e.target.value)}
-            className="bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-2.5 py-1.5 text-xs font-semibold text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]"
+            className="bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3 py-2 min-h-[40px] text-xs font-semibold text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]"
           >
             <option value="All">All Types</option>
             <option value="Hot Work">Hot Work</option>
@@ -568,218 +568,393 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
           {/* Email Logs Button */}
           <button
             onClick={() => setIsEmailLogViewOpen(true)}
-            className="px-3 py-1.5 rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#515154] flex items-center gap-1.5"
+            className="px-3.5 py-2 min-h-[40px] rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-xs font-semibold text-[#515154] flex items-center gap-1.5 touch-target shrink-0"
             title="Inspect Email Dispatch Logs"
           >
             <Mail className="w-3.5 h-3.5 text-[#0071e3]" />
-            <span>Emails ({emailLogs.length})</span>
+            <span className="hidden sm:inline">Emails</span> ({emailLogs.length})
           </button>
         </div>
       </div>
 
       {/* ==============================================================================
-          PERMITS REGISTRY TABLE
+          PERMITS REGISTRY: RESPONSIVE DESKTOP TABLE & MOBILE STACKED CARDS
       ============================================================================== */}
       <div className="saas-card rounded-2xl overflow-hidden border border-[#d2d2d7]/60 shadow-sm">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-[#f5f5f7] text-[#86868b] uppercase text-[10px] font-semibold border-b border-[#d2d2d7]/60">
-            <tr>
-              <th className="p-3.5">Permit #</th>
-              <th className="p-3.5">Type &amp; Risk</th>
-              <th className="p-3.5">Vendor &amp; Location</th>
-              <th className="p-3.5" style={{ minWidth: '220px' }}>Work Description</th>
-              <th className="p-3.5">Status &amp; Authority</th>
-              <th className="p-3.5">Expiry / Validity</th>
-              <th className="p-3.5 text-right">Controls</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-[#f5f5f7] font-medium text-[#1d1d1f]">
-            {displayedPermits.map(permit => {
-              const pendingSlot = permit.approvers.find(a => a.status === 'Pending');
-              const isHighRisk = permit.risk_level === 'High';
-              const isActive = permit.status === 'Active' || permit.status === 'Approved';
-              const isHandbackPending = permit.status === 'Pending Area Incharge';
+        {/* Desktop Table View (md:block) */}
+        <div className="hidden md:block overflow-x-auto w-full table-responsive-container">
+          <table className="w-full text-left text-xs min-w-[920px]">
+            <thead className="bg-[#f5f5f7] text-[#86868b] uppercase text-[10px] font-semibold border-b border-[#d2d2d7]/60">
+              <tr>
+                <th className="p-3.5">Permit #</th>
+                <th className="p-3.5">Type &amp; Risk</th>
+                <th className="p-3.5">Vendor &amp; Location</th>
+                <th className="p-3.5" style={{ minWidth: '220px' }}>Work Description</th>
+                <th className="p-3.5">Status &amp; Authority</th>
+                <th className="p-3.5">Expiry / Validity</th>
+                <th className="p-3.5 text-right">Controls</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#f5f5f7] font-medium text-[#1d1d1f]">
+              {displayedPermits.map(permit => {
+                const pendingSlot = permit.approvers.find(a => a.status === 'Pending');
+                const isHighRisk = permit.risk_level === 'High';
+                const isActive = permit.status === 'Active' || permit.status === 'Approved';
+                const isHandbackPending = permit.status === 'Pending Area Incharge';
 
-              return (
-                <tr key={permit.id} className="hover:bg-[#f5f5f7]/80 transition-colors">
-                  {/* Permit Number */}
-                  <td className="p-3.5 font-mono font-bold text-[#0071e3]">
-                    {permit.permit_number}
-                  </td>
+                return (
+                  <tr key={permit.id} className="hover:bg-[#f5f5f7]/80 transition-colors">
+                    {/* Permit Number */}
+                    <td className="p-3.5 font-mono font-bold text-[#0071e3]">
+                      {permit.permit_number}
+                    </td>
 
-                  {/* Type & Risk */}
-                  <td className="p-3.5">
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border inline-block ${
+                    {/* Type & Risk */}
+                    <td className="p-3.5">
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border inline-block ${
+                        isHighRisk
+                          ? 'bg-rose-50 text-rose-700 border-rose-200'
+                          : 'bg-blue-50 text-blue-700 border-blue-200'
+                      }`}>
+                        {isHighRisk ? 'HIGH RISK' : 'GENERAL'}
+                      </span>
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {permit.gateways?.hot_work && <span className="text-[9px] px-1.5 py-0.2 rounded bg-orange-50 text-orange-700 border border-orange-200 font-mono">HW</span>}
+                        {permit.gateways?.height_work && <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono">HT</span>}
+                        {permit.gateways?.confined_space && <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 border border-purple-200 font-mono">CS</span>}
+                        {permit.gateways?.line_breaking && <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-50 text-rose-700 border border-rose-200 font-mono">LB</span>}
+                        {permit.gateways?.excavation && <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200 font-mono">EX</span>}
+                        {permit.gateways?.hoisting && <span className="text-[9px] px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono">HO</span>}
+                        {permit.loto_required && <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-300 font-mono font-bold">LOTO</span>}
+                      </div>
+                    </td>
+
+                    {/* Vendor & Location */}
+                    <td className="p-3.5">
+                      <div className="text-xs font-semibold text-[#1d1d1f]">{permit.vendor}</div>
+                      <div className="text-[10px] text-[#86868b] truncate mt-0.5">📍 {permit.location}</div>
+                    </td>
+
+                    {/* Work Description */}
+                    <td className="p-3.5 max-w-xs">
+                      <div className="font-semibold text-[#1d1d1f] truncate" title={permit.description}>
+                        {permit.description || 'Facility Maintenance Task'}
+                      </div>
+                      <div className="text-[10px] text-[#86868b]">Req: {permit.requestor}</div>
+                    </td>
+
+                    {/* Status & Authority */}
+                    <td className="p-3.5">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border inline-block ${getStatusBadge(permit.status)}`}>
+                        {permit.status}
+                      </span>
+                      <div className="flex items-center gap-1 mt-1.5">
+                        {permit.approvers.map(a => {
+                          const isApp = a.status === 'Approved';
+                          const isPend = a.status === 'Pending';
+                          const isRej = a.status === 'Rejected';
+                          const isRev = a.status === 'REVOKED';
+
+                          return (
+                            <div
+                              key={a.slot}
+                              className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold font-mono transition-all cursor-pointer border ${
+                                isApp
+                                  ? 'bg-emerald-500 text-white border-emerald-600'
+                                  : isPend
+                                  ? 'bg-amber-400 text-amber-950 border-amber-500 animate-pulse'
+                                  : isRev
+                                  ? 'bg-black text-rose-400 border-rose-600'
+                                  : isRej
+                                  ? 'bg-rose-500 text-white border-rose-600'
+                                  : 'bg-[#e8e8ed] text-[#86868b] border-[#d2d2d7]'
+                              }`}
+                              title={`Slot ${a.slot}: ${a.role} (${a.name})\nStatus: ${a.status}\nComments: ${a.comments || 'None'}`}
+                              onClick={() => {
+                                if (isPend) setApprovalModalPermit({ permit, slot: a.slot });
+                              }}
+                            >
+                              {isApp ? '✓' : isRev ? '🛑' : isRej ? '✕' : a.slot}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </td>
+
+                    {/* Expiry / Validity */}
+                    <td className="p-3.5 font-mono text-[10px] text-[#515154]">
+                      <div>{permit.valid_from}</div>
+                      <div className="text-[#86868b] mt-0.5">to {permit.valid_to}</div>
+                    </td>
+
+                    {/* Controls */}
+                    <td className="p-3.5 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        {/* Sign off if pending */}
+                        {pendingSlot && (
+                          <button
+                            onClick={() => setApprovalModalPermit({ permit, slot: pendingSlot.slot })}
+                            className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold flex items-center gap-1 shadow-sm active:scale-95"
+                            title="Authorize or Reject"
+                          >
+                            <UserCheck className="w-3 h-3" />
+                            <span>Slot {pendingSlot.slot} Sign</span>
+                          </button>
+                        )}
+
+                        {/* Active: Submit Site Handback */}
+                        {isActive && (
+                          <button
+                            onClick={() => {
+                              setHandbackModalPermit(permit);
+                              setHbError(null);
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-[#0071e3] hover:bg-[#0077ed] text-white text-[10px] font-bold flex items-center gap-1 shadow-sm active:scale-95"
+                            title="Stage 1: Submit Site Handback"
+                          >
+                            <CheckSquare className="w-3 h-3" />
+                            <span>Handback</span>
+                          </button>
+                        )}
+
+                        {/* Pending Area Incharge: Final Closure */}
+                        {isHandbackPending && (
+                          <button
+                            onClick={() => {
+                              setFinalCloseModalPermit(permit);
+                              setFcError(null);
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-[#34c759] hover:bg-[#2fb34f] text-white text-[10px] font-bold flex items-center gap-1 shadow-sm active:scale-95 animate-pulse"
+                            title="Stage 2: Authorize Final Closure"
+                          >
+                            <KeyRound className="w-3 h-3" />
+                            <span>Final Close</span>
+                          </button>
+                        )}
+
+                        {/* MASTER ADMIN E0414 PERMIT DELETION BUTTON */}
+                        {canDelete && (
+                          <button
+                            onClick={() => setDeleteModalPermit(permit)}
+                            className="p-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 hover:text-rose-700 transition-all"
+                            title="Master Admin (E0414): Delete Permit"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+
+                        {/* Email preview button */}
+                        {pendingSlot && (
+                          <button
+                            onClick={() => setEmailModalPermit({ permit, slot: pendingSlot.slot })}
+                            className="p-1 rounded-lg bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#515154]"
+                            title="Preview Approver Email Notification"
+                          >
+                            <Mail className="w-3.5 h-3.5 text-[#0071e3]" />
+                          </button>
+                        )}
+
+                        {/* Certified PDF Export */}
+                        <button
+                          onClick={() => handleExportPermitPdf(permit)}
+                          className="p-1 rounded-lg bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#515154]"
+                          title="Download System-Certified ISO Permit PDF"
+                        >
+                          <Download className="w-3.5 h-3.5 text-[#0071e3]" />
+                        </button>
+
+                        {/* Inspect Checkpoints */}
+                        <button
+                          onClick={() => setInspectPermit(permit)}
+                          className="p-1 rounded-lg bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#515154]"
+                          title="Inspect 146 Checkpoints"
+                        >
+                          <Eye className="w-3.5 h-3.5 text-[#86868b]" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile Stacked Card View (md:hidden) */}
+        <div className="md:hidden divide-y divide-[#f5f5f7] p-2 space-y-3">
+          {displayedPermits.map(permit => {
+            const pendingSlot = permit.approvers.find(a => a.status === 'Pending');
+            const isHighRisk = permit.risk_level === 'High';
+            const isActive = permit.status === 'Active' || permit.status === 'Approved';
+            const isHandbackPending = permit.status === 'Pending Area Incharge';
+
+            return (
+              <div key={permit.id} className="p-4 bg-white rounded-2xl border border-[#d2d2d7]/60 shadow-sm space-y-3 text-xs">
+                {/* Header Row: Permit #, Risk, Status */}
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-bold text-sm text-[#0071e3]">{permit.permit_number}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
                       isHighRisk
                         ? 'bg-rose-50 text-rose-700 border-rose-200'
                         : 'bg-blue-50 text-blue-700 border-blue-200'
                     }`}>
                       {isHighRisk ? 'HIGH RISK' : 'GENERAL'}
                     </span>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {permit.gateways?.hot_work && <span className="text-[9px] px-1.5 py-0.2 rounded bg-orange-50 text-orange-700 border border-orange-200 font-mono">HW</span>}
-                      {permit.gateways?.height_work && <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono">HT</span>}
-                      {permit.gateways?.confined_space && <span className="text-[9px] px-1.5 py-0.2 rounded bg-purple-50 text-purple-700 border border-purple-200 font-mono">CS</span>}
-                      {permit.gateways?.line_breaking && <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-50 text-rose-700 border border-rose-200 font-mono">LB</span>}
-                      {permit.gateways?.excavation && <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200 font-mono">EX</span>}
-                      {permit.gateways?.hoisting && <span className="text-[9px] px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono">HO</span>}
-                      {permit.loto_required && <span className="text-[9px] px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 border border-amber-300 font-mono font-bold">LOTO</span>}
-                    </div>
-                  </td>
+                  </div>
+                  <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${getStatusBadge(permit.status)}`}>
+                    {permit.status}
+                  </span>
+                </div>
 
-                  {/* Vendor & Location */}
-                  <td className="p-3.5">
-                    <div className="text-xs font-semibold text-[#1d1d1f]">{permit.vendor}</div>
-                    <div className="text-[10px] text-[#86868b] truncate mt-0.5">📍 {permit.location}</div>
-                  </td>
+                {/* Gateways & LOTO Tags */}
+                <div className="flex flex-wrap gap-1">
+                  {permit.gateways?.hot_work && <span className="text-[9px] px-1.5 py-0.5 rounded bg-orange-50 text-orange-700 border border-orange-200 font-mono">HW Hot Work</span>}
+                  {permit.gateways?.height_work && <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-mono">HT Height</span>}
+                  {permit.gateways?.confined_space && <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 font-mono">CS Confined Space</span>}
+                  {permit.gateways?.line_breaking && <span className="text-[9px] px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 font-mono">LB Line Breaking</span>}
+                  {permit.gateways?.excavation && <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 font-mono">EX Excavation</span>}
+                  {permit.gateways?.hoisting && <span className="text-[9px] px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 font-mono">HO Hoisting</span>}
+                  {permit.loto_required && <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-mono font-bold">LOTO Active</span>}
+                </div>
 
-                  {/* Work Description */}
-                  <td className="p-3.5 max-w-xs">
-                    <div className="font-semibold text-[#1d1d1f] truncate" title={permit.description}>
-                      {permit.description || 'Facility Maintenance Task'}
-                    </div>
-                    <div className="text-[10px] text-[#86868b]">Req: {permit.requestor}</div>
-                  </td>
+                {/* Work Details */}
+                <div className="space-y-1 bg-[#f5f5f7]/70 p-3 rounded-xl border border-[#d2d2d7]/40 text-[11px]">
+                  <div className="font-semibold text-[#1d1d1f] text-xs">{permit.description || 'Facility Maintenance Task'}</div>
+                  <div className="text-[#515154]">📍 {permit.location}</div>
+                  <div className="text-[#86868b]">🏢 Agency: <strong className="text-[#1d1d1f] font-medium">{permit.vendor}</strong> • Req: {permit.requestor}</div>
+                  <div className="text-[#86868b] font-mono text-[10px]">📅 {permit.valid_from} to {permit.valid_to}</div>
+                </div>
 
-                  {/* Status & Authority */}
-                  <td className="p-3.5">
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border inline-block ${getStatusBadge(permit.status)}`}>
-                      {permit.status}
-                    </span>
-                    <div className="flex items-center gap-1 mt-1.5">
-                      {permit.approvers.map(a => {
-                        const isApp = a.status === 'Approved';
-                        const isPend = a.status === 'Pending';
-                        const isRej = a.status === 'Rejected';
-                        const isRev = a.status === 'REVOKED';
+                {/* Multi-tier Approval Progression Row */}
+                <div className="flex items-center justify-between pt-1">
+                  <span className="text-[10px] uppercase font-bold text-[#86868b]">Signoff Slots:</span>
+                  <div className="flex items-center gap-1.5">
+                    {permit.approvers.map(a => {
+                      const isApp = a.status === 'Approved';
+                      const isPend = a.status === 'Pending';
+                      const isRej = a.status === 'Rejected';
+                      const isRev = a.status === 'REVOKED';
 
-                        return (
-                          <div
-                            key={a.slot}
-                            className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold font-mono transition-all cursor-pointer border ${
-                              isApp
-                                ? 'bg-emerald-500 text-white border-emerald-600'
-                                : isPend
-                                ? 'bg-amber-400 text-amber-950 border-amber-500 animate-pulse'
-                                : isRev
-                                ? 'bg-black text-rose-400 border-rose-600'
-                                : isRej
-                                ? 'bg-rose-500 text-white border-rose-600'
-                                : 'bg-[#e8e8ed] text-[#86868b] border-[#d2d2d7]'
-                            }`}
-                            title={`Slot ${a.slot}: ${a.role} (${a.name})\nStatus: ${a.status}\nComments: ${a.comments || 'None'}`}
-                            onClick={() => {
-                              if (isPend) setApprovalModalPermit({ permit, slot: a.slot });
-                            }}
-                          >
-                            {isApp ? '✓' : isRev ? '🛑' : isRej ? '✕' : a.slot}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </td>
-
-                  {/* Expiry / Validity */}
-                  <td className="p-3.5 font-mono text-[10px] text-[#515154]">
-                    <div>{permit.valid_from}</div>
-                    <div className="text-[#86868b] mt-0.5">to {permit.valid_to}</div>
-                  </td>
-
-                  {/* Controls */}
-                  <td className="p-3.5 text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      {/* Sign off if pending */}
-                      {pendingSlot && (
-                        <button
-                          onClick={() => setApprovalModalPermit({ permit, slot: pendingSlot.slot })}
-                          className="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold flex items-center gap-1 shadow-sm active:scale-95"
-                          title="Authorize or Reject"
-                        >
-                          <UserCheck className="w-3 h-3" />
-                          <span>Slot {pendingSlot.slot} Sign</span>
-                        </button>
-                      )}
-
-                      {/* Active: Submit Site Handback */}
-                      {isActive && (
-                        <button
+                      return (
+                        <div
+                          key={a.slot}
+                          className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold font-mono transition-all cursor-pointer border ${
+                            isApp
+                              ? 'bg-emerald-500 text-white border-emerald-600'
+                              : isPend
+                              ? 'bg-amber-400 text-amber-950 border-amber-500 animate-pulse'
+                              : isRev
+                              ? 'bg-black text-rose-400 border-rose-600'
+                              : isRej
+                              ? 'bg-rose-500 text-white border-rose-600'
+                              : 'bg-[#e8e8ed] text-[#86868b] border-[#d2d2d7]'
+                          }`}
+                          title={`Slot ${a.slot}: ${a.role} (${a.name})\nStatus: ${a.status}`}
                           onClick={() => {
-                            setHandbackModalPermit(permit);
-                            setHbError(null);
+                            if (isPend) setApprovalModalPermit({ permit, slot: a.slot });
                           }}
-                          className="px-2.5 py-1 rounded-lg bg-[#0071e3] hover:bg-[#0077ed] text-white text-[10px] font-bold flex items-center gap-1 shadow-sm active:scale-95"
-                          title="Stage 1: Submit Site Handback"
                         >
-                          <CheckSquare className="w-3 h-3" />
-                          <span>Handback</span>
-                        </button>
-                      )}
+                          {isApp ? '✓' : isRev ? '🛑' : isRej ? '✕' : a.slot}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
 
-                      {/* Pending Area Incharge: Final Closure */}
-                      {isHandbackPending && (
-                        <button
-                          onClick={() => {
-                            setFinalCloseModalPermit(permit);
-                            setFcError(null);
-                          }}
-                          className="px-2.5 py-1 rounded-lg bg-[#34c759] hover:bg-[#2fb34f] text-white text-[10px] font-bold flex items-center gap-1 shadow-sm active:scale-95 animate-pulse"
-                          title="Stage 2: Authorize Final Closure"
-                        >
-                          <KeyRound className="w-3 h-3" />
-                          <span>Final Close</span>
-                        </button>
-                      )}
+                {/* Action Controls for Mobile Card (Touch targets) */}
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-[#f5f5f7]">
+                  {/* Sign off button if pending */}
+                  {pendingSlot && (
+                    <button
+                      onClick={() => setApprovalModalPermit({ permit, slot: pendingSlot.slot })}
+                      className="flex-1 py-2.5 px-3 min-h-[44px] rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 touch-target"
+                    >
+                      <UserCheck className="w-4 h-4" />
+                      <span>Slot {pendingSlot.slot} Sign</span>
+                    </button>
+                  )}
 
-                      {/* MASTER ADMIN E0414 PERMIT DELETION BUTTON */}
-                      {canDelete && (
-                        <button
-                          onClick={() => setDeleteModalPermit(permit)}
-                          className="p-1 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 hover:text-rose-700 transition-all"
-                          title="Master Admin (E0414): Delete Permit"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
+                  {/* Active Handback */}
+                  {isActive && (
+                    <button
+                      onClick={() => {
+                        setHandbackModalPermit(permit);
+                        setHbError(null);
+                      }}
+                      className="flex-1 py-2.5 px-3 min-h-[44px] rounded-xl bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 touch-target"
+                    >
+                      <CheckSquare className="w-4 h-4" />
+                      <span>Handback</span>
+                    </button>
+                  )}
 
-                      {/* Email preview button */}
-                      {pendingSlot && (
-                        <button
-                          onClick={() => setEmailModalPermit({ permit, slot: pendingSlot.slot })}
-                          className="p-1 rounded-lg bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#515154]"
-                          title="Preview Approver Email Notification"
-                        >
-                          <Mail className="w-3.5 h-3.5 text-[#0071e3]" />
-                        </button>
-                      )}
+                  {/* Final Close */}
+                  {isHandbackPending && (
+                    <button
+                      onClick={() => {
+                        setFinalCloseModalPermit(permit);
+                        setFcError(null);
+                      }}
+                      className="flex-1 py-2.5 px-3 min-h-[44px] rounded-xl bg-[#34c759] hover:bg-[#2fb34f] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 animate-pulse touch-target"
+                    >
+                      <KeyRound className="w-4 h-4" />
+                      <span>Final Close</span>
+                    </button>
+                  )}
 
-                      {/* Certified PDF Export */}
-                      <button
-                        onClick={() => handleExportPermitPdf(permit)}
-                        className="p-1 rounded-lg bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#515154]"
-                        title="Download System-Certified ISO Permit PDF"
-                      >
-                        <Download className="w-3.5 h-3.5 text-[#0071e3]" />
-                      </button>
+                  {/* PDF Download */}
+                  <button
+                    onClick={() => handleExportPermitPdf(permit)}
+                    className="p-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#0071e3] flex items-center justify-center touch-target"
+                    title="Download PDF"
+                    aria-label="Download Permit PDF"
+                  >
+                    <Download className="w-4 h-4" />
+                  </button>
 
-                      {/* Inspect Checkpoints */}
-                      <button
-                        onClick={() => setInspectPermit(permit)}
-                        className="p-1 rounded-lg bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#515154]"
-                        title="Inspect 146 Checkpoints"
-                      >
-                        <Eye className="w-3.5 h-3.5 text-[#86868b]" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                  {/* Email Preview */}
+                  {pendingSlot && (
+                    <button
+                      onClick={() => setEmailModalPermit({ permit, slot: pendingSlot.slot })}
+                      className="p-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#0071e3] flex items-center justify-center touch-target"
+                      title="Preview Email"
+                      aria-label="Preview Approver Email"
+                    >
+                      <Mail className="w-4 h-4" />
+                    </button>
+                  )}
+
+                  {/* Inspect Details */}
+                  <button
+                    onClick={() => setInspectPermit(permit)}
+                    className="p-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#86868b] flex items-center justify-center touch-target"
+                    title="Inspect 146 Checkpoints"
+                    aria-label="Inspect 146 Checkpoints"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </button>
+
+                  {/* Master Admin Delete */}
+                  {canDelete && (
+                    <button
+                      onClick={() => setDeleteModalPermit(permit)}
+                      className="p-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-600 flex items-center justify-center touch-target"
+                      title="Master Admin (E0414): Delete Permit"
+                      aria-label="Delete Permit"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* ==============================================================================
-          SLEEK APPLE PAGINATION / LOAD MORE
+          PAGINATION / LOAD MORE
       ============================================================================== */}
       {!isFullArchiveLoaded && filteredPermits.length > 35 && (
         <div className="text-center py-4">
@@ -788,7 +963,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
               setIsFullArchiveLoaded(true);
               PtwService.logActivity('ARCHIVE_EXPAND', 'Full historical archive loaded into client view.');
             }}
-            className="px-6 py-2.5 rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#1d1d1f] text-xs font-semibold shadow-sm transition-all inline-flex items-center gap-2 active:scale-95"
+            className="px-6 py-3 min-h-[44px] rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d2d2d7] text-[#1d1d1f] text-xs font-semibold shadow-sm transition-all inline-flex items-center gap-2 active:scale-95 touch-target"
           >
             <ChevronDown className="w-4 h-4 text-[#86868b]" />
             <span>Load All Records (Showing {displayedPermits.length} of {filteredPermits.length.toLocaleString()} permits)</span>
@@ -800,10 +975,10 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
           MASTER ADMIN (E0414) PERMANENT DELETE CONFIRMATION MODAL
       ============================================================================== */}
       {deleteModalPermit && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-rose-300 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl p-6 space-y-4 text-[#1d1d1f]">
-            <div className="flex items-center gap-3 text-rose-600 border-b border-rose-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-rose-300 w-[95vw] sm:max-w-md max-h-[90vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl p-4 sm:p-6 text-[#1d1d1f]">
+            <div className="flex items-center gap-3 text-rose-600 border-b border-rose-100 pb-3 shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center shrink-0">
                 <Trash2 className="w-5 h-5 text-rose-600" />
               </div>
               <div>
@@ -812,32 +987,34 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
               </div>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-200 text-xs space-y-2">
-              <p className="text-rose-950 font-medium leading-relaxed">
-                Are you sure you want to permanently delete Permit <strong className="font-mono text-rose-900">{deleteModalPermit.permit_number}</strong>?
-              </p>
-              <div className="text-[11px] text-rose-800 space-y-0.5">
-                <div>&bull; Work: {deleteModalPermit.description || deleteModalPermit.location}</div>
-                <div>&bull; Requestor: {deleteModalPermit.requestor}</div>
-                <div>&bull; Status: {deleteModalPermit.status}</div>
+            <div className="flex-1 overflow-y-auto py-3 space-y-3">
+              <div className="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-200 text-xs space-y-2">
+                <p className="text-rose-950 font-medium leading-relaxed">
+                  Are you sure you want to permanently delete Permit <strong className="font-mono text-rose-900">{deleteModalPermit.permit_number}</strong>?
+                </p>
+                <div className="text-[11px] text-rose-800 space-y-0.5">
+                  <div>&bull; Work: {deleteModalPermit.description || deleteModalPermit.location}</div>
+                  <div>&bull; Requestor: {deleteModalPermit.requestor}</div>
+                  <div>&bull; Status: {deleteModalPermit.status}</div>
+                </div>
+                <p className="text-[10px] text-rose-700 font-bold mt-2">
+                  ⚠️ This action will expunge the record permanently from the live ledger and record a safety audit log.
+                </p>
               </div>
-              <p className="text-[10px] text-rose-700 font-bold mt-2">
-                ⚠️ This action will expunge the record permanently from the live ledger and record a safety audit log.
-              </p>
             </div>
 
-            <div className="flex items-center justify-end gap-2.5 pt-2">
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-rose-100 shrink-0">
               <button
                 type="button"
                 onClick={() => setDeleteModalPermit(null)}
-                className="px-4 py-2 rounded-full border border-[#d2d2d7] text-xs font-semibold hover:bg-[#f5f5f7] transition-all"
+                className="px-4 py-2.5 min-h-[44px] rounded-full border border-[#d2d2d7] text-xs font-semibold hover:bg-[#f5f5f7] transition-all touch-target"
               >
                 Cancel
               </button>
               <button
                 type="button"
                 onClick={handleConfirmDelete}
-                className="px-5 py-2 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md active:scale-95 transition-all flex items-center gap-1.5"
+                className="px-5 py-2.5 min-h-[44px] rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md active:scale-95 transition-all flex items-center gap-1.5 touch-target"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Expunge Record</span>
@@ -851,83 +1028,86 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
           MODAL 1: APPROVER ACTION (PORTAL AUTH WITH EMERGENCY REVOCATION)
       ============================================================================== */}
       {approvalModalPermit && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-[#d2d2d7] w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl p-6 space-y-4 text-[#1d1d1f]">
-            <div className="flex items-center justify-between border-b border-[#d2d2d7]/50 pb-3">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-[#d2d2d7] w-[95vw] sm:max-w-lg max-h-[90vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl p-4 sm:p-6 text-[#1d1d1f]">
+            <div className="flex items-center justify-between border-b border-[#d2d2d7]/50 pb-3 shrink-0">
               <div>
                 <span className="text-[10px] uppercase font-bold text-[#0071e3] tracking-wider block">
                   Sentinel Authorization Authority
                 </span>
-                <h3 className="text-base font-bold text-[#1d1d1f]">
+                <h3 className="text-sm sm:text-base font-bold text-[#1d1d1f]">
                   Sign-Off Slot #{approvalModalPermit.slot}: {approvalModalPermit.permit.approvers.find(a => a.slot === approvalModalPermit.slot)?.role}
                 </h3>
               </div>
               <button
                 onClick={() => setApprovalModalPermit(null)}
-                className="p-1.5 rounded-full hover:bg-black/5 text-[#86868b]"
+                className="p-1.5 rounded-full hover:bg-black/5 text-[#86868b] touch-target"
+                aria-label="Close"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7]/60 text-xs space-y-1.5">
-              <div className="flex justify-between">
-                <span className="text-[#86868b]">Permit Number:</span>
-                <span className="font-mono font-bold text-[#0071e3]">{approvalModalPermit.permit.permit_number}</span>
+            <div className="flex-1 overflow-y-auto py-3 space-y-3.5 pr-1">
+              <div className="p-3.5 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7]/60 text-xs space-y-1.5">
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">Permit Number:</span>
+                  <span className="font-mono font-bold text-[#0071e3]">{approvalModalPermit.permit.permit_number}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">Location / Area:</span>
+                  <span className="font-semibold text-[#1d1d1f]">{approvalModalPermit.permit.location}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#86868b]">Assigned Officer:</span>
+                  <span className="font-semibold text-[#1d1d1f]">
+                    {approvalModalPermit.permit.approvers.find(a => a.slot === approvalModalPermit.slot)?.name}
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-[#86868b]">Location / Area:</span>
-                <span className="font-semibold text-[#1d1d1f]">{approvalModalPermit.permit.location}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[#86868b]">Assigned Officer:</span>
-                <span className="font-semibold text-[#1d1d1f]">
-                  {approvalModalPermit.permit.approvers.find(a => a.slot === approvalModalPermit.slot)?.name}
-                </span>
+
+              <div>
+                <label className="block text-xs font-bold text-rose-700 uppercase tracking-wider mb-1.5">
+                  Physical Inspection Observations (MANDATORY PER CODE.GS)
+                </label>
+                <textarea
+                  rows={3}
+                  value={approvalComments}
+                  onChange={(e) => setApprovalComments(e.target.value)}
+                  placeholder="Document site verification details, gas tester serial number, PPE confirmation..."
+                  className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-3 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3]"
+                />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-rose-700 uppercase tracking-wider mb-1.5">
-                Physical Inspection Observations (MANDATORY PER CODE.GS)
-              </label>
-              <textarea
-                rows={3}
-                value={approvalComments}
-                onChange={(e) => setApprovalComments(e.target.value)}
-                placeholder="Document site verification details, gas tester serial number, PPE confirmation..."
-                className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-3 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3]"
-              />
-            </div>
+            <div className="pt-3 border-t border-[#d2d2d7]/50 space-y-2 shrink-0">
+              <div className="grid grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => handleProcessApproval('Approve')}
+                  className="py-3 min-h-[44px] rounded-xl bg-[#34c759] hover:bg-[#2fb34f] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all touch-target"
+                >
+                  <Check className="w-4 h-4" />
+                  <span>Authorize &amp; Sign</span>
+                </button>
 
-            <div className="grid grid-cols-2 gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => handleProcessApproval('Approve')}
-                className="py-2.5 rounded-xl bg-[#34c759] hover:bg-[#2fb34f] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all"
-              >
-                <Check className="w-4 h-4" />
-                <span>Authorize &amp; Sign</span>
-              </button>
+                <button
+                  type="button"
+                  onClick={() => handleProcessApproval('Reject')}
+                  className="py-3 min-h-[44px] rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all touch-target"
+                >
+                  <X className="w-4 h-4" />
+                  <span>Reject / Stop</span>
+                </button>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => handleProcessApproval('Reject')}
-                className="py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 active:scale-95 transition-all"
-              >
-                <X className="w-4 h-4" />
-                <span>Reject / Stop</span>
-              </button>
-            </div>
-
-            <div className="pt-2 border-t border-[#d2d2d7]/50">
               <button
                 type="button"
                 onClick={() => handleProcessApproval('Revoke')}
-                className="w-full py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all"
+                className="w-full py-3 min-h-[44px] rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all touch-target"
               >
                 <ShieldAlert className="w-4 h-4 animate-pulse" />
-                <span>🚨 EMERGENCY REVOCATION (IMMEDIATE STOP WORK)</span>
+                <span>🚨 EMERGENCY REVOCATION (STOP WORK)</span>
               </button>
             </div>
           </div>
@@ -938,80 +1118,84 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
           MODAL 2: STAGE 1 SITE HANDBACK (EXECUTING SUPERVISOR + 4-DIGIT PIN)
       ============================================================================== */}
       {handbackModalPermit && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-[#d2d2d7] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl p-6 space-y-4 text-[#1d1d1f]">
-            <div className="flex items-center justify-between border-b border-[#d2d2d7]/50 pb-3">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-[#d2d2d7] w-[95vw] sm:max-w-md max-h-[90vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl p-4 sm:p-6 text-[#1d1d1f]">
+            <div className="flex items-center justify-between border-b border-[#d2d2d7]/50 pb-3 shrink-0">
               <div>
                 <span className="text-[10px] uppercase font-bold text-[#0071e3] tracking-wider block">Stage 1 Site Handback</span>
-                <h3 className="text-base font-bold text-[#1d1d1f]">Handback: {handbackModalPermit.permit_number}</h3>
+                <h3 className="text-sm sm:text-base font-bold text-[#1d1d1f]">Handback: {handbackModalPermit.permit_number}</h3>
               </div>
-              <button onClick={() => setHandbackModalPermit(null)} className="p-1.5 rounded-full hover:bg-black/5 text-[#86868b]">
+              <button onClick={() => setHandbackModalPermit(null)} className="p-1.5 rounded-full hover:bg-black/5 text-[#86868b] touch-target">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {hbError && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
-                {hbError}
+            <div className="flex-1 overflow-y-auto py-3 space-y-3 pr-1">
+              {hbError && (
+                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
+                  {hbError}
+                </div>
+              )}
+
+              <div className="space-y-2.5 text-xs">
+                <label className="flex items-center gap-2.5 p-3 min-h-[44px] rounded-xl border border-[#d2d2d7] bg-[#f5f5f7] cursor-pointer touch-target">
+                  <input
+                    type="checkbox"
+                    checked={hbCleared}
+                    onChange={(e) => setHbCleared(e.target.checked)}
+                    className="w-4 h-4 rounded text-[#0071e3]"
+                  />
+                  <span className="font-semibold text-[#1d1d1f]">Site cleared of tools, debris, and materials.</span>
+                </label>
+
+                <label className="flex items-center gap-2.5 p-3 min-h-[44px] rounded-xl border border-[#d2d2d7] bg-[#f5f5f7] cursor-pointer touch-target">
+                  <input
+                    type="checkbox"
+                    checked={hbFireWatch}
+                    onChange={(e) => setHbFireWatch(e.target.checked)}
+                    className="w-4 h-4 rounded text-[#0071e3]"
+                  />
+                  <span className="font-semibold text-[#1d1d1f]">Post-Work fire watch completed (NFPA 51B).</span>
+                </label>
+
+                <label className="flex items-center gap-2.5 p-3 min-h-[44px] rounded-xl border border-[#d2d2d7] bg-[#f5f5f7] cursor-pointer touch-target">
+                  <input
+                    type="checkbox"
+                    checked={hbLotoRemoved}
+                    onChange={(e) => setHbLotoRemoved(e.target.checked)}
+                    className="w-4 h-4 rounded text-[#0071e3]"
+                  />
+                  <span className="font-semibold text-[#1d1d1f]">Isolations (LOTO) removed and energy restored.</span>
+                </label>
               </div>
-            )}
 
-            <div className="space-y-2.5 text-xs">
-              <label className="flex items-center gap-2.5 p-2.5 rounded-xl border border-[#d2d2d7] bg-[#f5f5f7] cursor-pointer">
+              <div className="pt-2 text-center">
+                <label className="block text-xs font-bold text-[#0071e3] uppercase tracking-wider mb-1">
+                  Executor 4-Digit Security PIN (MANDATORY)
+                </label>
                 <input
-                  type="checkbox"
-                  checked={hbCleared}
-                  onChange={(e) => setHbCleared(e.target.checked)}
-                  className="rounded text-[#0071e3]"
+                  type="password"
+                  maxLength={4}
+                  value={hbExecPin}
+                  onChange={(e) => setHbExecPin(e.target.value)}
+                  placeholder="••••"
+                  className="w-36 mx-auto bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3 py-2.5 text-center text-lg font-mono font-bold tracking-[8px] focus:outline-none focus:bg-white focus:border-[#0071e3]"
                 />
-                <span className="font-semibold text-[#1d1d1f]">Site cleared of tools, debris, and materials.</span>
-              </label>
-
-              <label className="flex items-center gap-2.5 p-2.5 rounded-xl border border-[#d2d2d7] bg-[#f5f5f7] cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={hbFireWatch}
-                  onChange={(e) => setHbFireWatch(e.target.checked)}
-                  className="rounded text-[#0071e3]"
-                />
-                <span className="font-semibold text-[#1d1d1f]">Post-Work fire watch completed (NFPA 51B).</span>
-              </label>
-
-              <label className="flex items-center gap-2.5 p-2.5 rounded-xl border border-[#d2d2d7] bg-[#f5f5f7] cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={hbLotoRemoved}
-                  onChange={(e) => setHbLotoRemoved(e.target.checked)}
-                  className="rounded text-[#0071e3]"
-                />
-                <span className="font-semibold text-[#1d1d1f]">Isolations (LOTO) removed and energy restored.</span>
-              </label>
+                <span className="text-[10px] text-[#86868b] block mt-1">
+                  Default: 1234 or executing supervisor credentials.
+                </span>
+              </div>
             </div>
 
-            <div className="pt-2 text-center">
-              <label className="block text-xs font-bold text-[#0071e3] uppercase tracking-wider mb-1">
-                Executor 4-Digit Security PIN (MANDATORY)
-              </label>
-              <input
-                type="password"
-                maxLength={4}
-                value={hbExecPin}
-                onChange={(e) => setHbExecPin(e.target.value)}
-                placeholder="••••"
-                className="w-36 mx-auto bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3 py-2 text-center text-lg font-mono font-bold tracking-[8px] focus:outline-none focus:bg-white focus:border-[#0071e3]"
-              />
-              <span className="text-[10px] text-[#86868b] block mt-1">
-                Matches executing supervisor credentials (e.g. 1111 or default 1234).
-              </span>
+            <div className="pt-3 border-t border-[#d2d2d7]/50 shrink-0">
+              <button
+                type="button"
+                onClick={handleProcessHandback}
+                className="w-full py-3 min-h-[44px] rounded-2xl bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-bold shadow-sm active:scale-95 transition-all touch-target"
+              >
+                Authenticate &amp; Submit Handback
+              </button>
             </div>
-
-            <button
-              type="button"
-              onClick={handleProcessHandback}
-              className="w-full py-3 rounded-2xl bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-bold shadow-sm active:scale-95 transition-all"
-            >
-              Authenticate &amp; Submit Handback
-            </button>
           </div>
         </div>
       )}
@@ -1020,65 +1204,69 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
           MODAL 3: STAGE 2 FINAL CLOSURE (AREA INCHARGE + 4-DIGIT PIN)
       ============================================================================== */}
       {finalCloseModalPermit && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-[#d2d2d7] w-full max-w-md rounded-3xl overflow-hidden shadow-2xl p-6 space-y-4 text-[#1d1d1f]">
-            <div className="flex items-center justify-between border-b border-[#d2d2d7]/50 pb-3">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-[#d2d2d7] w-[95vw] sm:max-w-md max-h-[90vh] flex flex-col rounded-3xl overflow-hidden shadow-2xl p-4 sm:p-6 text-[#1d1d1f]">
+            <div className="flex items-center justify-between border-b border-[#d2d2d7]/50 pb-3 shrink-0">
               <div>
                 <span className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider block">Stage 2 Final Administrative Closure</span>
-                <h3 className="text-base font-bold text-[#1d1d1f]">Final Close: {finalCloseModalPermit.permit_number}</h3>
+                <h3 className="text-sm sm:text-base font-bold text-[#1d1d1f]">Final Close: {finalCloseModalPermit.permit_number}</h3>
               </div>
-              <button onClick={() => setFinalCloseModalPermit(null)} className="p-1.5 rounded-full hover:bg-black/5 text-[#86868b]">
+              <button onClick={() => setFinalCloseModalPermit(null)} className="p-1.5 rounded-full hover:bg-black/5 text-[#86868b] touch-target">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {fcError && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
-                {fcError}
+            <div className="flex-1 overflow-y-auto py-3 space-y-3 pr-1">
+              {fcError && (
+                <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs">
+                  {fcError}
+                </div>
+              )}
+
+              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 space-y-1">
+                <span className="font-bold block">✓ Site Cleared by Executing Supervisor</span>
+                <p className="text-[11px] text-emerald-800">
+                  All tools removed, isolations restored, and work area surrendered safely. Ready for Area Incharge final stamping.
+                </p>
               </div>
-            )}
 
-            <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 space-y-1">
-              <span className="font-bold block">✓ Site Cleared by Executing Supervisor</span>
-              <p className="text-[11px] text-emerald-800">
-                All tools removed, isolations restored, and work area surrendered safely. Ready for Area Incharge final stamping.
-              </p>
+              <div>
+                <label className="block text-xs font-semibold text-[#515154] mb-1">Area Incharge Closing Remarks</label>
+                <textarea
+                  rows={2}
+                  value={fcComments}
+                  onChange={(e) => setFcComments(e.target.value)}
+                  className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-3 text-xs text-[#1d1d1f]"
+                />
+              </div>
+
+              <div className="pt-2 text-center">
+                <label className="block text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">
+                  Area Incharge 4-Digit Security PIN (MANDATORY)
+                </label>
+                <input
+                  type="password"
+                  maxLength={4}
+                  value={fcPin}
+                  onChange={(e) => setFcPin(e.target.value)}
+                  placeholder="••••"
+                  className="w-36 mx-auto bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3 py-2.5 text-center text-lg font-mono font-bold tracking-[8px] focus:outline-none focus:bg-white focus:border-emerald-600"
+                />
+                <span className="text-[10px] text-[#86868b] block mt-1">
+                  Default: 1234 or Area Incharge credentials.
+                </span>
+              </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-[#515154] mb-1">Area Incharge Closing Remarks</label>
-              <textarea
-                rows={2}
-                value={fcComments}
-                onChange={(e) => setFcComments(e.target.value)}
-                className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl p-2.5 text-xs text-[#1d1d1f]"
-              />
+            <div className="pt-3 border-t border-[#d2d2d7]/50 shrink-0">
+              <button
+                type="button"
+                onClick={handleProcessFinalClose}
+                className="w-full py-3 min-h-[44px] rounded-2xl bg-[#34c759] hover:bg-[#2fb34f] text-white text-xs font-bold shadow-sm active:scale-95 transition-all touch-target"
+              >
+                Authenticate &amp; Apply Final Closure
+              </button>
             </div>
-
-            <div className="pt-2 text-center">
-              <label className="block text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">
-                Area Incharge 4-Digit Security PIN (MANDATORY)
-              </label>
-              <input
-                type="password"
-                maxLength={4}
-                value={fcPin}
-                onChange={(e) => setFcPin(e.target.value)}
-                placeholder="••••"
-                className="w-36 mx-auto bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3 py-2 text-center text-lg font-mono font-bold tracking-[8px] focus:outline-none focus:bg-white focus:border-emerald-600"
-              />
-              <span className="text-[10px] text-[#86868b] block mt-1">
-                Matches Area Incharge credentials (e.g. 4444, 1406, or default 1234).
-              </span>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleProcessFinalClose}
-              className="w-full py-3 rounded-2xl bg-[#34c759] hover:bg-[#2fb34f] text-white text-xs font-bold shadow-sm active:scale-95 transition-all"
-            >
-              Authenticate &amp; Apply Final Closure
-            </button>
           </div>
         </div>
       )}
@@ -1087,26 +1275,26 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
           MODAL 4: FULL 146-ITEM AUDIT INSPECTION DRAWER
       ============================================================================== */}
       {inspectPermit && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-[#d2d2d7] w-full max-w-3xl max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col text-[#1d1d1f]">
-            <div className="p-5 border-b border-[#d2d2d7]/60 flex items-center justify-between bg-[#f5f5f7]/80 shrink-0">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-[#d2d2d7] w-[95vw] sm:max-w-3xl max-h-[90vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col text-[#1d1d1f]">
+            <div className="p-4 sm:p-5 border-b border-[#d2d2d7]/60 flex items-center justify-between bg-[#f5f5f7]/80 shrink-0">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase text-[#0071e3]">
-                  Character-Perfect 146-Column Ledger View
+                  146-Column Ledger View
                 </span>
-                <h3 className="text-base font-bold text-[#1d1d1f]">
+                <h3 className="text-sm sm:text-base font-bold text-[#1d1d1f]">
                   Audit Record: {inspectPermit.permit_number}
                 </h3>
               </div>
-              <button onClick={() => setInspectPermit(null)} className="p-2 rounded-full hover:bg-black/5 text-[#86868b]">
+              <button onClick={() => setInspectPermit(null)} className="p-2 rounded-full hover:bg-black/5 text-[#86868b] touch-target">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-5 text-xs">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-5 text-xs">
               <div className="p-4 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7]/70 space-y-2">
                 <h4 className="font-bold text-[#1d1d1f] uppercase tracking-wider text-[11px]">1. General Permit Parameters</h4>
-                <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div><span className="text-[#86868b]">Location:</span> <strong className="text-[#1d1d1f]">{inspectPermit.location}</strong></div>
                   <div><span className="text-[#86868b]">Validity:</span> <strong className="text-[#1d1d1f]">{inspectPermit.valid_from} - {inspectPermit.valid_to}</strong></div>
                   <div><span className="text-[#86868b]">Requestor:</span> <strong className="text-[#1d1d1f]">{inspectPermit.requestor}</strong></div>
@@ -1120,7 +1308,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
 
               <div className="p-4 rounded-2xl border border-rose-200 bg-rose-50/30 space-y-2">
                 <h4 className="font-bold text-rose-800 uppercase tracking-wider text-[11px]">2. Gas &amp; Hazardous Energy Controls</h4>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   <div className="p-2.5 rounded-xl bg-white border border-rose-200">
                     <span className="text-[10px] text-[#86868b] block">Combustible Gas (LEL)</span>
                     <span className="text-sm font-mono font-bold text-rose-700">
@@ -1149,7 +1337,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
                 <h4 className="font-bold text-[#1d1d1f] uppercase tracking-wider text-[11px]">3. Multi-Tier Escalation Audit Trail</h4>
                 <div className="space-y-2">
                   {inspectPermit.approvers.map(a => (
-                    <div key={a.slot} className="p-3 rounded-xl border border-[#d2d2d7] bg-[#f5f5f7] flex items-center justify-between">
+                    <div key={a.slot} className="p-3 rounded-xl border border-[#d2d2d7] bg-[#f5f5f7] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-[#1d1d1f]">Slot #{a.slot}: {a.role}</span>
@@ -1168,14 +1356,14 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
                           </p>
                         )}
                       </div>
-                      <span className="text-[10px] font-mono text-[#86868b]">{a.timestamp || 'Pending'}</span>
+                      <span className="text-[10px] font-mono text-[#86868b] shrink-0">{a.timestamp || 'Pending'}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            <div className="p-4 border-t border-[#d2d2d7]/60 flex items-center justify-between bg-[#f5f5f7]/50">
+            <div className="p-4 border-t border-[#d2d2d7]/60 flex items-center justify-between bg-[#f5f5f7]/50 shrink-0">
               <div>
                 {canDelete && (
                   <button
@@ -1184,16 +1372,16 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
                       setInspectPermit(null);
                       setDeleteModalPermit(p);
                     }}
-                    className="px-4 py-2 rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 text-xs font-bold flex items-center gap-1.5 transition-all"
+                    className="px-4 py-2 min-h-[44px] rounded-full bg-rose-50 hover:bg-rose-100 border border-rose-300 text-rose-700 text-xs font-bold flex items-center gap-1.5 transition-all touch-target"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
-                    <span>Master Admin (E0414): Delete Permit</span>
+                    <span>Delete</span>
                   </button>
                 )}
               </div>
               <button
                 onClick={() => handleExportPermitPdf(inspectPermit)}
-                className="px-4 py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-semibold flex items-center gap-1.5 transition-all"
+                className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-semibold flex items-center gap-1.5 transition-all touch-target"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Export PDF</span>
@@ -1207,19 +1395,19 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
           MODAL 5: EMAIL DISPATCH LOG AUDIT DRAWER
       ============================================================================== */}
       {isEmailLogViewOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white border border-[#d2d2d7] w-full max-w-2xl max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col text-[#1d1d1f]">
-            <div className="p-5 border-b border-[#d2d2d7]/60 flex items-center justify-between bg-[#f5f5f7]/80 shrink-0">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+          <div className="bg-white border border-[#d2d2d7] w-[95vw] sm:max-w-2xl max-h-[85vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col text-[#1d1d1f]">
+            <div className="p-4 sm:p-5 border-b border-[#d2d2d7]/60 flex items-center justify-between bg-[#f5f5f7]/80 shrink-0">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase text-[#0071e3]">Live Communications Gateway</span>
-                <h3 className="text-base font-bold text-[#1d1d1f]">Email &amp; Telegram Dispatch Audit Logs</h3>
+                <h3 className="text-sm sm:text-base font-bold text-[#1d1d1f]">Email &amp; Telegram Dispatch Audit Logs</h3>
               </div>
-              <button onClick={() => setIsEmailLogViewOpen(false)} className="p-2 rounded-full hover:bg-black/5 text-[#86868b]">
+              <button onClick={() => setIsEmailLogViewOpen(false)} className="p-2 rounded-full hover:bg-black/5 text-[#86868b] touch-target">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 space-y-3">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-3">
               {emailLogs.length === 0 ? (
                 <div className="text-center py-10 text-[#86868b] text-xs">
                   No email dispatches recorded in this session.
@@ -1241,7 +1429,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
                       </div>
                     </div>
                     <div className="font-semibold text-[#1d1d1f]">{log.subject}</div>
-                    <div className="flex justify-between text-[11px] text-[#86868b]">
+                    <div className="flex flex-col sm:flex-row sm:justify-between text-[11px] text-[#86868b] gap-1">
                       <span>To: {log.recipient_name} ({log.recipient_email}) &bull; Slot #{log.slot}</span>
                       <span>{log.dispatched_at}</span>
                     </div>

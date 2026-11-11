@@ -302,39 +302,40 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white border border-[#d2d2d7] w-full max-w-4xl max-h-[92vh] rounded-3xl overflow-hidden shadow-2xl flex flex-col text-[#1d1d1f]">
+    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4">
+      <div className="bg-white border border-[#d2d2d7] w-[95vw] sm:max-w-4xl max-h-[94vh] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col text-[#1d1d1f]">
         
         {/* Header */}
-        <div className="p-5 border-b border-[#d2d2d7]/60 flex items-center justify-between bg-[#f5f5f7]/80 shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#0071e3]/10 text-[#0071e3] border border-[#0071e3]/20 flex items-center justify-center">
-              <FileText className="w-5 h-5" />
+        <div className="p-4 sm:p-5 border-b border-[#d2d2d7]/60 flex items-center justify-between bg-[#f5f5f7]/80 shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#0071e3]/10 text-[#0071e3] border border-[#0071e3]/20 flex items-center justify-center shrink-0">
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-[#1d1d1f]">Create Safety Permit to Work</h3>
-                <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold font-mono border ${
+              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                <h3 className="text-sm sm:text-base font-bold text-[#1d1d1f]">Create Safety Permit to Work</h3>
+                <span className={`text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 rounded-full font-bold font-mono border ${
                   isHighRisk ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-blue-50 text-blue-700 border-blue-200'
                 }`}>
-                  {isHighRisk ? 'HIGH-RISK (5-SLOT ESCALATION)' : 'GENERAL (3-SLOT ESCALATION)'}
+                  {isHighRisk ? 'HIGH-RISK (5-SLOT)' : 'GENERAL (3-SLOT)'}
                 </span>
               </div>
-              <p className="text-xs text-[#86868b] mt-0.5">
+              <p className="text-[10px] sm:text-xs text-[#86868b] mt-0.5 truncate">
                 ISO 45001:2018 &bull; OSHA 29 CFR 1910.119 &bull; Format EF/SF/01 - EF/SF/07
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-black/5 text-[#86868b] hover:text-[#1d1d1f] transition-all"
+            className="p-2 rounded-full hover:bg-black/5 text-[#86868b] hover:text-[#1d1d1f] transition-all touch-target"
+            aria-label="Close"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Navigation (The 5 Form Sections) */}
-        <div className="flex border-b border-[#d2d2d7]/60 bg-[#f5f5f7]/50 px-6 shrink-0 text-xs overflow-x-auto">
+        <div className="flex border-b border-[#d2d2d7]/60 bg-[#f5f5f7]/50 px-3 sm:px-6 shrink-0 text-xs overflow-x-auto scrollbar-none flex-nowrap">
           <button
             type="button"
             onClick={() => setActiveTab('section1')}
@@ -401,14 +402,14 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
         )}
 
         {/* Modal Form Content */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
           
           {/* ============================================================== */}
           {/* TAB 1: GENERAL JOB & PERSONNEL */}
           {/* ============================================================== */}
           {activeTab === 'section1' && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#515154] mb-1">Department / Area / Location *</label>
                   <input
@@ -417,7 +418,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     onChange={(e) => setLocation(e.target.value)}
                     required
                     placeholder="e.g. Lalru Unit-3 - Resin Plant Area"
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3]"
                   />
                 </div>
                 <div>
@@ -427,7 +428,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     value={emergencyContact}
                     onChange={(e) => setEmergencyContact(e.target.value)}
                     required
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3]"
                   />
                 </div>
               </div>
@@ -440,18 +441,18 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                   onChange={(e) => setDescription(e.target.value)}
                   required
                   placeholder="Detail exact engineering task, equipment tag, and scope..."
-                  className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3]"
+                  className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 text-xs text-[#1d1d1f] focus:outline-none focus:bg-white focus:border-[#0071e3]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#515154] mb-1">Permit Start Date &amp; Time</label>
                   <input
                     type="text"
                     value={validFrom}
                     onChange={(e) => setValidFrom(e.target.value)}
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
                 <div>
@@ -460,19 +461,19 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     type="text"
                     value={validTo}
                     onChange={(e) => setValidTo(e.target.value)}
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#515154] mb-1">Requestor Name</label>
                   <input
                     type="text"
                     value={requestor}
                     onChange={(e) => setRequestor(e.target.value)}
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
                 <div>
@@ -481,19 +482,19 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     type="text"
                     value={vendor}
                     onChange={(e) => setVendor(e.target.value)}
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#515154] mb-1">Contractor Safety Induction Date</label>
                   <input
                     type="text"
                     value={contractorInductionDate}
                     onChange={(e) => setContractorInductionDate(e.target.value)}
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
                 <div>
@@ -502,19 +503,19 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     type="text"
                     value={contractorComplianceId}
                     onChange={(e) => setContractorComplianceId(e.target.value)}
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-[#515154] mb-1">Names of Persons Performing Job</label>
                   <input
                     type="text"
                     value={workers}
                     onChange={(e) => setWorkers(e.target.value)}
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
                 <div>
@@ -523,7 +524,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     type="text"
                     value={inductionTrainingNumbers}
                     onChange={(e) => setInductionTrainingNumbers(e.target.value)}
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
               </div>
@@ -534,14 +535,14 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                   <ShieldCheck className="w-4 h-4 text-[#0071e3]" />
                   Emergency Preparedness Marshals
                 </h4>
-                <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   <div>
                     <label className="block text-[11px] text-[#86868b] mb-1">Assigned Shift First Aider Name</label>
                     <input
                       type="text"
                       value={firstAider}
                       onChange={(e) => setFirstAider(e.target.value)}
-                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-1.5 text-xs text-[#1d1d1f]"
+                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-2 min-h-[40px] text-xs text-[#1d1d1f]"
                     />
                   </div>
                   <div>
@@ -550,7 +551,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                       type="text"
                       value={ertMember}
                       onChange={(e) => setErtMember(e.target.value)}
-                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-1.5 text-xs text-[#1d1d1f]"
+                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-2 min-h-[40px] text-xs text-[#1d1d1f]"
                     />
                   </div>
                   <div>
@@ -559,7 +560,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                       type="text"
                       value={fireWatch}
                       onChange={(e) => setFireWatch(e.target.value)}
-                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-1.5 text-xs text-[#1d1d1f]"
+                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-2 min-h-[40px] text-xs text-[#1d1d1f]"
                     />
                   </div>
                   <div>
@@ -568,19 +569,19 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                       type="text"
                       value={assemblyPoint}
                       onChange={(e) => setAssemblyPoint(e.target.value)}
-                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-1.5 text-xs text-[#1d1d1f]"
+                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-2 min-h-[40px] text-xs text-[#1d1d1f]"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-[#d2d2d7]/50">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-2 border-t border-[#d2d2d7]/50">
                   <div>
                     <label className="block text-[11px] text-[#86868b] mb-1">Supervisor (Executing Department)</label>
                     <input
                       type="text"
                       value={supervisorExecuting}
                       onChange={(e) => setSupervisorExecuting(e.target.value)}
-                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-1.5 text-xs text-[#1d1d1f]"
+                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-2 min-h-[40px] text-xs text-[#1d1d1f]"
                     />
                   </div>
                   <div>
@@ -589,7 +590,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                       type="text"
                       value={supervisorBeneficiary}
                       onChange={(e) => setSupervisorBeneficiary(e.target.value)}
-                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-1.5 text-xs text-[#1d1d1f]"
+                      className="w-full bg-white border border-[#d2d2d7] rounded-lg px-2.5 py-2 min-h-[40px] text-xs text-[#1d1d1f]"
                     />
                   </div>
                 </div>
@@ -607,11 +608,11 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                   <AlertTriangle className="w-4 h-4 text-amber-500" />
                   Identified Workplace Hazards (Form Section 2)
                 </h4>
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-2.5">
                   {HAZARDS_CONFIG.map(hz => (
                     <label
                       key={hz}
-                      className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
+                      className={`flex items-center gap-2 p-2.5 min-h-[44px] rounded-xl border text-xs cursor-pointer transition-all touch-target ${
                         hazards[hz]
                           ? 'bg-amber-50 border-amber-300 text-amber-900 font-medium'
                           : 'bg-[#f5f5f7] border-[#d2d2d7] text-[#515154] hover:bg-white'
@@ -621,7 +622,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                         type="checkbox"
                         checked={!!hazards[hz]}
                         onChange={(e) => setHazards({ ...hazards, [hz]: e.target.checked })}
-                        className="rounded text-[#0071e3]"
+                        className="rounded text-[#0071e3] w-4 h-4"
                       />
                       <span className="truncate">{hz}</span>
                     </label>
@@ -633,7 +634,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     value={otherHazards}
                     onChange={(e) => setOtherHazards(e.target.value)}
                     placeholder="Any other hazards? Specify..."
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3 py-1.5 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
               </div>
@@ -643,11 +644,11 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   Mandatory Personal Protective Equipment (PPE)
                 </h4>
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-2.5">
                   {PPES_CONFIG.map(p => (
                     <label
                       key={p}
-                      className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
+                      className={`flex items-center gap-2 p-2.5 min-h-[44px] rounded-xl border text-xs cursor-pointer transition-all touch-target ${
                         ppes[p]
                           ? 'bg-emerald-50 border-emerald-300 text-emerald-900 font-medium'
                           : 'bg-[#f5f5f7] border-[#d2d2d7] text-[#515154] hover:bg-white'
@@ -657,7 +658,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                         type="checkbox"
                         checked={!!ppes[p]}
                         onChange={(e) => setPpes({ ...ppes, [p]: e.target.checked })}
-                        className="rounded text-[#0071e3]"
+                        className="rounded text-[#0071e3] w-4 h-4"
                       />
                       <span className="truncate">{p}</span>
                     </label>
@@ -669,7 +670,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     value={otherPpes}
                     onChange={(e) => setOtherPpes(e.target.value)}
                     placeholder="Any other PPEs required? Specify..."
-                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3 py-1.5 text-xs text-[#1d1d1f]"
+                    className="w-full bg-[#f5f5f7] border border-[#d2d2d7] rounded-xl px-3.5 py-2.5 min-h-[44px] text-xs text-[#1d1d1f]"
                   />
                 </div>
               </div>
@@ -686,7 +687,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
               </div>
 
               {/* Gateway Checkbox Strip */}
-              <div className="grid grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-2.5">
                 {[
                   { key: 'hot_work', label: 'Hot Work Permit', icon: Flame },
                   { key: 'height_work', label: 'Height Work Permit', icon: AlertTriangle },
@@ -702,17 +703,17 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                       key={item.key}
                       type="button"
                       onClick={() => setGateways({ ...gateways, [item.key]: !isChecked })}
-                      className={`p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
+                      className={`p-3 min-h-[48px] rounded-2xl border text-left flex items-center justify-between transition-all touch-target ${
                         isChecked
                           ? 'bg-[#0071e3]/10 border-[#0071e3] text-[#0071e3] font-bold shadow-sm'
                           : 'bg-[#f5f5f7] border-[#d2d2d7] text-[#515154] hover:bg-white'
                       }`}
                     >
                       <div className="flex items-center gap-2">
-                        <Icon className="w-4 h-4" />
+                        <Icon className="w-4 h-4 shrink-0" />
                         <span className="text-xs">{item.label}</span>
                       </div>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold shrink-0 ${
                         isChecked ? 'bg-[#0071e3] text-white' : 'bg-[#e5e5ea] text-[#86868b]'
                       }`}>
                         {isChecked ? 'ENGAGED' : 'OFF'}
@@ -1151,7 +1152,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                         </div>
 
                         {record.required && (
-                          <div className="grid grid-cols-4 gap-3 text-xs">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 text-xs">
                             <div>
                               <label className="block text-[10px] text-[#86868b] mb-1">Lock Number</label>
                               <input
@@ -1235,15 +1236,15 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
 
               <div className="space-y-3 text-xs">
                 {/* Slot 1: Area Incharge */}
-                <div className="p-3.5 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7] flex items-center justify-between">
-                  <div className="w-1/3">
+                <div className="p-3.5 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div className="w-full sm:w-1/3">
                     <span className="font-bold text-[#1d1d1f] block">Slot 1: Area Incharge</span>
                     <span className="text-[10px] text-[#86868b]">Beneficiary department head</span>
                   </div>
                   <select
                     value={areaIncharge}
                     onChange={(e) => setAreaIncharge(e.target.value)}
-                    className="w-2/3 bg-white border border-[#d2d2d7] rounded-xl px-3 py-1.5 text-xs text-[#1d1d1f]"
+                    className="w-full sm:w-2/3 bg-white border border-[#d2d2d7] rounded-xl px-3 py-2.5 min-h-[44px] text-xs text-[#1d1d1f] touch-target"
                   >
                     {areaIncharges.map(p => (
                       <option key={p.name + p.email} value={p.name}>{p.name} ({p.email})</option>
@@ -1252,15 +1253,15 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                 </div>
 
                 {/* Slot 2: Engineering Incharge */}
-                <div className="p-3.5 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7] flex items-center justify-between">
-                  <div className="w-1/3">
+                <div className="p-3.5 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div className="w-full sm:w-1/3">
                     <span className="font-bold text-[#1d1d1f] block">Slot 2: Engineering Incharge</span>
                     <span className="text-[10px] text-[#86868b]">Maintenance executing lead</span>
                   </div>
                   <select
                     value={engineeringIncharge}
                     onChange={(e) => setEngineeringIncharge(e.target.value)}
-                    className="w-2/3 bg-white border border-[#d2d2d7] rounded-xl px-3 py-1.5 text-xs text-[#1d1d1f]"
+                    className="w-full sm:w-2/3 bg-white border border-[#d2d2d7] rounded-xl px-3 py-2.5 min-h-[44px] text-xs text-[#1d1d1f] touch-target"
                   >
                     {engIncharges.map(p => (
                       <option key={p.name + p.email} value={p.name}>{p.name} ({p.email})</option>
@@ -1269,15 +1270,15 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                 </div>
 
                 {/* Slot 3: EHS Manager */}
-                <div className="p-3.5 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7] flex items-center justify-between">
-                  <div className="w-1/3">
+                <div className="p-3.5 rounded-2xl bg-[#f5f5f7] border border-[#d2d2d7] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                  <div className="w-full sm:w-1/3">
                     <span className="font-bold text-[#1d1d1f] block">Slot 3: EHS Manager</span>
                     <span className="text-[10px] text-[#86868b]">Safety &amp; environmental compliance</span>
                   </div>
                   <select
                     value={ehsManager}
                     onChange={(e) => setEhsManager(e.target.value)}
-                    className="w-2/3 bg-white border border-[#d2d2d7] rounded-xl px-3 py-1.5 text-xs text-[#1d1d1f]"
+                    className="w-full sm:w-2/3 bg-white border border-[#d2d2d7] rounded-xl px-3 py-2.5 min-h-[44px] text-xs text-[#1d1d1f] touch-target"
                   >
                     {ehsManagers.map(p => (
                       <option key={p.name + p.email} value={p.name}>{p.name} ({p.email})</option>
@@ -1288,15 +1289,15 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                 {/* Slot 4 & 5 (High Risk Only) */}
                 {isHighRisk && (
                   <>
-                    <div className="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-200 flex items-center justify-between">
-                      <div className="w-1/3">
+                    <div className="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                      <div className="w-full sm:w-1/3">
                         <span className="font-bold text-rose-900 block">Slot 4: Engineering HOD</span>
                         <span className="text-[10px] text-rose-700">High-risk executive technical sign-off</span>
                       </div>
                       <select
                         value={engineeringHod}
                         onChange={(e) => setEngineeringHod(e.target.value)}
-                        className="w-2/3 bg-white border border-rose-300 rounded-xl px-3 py-1.5 text-xs text-[#1d1d1f]"
+                        className="w-full sm:w-2/3 bg-white border border-rose-300 rounded-xl px-3 py-2.5 min-h-[44px] text-xs text-[#1d1d1f] touch-target"
                       >
                         {engHods.map(p => (
                           <option key={p.name + p.email} value={p.name}>{p.name} ({p.email})</option>
@@ -1304,15 +1305,15 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                       </select>
                     </div>
 
-                    <div className="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-200 flex items-center justify-between">
-                      <div className="w-1/3">
+                    <div className="p-3.5 rounded-2xl bg-rose-50/60 border border-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                      <div className="w-full sm:w-1/3">
                         <span className="font-bold text-rose-900 block">Slot 5: Area HOD</span>
                         <span className="text-[10px] text-rose-700">Operations &amp; manufacturing authorization</span>
                       </div>
                       <select
                         value={areaHod}
                         onChange={(e) => setAreaHod(e.target.value)}
-                        className="w-2/3 bg-white border border-rose-300 rounded-xl px-3 py-1.5 text-xs text-[#1d1d1f]"
+                        className="w-full sm:w-2/3 bg-white border border-rose-300 rounded-xl px-3 py-2.5 min-h-[44px] text-xs text-[#1d1d1f] touch-target"
                       >
                         {areaHods.map(p => (
                           <option key={p.name + p.email} value={p.name}>{p.name} ({p.email})</option>
@@ -1326,8 +1327,8 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
           )}
 
           {/* Action Footer */}
-          <div className="pt-4 border-t border-[#d2d2d7]/60 flex items-center justify-between shrink-0">
-            <div className="text-xs text-[#86868b]">
+          <div className="pt-4 border-t border-[#d2d2d7]/60 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0">
+            <div className="text-xs text-[#86868b] text-center sm:text-left">
               <span>Section {activeTab.slice(-1)} of 5</span>
             </div>
 
@@ -1340,7 +1341,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     const idx = tabs.indexOf(activeTab);
                     if (idx > 0) setActiveTab(tabs[idx - 1]);
                   }}
-                  className="px-4 py-2 rounded-full border border-[#d2d2d7] text-xs font-medium hover:bg-[#f5f5f7] transition-all flex items-center gap-1"
+                  className="flex-1 sm:flex-none px-4 py-2.5 min-h-[44px] rounded-full border border-[#d2d2d7] text-xs font-medium hover:bg-[#f5f5f7] transition-all flex items-center justify-center gap-1 touch-target"
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
                   <span>Previous</span>
@@ -1355,7 +1356,7 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                     const idx = tabs.indexOf(activeTab);
                     if (idx < tabs.length - 1) setActiveTab(tabs[idx + 1]);
                   }}
-                  className="px-5 py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-1"
+                  className="flex-1 sm:flex-none px-5 py-2.5 min-h-[44px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-semibold shadow-sm transition-all flex items-center justify-center gap-1 touch-target"
                 >
                   <span>Continue</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -1364,10 +1365,10 @@ export const CreatePermitModal: React.FC<CreatePermitModalProps> = ({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-6 py-2 rounded-full bg-[#34c759] hover:bg-[#2fb34f] text-white text-xs font-bold shadow-sm transition-all flex items-center gap-2 disabled:opacity-50"
+                  className="flex-1 sm:flex-none px-6 py-2.5 min-h-[44px] rounded-full bg-[#34c759] hover:bg-[#2fb34f] text-white text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-2 disabled:opacity-50 touch-target"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>{isSubmitting ? 'Registering & Dispatching...' : 'Authorize & Dispatch Permit'}</span>
+                  <span>{isSubmitting ? 'Registering...' : 'Authorize & Dispatch Permit'}</span>
                 </button>
               )}
             </div>
