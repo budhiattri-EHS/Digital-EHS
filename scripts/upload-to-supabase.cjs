@@ -11,8 +11,25 @@ const fs = require('fs');
 const path = require('path');
 const { createClient } = require('../web/node_modules/@supabase/supabase-js');
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://wzpdrkoluvprdokodpff.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Load env from web/.env.local if present
+const envPath = path.join(__dirname, '..', 'web', '.env.local');
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, 'utf8');
+  envContent.split('\n').forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#')) {
+      const idx = trimmed.indexOf('=');
+      if (idx !== -1) {
+        const k = trimmed.slice(0, idx).trim();
+        const v = trimmed.slice(idx + 1).trim();
+        if (!process.env[k]) process.env[k] = v;
+      }
+    }
+  });
+}
+
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wzpdrkoluvprdokodpff.supabase.co';
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 console.log('🔗 Connecting to Supabase Cloud Instance:');
 console.log('URL:', SUPABASE_URL);
