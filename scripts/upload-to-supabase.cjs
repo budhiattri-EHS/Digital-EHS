@@ -2,8 +2,7 @@
  * ==============================================================================
  * SUPABASE CLOUD UPLOADER & TABLE POPULATOR
  * Uploads all 2,649 migrated records across 24 modules to Supabase PostgreSQL.
- * URL: https://wzpdrkoluvprdokodpff.supabase.co
- * Key: 
+ * Reads credentials from environment variables.
  * ==============================================================================
  */
 
@@ -28,7 +27,7 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://wzpdrkoluvprdokodpff.supabase.co';
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
 console.log('🔗 Connecting to Supabase Cloud Instance:');

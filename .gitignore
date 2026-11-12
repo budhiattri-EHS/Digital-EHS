@@ -28,7 +28,19 @@ mobile/ios/App/DerivedData/
 .env
 .env*.local
 .env*
+*.env
+*.env.local
+*.env*.local
 mobile/.env*
+*.key
+*.pem
+*.cert
+*.crt
+credentials.json
+service-account*.json
+gdoc_code.txt
+scripts/ptw_form_raw.html
+scripts/ptw_doc_raw.txt
 
 # Vercel Cache & Configuration
 .vercel/

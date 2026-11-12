@@ -2,13 +2,13 @@ import { MasterTelemetry } from '../types';
 
 export class GeminiService {
   private static API_KEY_STORAGE = 'SBL_GEMINI_API_KEY';
-  private static DEFAULT_API_KEY = '';
+  private static DEFAULT_API_KEY = (typeof process !== 'undefined' && (process.env?.NEXT_PUBLIC_GEMINI_API_KEY || process.env?.GEMINI_API_KEY)) || (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_GEMINI_API_KEY) || '';
 
   private static PASSCODE_STORAGE = 'SBL_JARVIS_PASSCODE';
-  public static DEFAULT_PASSCODE = 'SBL-COMMAND';
+  public static DEFAULT_PASSCODE = (typeof process !== 'undefined' && process.env?.JARVIS_PASSCODE) || 'SBL-COMMAND';
 
   public static getApiKey(): string {
-    return localStorage.getItem(this.API_KEY_STORAGE) || this.DEFAULT_API_KEY;
+    return (typeof window !== 'undefined' ? localStorage.getItem(this.API_KEY_STORAGE) : null) || this.DEFAULT_API_KEY;
   }
 
   public static setApiKey(key: string): void {

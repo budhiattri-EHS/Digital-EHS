@@ -1,7 +1,7 @@
 const https = require('https');
 
-const token = '';
-const chatId = '6613901446'; // Budhi Parkash
+const token = process.env.TELEGRAM_BOT_TOKEN || '';
+const chatId = process.env.TELEGRAM_CHAT_ID || '6613901446';
 const text = '🛡️ *SBL Sentinel PTW System Online*\n\nYour EHS Portal is successfully integrated with live Telegram alerts and multi-tier escalation.';
 
 const payload = JSON.stringify({
