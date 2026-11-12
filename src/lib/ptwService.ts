@@ -172,6 +172,35 @@ export interface PtwRecord {
 
   pdf_url?: string;
   created_at: string;
+  updated_at?: string;
+
+  // Extended Plain-Text & 164-Column Parity Fields
+  permit_type?: string;
+  title?: string;
+  requestor_name?: string;
+  vendor_name?: string;
+  contractor_esi_id?: string;
+  workers_names?: string;
+  induction_numbers?: string;
+  first_aider_name?: string;
+  ert_member_name?: string;
+  fire_watch_name?: string;
+  executing_supervisor?: string;
+  beneficiary_supervisor?: string;
+  hazards_identified?: string[];
+  ppe_issued?: string[];
+  ppe_required?: string[];
+  precautions_checklist?: any[];
+  gas_test_records?: any[];
+  loto_details?: any;
+  approver_1_role?: string; approver_1_name?: string; approver_1_email?: string; approver_1_status?: string; approver_1_timestamp?: string; approver_1_comments?: string; approver_1_token?: string;
+  approver_2_role?: string; approver_2_name?: string; approver_2_email?: string; approver_2_status?: string; approver_2_timestamp?: string; approver_2_comments?: string; approver_2_token?: string;
+  approver_3_role?: string; approver_3_name?: string; approver_3_email?: string; approver_3_status?: string; approver_3_timestamp?: string; approver_3_comments?: string; approver_3_token?: string;
+  approver_4_role?: string; approver_4_name?: string; approver_4_email?: string; approver_4_status?: string; approver_4_timestamp?: string; approver_4_comments?: string; approver_4_token?: string;
+  approver_5_role?: string; approver_5_name?: string; approver_5_email?: string; approver_5_status?: string; approver_5_timestamp?: string; approver_5_comments?: string; approver_5_token?: string;
+  final_closure_time?: string;
+  final_closure_comments?: string;
+  report_pdf_url?: string;
 }
 
 export interface SafetyActivityLog {
@@ -814,6 +843,28 @@ export class PtwService {
     return {
       success: true,
       message: `Permit ${pNo} has been permanently deleted from the registry.`
+    };
+  }
+
+  /**
+   * Master Admin Full Permit Edit (Syncs memory & localStorage)
+   */
+  public static updatePermit(permitId: string, updatedData: Partial<PtwRecord>): { success: boolean; message: string; permit?: PtwRecord } {
+    this.initialize();
+    const idx = this.permits.findIndex(p => p.id === permitId || p.permit_number === permitId);
+    if (idx === -1) {
+      return { success: false, message: `Permit ${permitId} not found in active registry.` };
+    }
+    this.permits[idx] = {
+      ...this.permits[idx],
+      ...updatedData
+    };
+    this.savePermits();
+    this.logActivity('PERMIT_UPDATED', `Permit ${this.permits[idx].permit_number} updated by Admin.`);
+    return {
+      success: true,
+      message: `Permit ${this.permits[idx].permit_number} updated successfully.`,
+      permit: this.permits[idx]
     };
   }
 

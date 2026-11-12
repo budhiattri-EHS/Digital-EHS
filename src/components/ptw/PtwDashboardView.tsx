@@ -5,6 +5,7 @@ import { PtwService, PtwRecord, ApproverSlot, EmailDispatchLog, SafetyActivityLo
 import { generateEnterpriseEhsPdf } from '@/lib/pdfGenerator';
 import { CreatePermitModal } from './CreatePermitModal';
 import { PtwEmailModal } from './PtwEmailModal';
+import { AdminEditPermitModal } from './AdminEditPermitModal';
 import {
   FileText,
   PlusCircle,
@@ -18,6 +19,7 @@ import {
   Download,
   Mail,
   Eye,
+  Edit3,
   RefreshCw,
   ExternalLink,
   ChevronRight,
@@ -58,6 +60,7 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [emailModalPermit, setEmailModalPermit] = useState<{ permit: PtwRecord; slot: number } | null>(null);
   const [inspectPermit, setInspectPermit] = useState<PtwRecord | null>(null);
+  const [editModalPermit, setEditModalPermit] = useState<PtwRecord | null>(null);
   const [approvalModalPermit, setApprovalModalPermit] = useState<{ permit: PtwRecord; slot: number } | null>(null);
   const [approvalComments, setApprovalComments] = useState('');
   const [isEmailLogViewOpen, setIsEmailLogViewOpen] = useState(false);
@@ -771,6 +774,15 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
                         >
                           <Eye className="w-3.5 h-3.5 text-[#86868b]" />
                         </button>
+
+                        {/* Admin Full Edit */}
+                        <button
+                          onClick={() => setEditModalPermit(permit)}
+                          className="p-1 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-200 text-[#0071e3]"
+                          title="Admin Full Edit (Supabase)"
+                        >
+                          <Edit3 className="w-3.5 h-3.5 text-[#0071e3]" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -933,6 +945,16 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
                     aria-label="Inspect 146 Checkpoints"
                   >
                     <Eye className="w-4 h-4" />
+                  </button>
+
+                  {/* Admin Full Edit */}
+                  <button
+                    onClick={() => setEditModalPermit(permit)}
+                    className="p-2.5 min-h-[44px] min-w-[44px] rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-200 text-[#0071e3] flex items-center justify-center touch-target"
+                    title="Admin Full Edit (Supabase)"
+                    aria-label="Admin Full Edit"
+                  >
+                    <Edit3 className="w-4 h-4" />
                   </button>
 
                   {/* Master Admin Delete */}
@@ -1379,13 +1401,27 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
                   </button>
                 )}
               </div>
-              <button
-                onClick={() => handleExportPermitPdf(inspectPermit)}
-                className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-semibold flex items-center gap-1.5 transition-all touch-target"
-              >
-                <Download className="w-3.5 h-3.5" />
-                <span>Export PDF</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    const p = inspectPermit;
+                    setInspectPermit(null);
+                    setEditModalPermit(p);
+                  }}
+                  className="px-4 py-2.5 min-h-[44px] rounded-full bg-blue-50 hover:bg-blue-100 border border-blue-200 text-[#0071e3] text-xs font-bold flex items-center gap-1.5 transition-all touch-target"
+                  title="Admin Full Edit (Supabase)"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>Admin Edit</span>
+                </button>
+                <button
+                  onClick={() => handleExportPermitPdf(inspectPermit)}
+                  className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-xs font-semibold flex items-center gap-1.5 transition-all touch-target"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Export PDF</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1460,6 +1496,20 @@ export const PtwDashboardView: React.FC<PtwDashboardViewProps> = ({
             setPermits([...PtwService.getPermits()]);
             setEmailModalPermit(null);
             showToast('✓ Approver action recorded successfully.');
+          }}
+        />
+      )}
+
+      {/* ADMIN FULL EDIT PERMIT MODAL */}
+      {editModalPermit && (
+        <AdminEditPermitModal
+          permit={editModalPermit}
+          isOpen={!!editModalPermit}
+          onClose={() => setEditModalPermit(null)}
+          onSuccess={(updated) => {
+            setPermits(prev => prev.map(p => p.permit_number === updated.permit_number ? updated : p));
+            setActionNotice(`Permit ${updated.permit_number} updated directly in Supabase cloud!`);
+            setTimeout(() => setActionNotice(null), 4000);
           }}
         />
       )}
